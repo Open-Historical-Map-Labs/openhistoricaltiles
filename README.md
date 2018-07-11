@@ -5,6 +5,6 @@ We'll be using a fork of OpenMapTiles, https://github.com/OpenHistoricalMap/open
 
 The OpenHistoricalMap planet file (as of July 9 2018) may be had from https://greeninfo.slack.com/files/UAAD2PM5Z/FBKD5RN95/ohm-20180612.osm.pbf  This link is specificaly for GIN staff.
 
-The OpenMapTiles server is running at http://ec2-18-209-171-18.compute-1.amazonaws.com/vectortiles/
+The OpenMapTiles server is running at http://ec2-18-209-171-18.compute-1.amazonaws.com/ Pointing your browser at this URL will bring up a demo using raster tiles, but wil also point to vector tile sources.
 
 
