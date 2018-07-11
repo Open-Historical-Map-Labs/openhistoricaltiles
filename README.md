@@ -1,10 +1,30 @@
-# openhistoricaltiles
-First iteration of vector tiles from OHM Planet data
+# Open Historical Map: Phase 1-B Demonstration
 
-We'll be using a fork of OpenMapTiles, https://github.com/OpenHistoricalMap/openmaptiles, and then this repo will be mostly for issues related to our implementaiton, though we might also commit style JSON files and other ancillary items here when they don't belong inside our install of OpenMapTiles.
+A simple vector-tiles map which displays OpenHistoricalMap data from the OpenMapTiles/Tessera service.
 
-The OpenHistoricalMap planet file (as of July 9 2018) may be had from https://greeninfo.slack.com/files/UAAD2PM5Z/FBKD5RN95/ohm-20180612.osm.pbf  This link is specificaly for GIN staff.
+http://openhistoricalmap.github.io/openhistoricaltiles
 
-The OpenMapTiles server is running at http://ec2-18-209-171-18.compute-1.amazonaws.com/vectortiles/
 
+## Tech Stack
+
+* Tile server: Tessera serving OSM data from a Amazon EC2
+* Database: Dockerized PostgreSQL loaded with a OHM dump in OSM.PBF format
+* Map client: Mapbox GL JS API
+* Client-side programming language: jQuery
+
+
+
+## For Developers
+
+Babel, SASS/SCSS, Webpack.
+
+Upon initial setup on your system, run `nvm use` and `yarn install` to set up build tools.
+
+Then, your edits would be made to **index.src.html** **index.src.scss** **index.src.js** as the main files, and to **webpack.entrypoint.js** as the entry point which lists assets to include.
+
+Running `npm run build` will compile the browser-side "deliverables" **index.html** **index.css** **index.js** via webpack. Note that these outputs **are** included in version control, so they may be hosted via Github Pages without us needing to work in additional tooling.
+
+`npm run serve` will run a HTTP server, as well as watching and rebuilding (below). The vector tiles are considered data from a cross-origin perspective, and XHR won't work over `file://` URLs, so this is important.
+
+`npm run watch` will watch for changes and recompile and reload when changes are made. *This is not a replacement* for a final `npm run build` for deployment.
 
