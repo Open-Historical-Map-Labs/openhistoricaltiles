@@ -86,24 +86,16 @@ But for our uses, we don't care for that an would prefer to serve tiles dynamica
 
 Tessera is a service which reads from the PostGIS database and generates PBF vector tiles.
 
-### Launching It
+*For more complete information, see the **OpenMapTiles_Service** document. This is a quick introduction.*
 
-The instructions for starting Tessera aren't quite complete, and should read:
+The file `build/openmaptiles.tm2source/data.yml` is the configuration for what data services exist. It also configures global stuff like the `minzoom` and `maxzoom`
 
+To configure your Node version and launch the service, you would do the following:
 ```
-cd ~/OPENMAPTILES/openhistoricaltiles
+cd
+nvm use
+cd ~/OPENMAPTILES/openmaptiles
 ~/node_modules/.bin/tessera tmsource://./build/openmaptiles.tm2source
 ```
 
-This runs a service on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` so there is an Apache proxy so these services are visible as `http://ec2-18-209-171-18.compute-1.amazonaws.com/vectortiles/`
-
-### Configuration
-
-The file `build/openmaptiles.tm2source/data.yml` is the configuration for what data services exist.
-
-it also configures global stuff like the `minzoom` and `maxzoom`
-
-Terminology note: "Datasource" is what we normally call a "layer" or "feature group" such as buildings, lakes, or coastlines. A "Layer" is the whole data service.
-
-
-
+The site would then be available as http://ec2-18-209-171-18.compute-1.amazonaws.com/vectortiles/
