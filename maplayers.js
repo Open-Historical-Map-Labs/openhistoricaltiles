@@ -9,40 +9,21 @@
  * and it's the LayerPickerControl which will change the visibility of these layers (that's why they're all "none" right now)
  */
 
-export const VECTILES_BASE_URL = "https://ohm-demo.s3.amazonaws.com/tiles/";
-
-export const STATES_MIN_ZOOM = 3;
-export const COUNTIES_MIN_ZOOM = 6;
+export const OHM_BASE_URL = "http://ec2-18-209-171-18.compute-1.amazonaws.com";
+export const OHM_TILEJSON = `${OHM_BASE_URL}/index.json`;
+export const OHM_URL      = `${OHM_BASE_URL}/{z}/{x}/{y}.pbf`;
 
 export const GLMAP_STYLE = {
   "version": 8,
   "name": "mandesdemo",
   "sources": {
-    "states-historical": {
+    "ohm-data": {
       "type": "vector",
       "tiles": [
-        VECTILES_BASE_URL + "states-historical/{z}/{x}/{y}.pbf"
+        OHM_URL
       ]
     },
-    "counties-historical": {
-      "type": "vector",
-      "tiles": [
-        VECTILES_BASE_URL + "counties-historical/{z}/{x}/{y}.pbf"
-      ]
-    },
-    "states-modern": {
-      "type": "vector",
-      "tiles": [
-        VECTILES_BASE_URL + "states-modern/{z}/{x}/{y}.pbf"
-      ]
-    },
-    "counties-modern": {
-      "type": "vector",
-      "tiles": [
-        VECTILES_BASE_URL + "counties-modern/{z}/{x}/{y}.pbf"
-      ]
-    },
-    "basemap-light": {
+    "modern-basemap-light": {
       "type": "raster",
       "tiles": [
         "https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
@@ -52,7 +33,7 @@ export const GLMAP_STYLE = {
       ],
       "tileSize": 256
     },
-    "basemap-labels": {
+    "modern-basemap-labels": {
       "type": "raster",
       "tiles": [
         "https://a.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png",
@@ -70,185 +51,68 @@ export const GLMAP_STYLE = {
      * BASEMAP OPTIONS
      */
     {
-      "id": "basemap-light",
+      "id": "modern-basemap-light",
       "type": "raster",
-      "source": "basemap-light",
+      "source": "modern-basemap-light",
     },
 
     /*
-     * HISTORICAL BOUNDARIES, the real meat of the matter
-     * these are likely to be broken up to form color-classifications
+     * THE OHM LAYER, the real meat of the matter
+     * Layer list of of July 12 2018:
+     * water
+     * waterway
+     * landcover
+     * landuse
+     * mountain_peak
+     * park
+     * boundary
+     * aeroway
+     * transportation
+     * building
+     * water_name
+     * transportation_name
+     * place
+     * housenumber
+     * poi
+     * aerodrome_label
      */
-    {
-      "id": "state-boundaries-historical",
-      "source": "states-historical",
-      "source-layer": "states",
-      "type": "fill",
-      "minzoom": STATES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "rgb(168, 74, 0)",
-        "fill-outline-color": "rgb(0, 0, 0)"
-      },
-      "layout" : {
-        "visibility": "none",
-      },
-      "filter": [ 'all', [ "<=", "START", "9999/12/31" ], [ ">", "END", "9999/12/31" ] ],  // filter: start date and end date clauses, drop in a year to see what had any presence during that year
-    },
-    {
-      "id": "county-boundaries-historical",
-      "source": "counties-historical",
-      "source-layer": "counties",
-      "type": "fill",
-      "minzoom": COUNTIES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "rgb(241, 168, 66)",
-        "fill-outline-color": "rgb(0, 0, 0)"
-      },
-      "layout" : {
-        "visibility": "none",
-      },
-      "filter": [ 'all', [ "<=", "START", "9999/12/31" ], [ ">", "END", "9999/12/31" ] ],  // filter: start date and end date clauses, drop in a year to see what had any presence during that year
-    },
 
-    /*
-     * MODERN BOUNDARIES, for reference
-     */
+
     {
-      "id": "state-boundaries-modern-line",
-      "source": "states-modern",
-      "source-layer": "states",
+      "id": "ohm-transportation",
+      "source": "ohm-data",
+      "source-layer": "transportation",
       "type": "line",
-      "minzoom": STATES_MIN_ZOOM,
       "paint": {
-        "line-color": "black",
-        "line-width": 4,
-      },
-      "layout" : {
-        "visibility": "none",
-      },
+        "line-color": "rgb(0, 0, 0)",
+        "line-width": 3,
+      }
     },
     {
-      "id": "county-boundaries-modern-line",
-      "source": "counties-modern",
-      "source-layer": "counties",
-      "type": "line",
-      "minzoom": COUNTIES_MIN_ZOOM,
+      "id": "ohm-poi",
+      "source": "ohm-data",
+      "source-layer": "poi",
+      "type": "circle",
       "paint": {
-        "line-color": "black",
-        "line-width": 2,
-      },
-      "layout" : {
-        "visibility": "none",
-      },
+        "circle-color": "rgb(255, 0, 0)",
+        "circle-radius": 10,
+      }
     },
 
-    /*
-     * HOVER EFFECTS, same state/county shapes as above, but lighter color... and with a filter to match nothing until mouse movement changes the filter
-     */
-    {
-      "id": "county-boundaries-historical-hover",
-      "source": "counties-historical",
-      "source-layer": "counties",
-      "type": "fill",
-      "minzoom": COUNTIES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "white",
-        "fill-opacity": 0.5,
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-      "filter": [ "==", "IDNUM", -1 ],  // for highlighting by this unique feature ID
-    },
-    {
-      "id": "state-boundaries-historical-hover",
-      "source": "states-historical",
-      "source-layer": "states",
-      "type": "fill",
-      "minzoom": STATES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "white",
-        "fill-opacity": 0.5,
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-      "filter": [ "==", "IDNUM", -1 ],  // for highlighting by this unique feature ID
-    },
 
     /*
-     * CLICKABLES; the historical and modern boundaries data
-     * no filters, unclassified and with transparent fill
-     * so the map can be clicked to get info about everything in one go
+     * MODERN LABELS, over top of everything else
      */
     {
-      "id": "counties-modern-clickable",
-      "source": "counties-modern",
-      "source-layer": "counties",
-      "type": "fill",
-      "minzoom": COUNTIES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "transparent",
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-    },
-    {
-      "id": "states-modern-clickable",
-      "source": "states-modern",
-      "source-layer": "states",
-      "type": "fill",
-      "minzoom": STATES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "transparent",
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-    },
-    {
-      "id": "counties-historical-clickable",
-      "source": "counties-historical",
-      "source-layer": "counties",
-      "type": "fill",
-      "minzoom": COUNTIES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "transparent",
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-    },
-    {
-      "id": "states-historical-clickable",
-      "source": "states-historical",
-      "source-layer": "states",
-      "type": "fill",
-      "minzoom": STATES_MIN_ZOOM,
-      "paint": {
-        "fill-color": "transparent",
-      },
-      "layout" : {
-        "visibility": "visible",
-      },
-    },
-
-    /*
-     * LABELS, over top of everything else
-     */
-    /*
-    {
-      "id": "basemap-labels",
+      "id": "modern-basemap-labels",
       "type": "raster",
-      "source": "basemap-labels",
+      "source": "modern-basemap-labels",
       "paint": {
         "raster-opacity": 0.50
-      },
+      }/*,
       "layout": {
         "visibility": "none"
-      }
+      }*/
     }
-    */
   ]
 };
