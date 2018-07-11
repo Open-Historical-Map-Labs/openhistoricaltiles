@@ -26,7 +26,27 @@ $(document).ready(function () {
     // startup and initial state, once the GL Map has loaded
     //
     MAP.on('load', function () {
-        // nothing to do here yet
-        // this is where one would load a querystring/hash to set up initial state: filtering and layer visibility, etc.
+        // read a simple location hash: #Z/LAT/LNG   example:  #15/47.6073/-122.3327
+        // now at page load, then keep watching the address bar
+        if (window.location.hash) {
+            window.checkHashAndApply();
+        }
+        window.addEventListener("hashchange", function () {
+            window.checkHashAndApply();
+        }, false);
     });
 });
+
+
+window.checkHashAndApply = function () {
+    const zxy_regex = /^\#(\d+)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
+    const zxy = window.location.hash.match(zxy_regex);
+    if (! zxy) return;  // not a match, maybe blank, maybe malformed?
+
+    const z = zxy[1];
+    const lat = zxy[2];
+    const lng = zxy[3];
+
+    MAP.setZoom(z);
+    MAP.setCenter([ lng, lat ]);
+};
