@@ -1,5 +1,6 @@
 import { GLMAP_STYLE } from './maplayers';
 
+import { UrlHashControl } from './js/mbgl-control-urlhash';
 import { MapHoversControl } from './js/mbgl-control-mousehovers';
 import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 import { InspectorPanelControl } from './js/mbgl-control-inspectorpanel';
@@ -141,35 +142,14 @@ $(document).ready(function () {
     MAP.addControl(MAP.CLICKS);
 */
 
-
-
+    MAP.HASHWATCHER = new UrlHashControl();
+    MAP.addControl(MAP.HASHWATCHER);
 
 
     //  
     // startup and initial state, once the GL Map has loaded
     //
     MAP.on('load', function () {
-        // read a simple location hash: #Z/LAT/LNG   example:  #15/47.6073/-122.3327
-        // now at page load, then keep watching the address bar
-        if (window.location.hash) {
-            window.checkHashAndApply();
-        }
-        window.addEventListener("hashchange", function () {
-            window.checkHashAndApply();
-        }, false);
+        // nothing to do here; most behaviors are implemented as Controls
     });
 });
-
-
-window.checkHashAndApply = function () {
-    const zxy_regex = /^\#(\d+)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
-    const zxy = window.location.hash.match(zxy_regex);
-    if (! zxy) return;  // not a match, maybe blank, maybe malformed?
-
-    const z = zxy[1];
-    const lat = zxy[2];
-    const lng = zxy[3];
-
-    MAP.setZoom(z);
-    MAP.setCenter([ lng, lat ]);
-};
