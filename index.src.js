@@ -28,25 +28,74 @@ $(document).ready(function () {
 
     MAP.HOVERS = new MapHoversControl({
         layers: {
-            'ohm-transportation': {
-                enter: (mouseevent) => {
-                    // console.log(mouseevent.features[0].properties);
-                    const tooltip = `Transportation: ${mouseevent.features[0].properties.class}`;
-                    MAP.HOVERS.setMapToolTip(tooltip);
-                },
-                leave: (mouseevent) => {
-                    MAP.HOVERS.clearMapToolTip();
-                },
+            'highway-area': function (feature) {
+                return 'street';
             },
-            'ohm-poi': {
-                enter: (mouseevent) => {
-                    // console.log(mouseevent.features[0].properties);
-                    const tooltip = `POI: ${mouseevent.features[0].properties.name}`;
-                    MAP.HOVERS.setMapToolTip(tooltip);
-                },
-                leave: (mouseevent) => {
-                    MAP.HOVERS.clearMapToolTip();
-                },
+            'highway-path': function (feature) {
+                return 'Street';
+            },
+            'highway-motorway-link': function (feature) {
+                return 'Street';
+            },
+            'highway-link': function (feature) {
+                return 'Street';
+            },
+            'highway-minor': function (feature) {
+                return 'Street';
+            },
+            'highway-secondary-tertiary': function (feature) {
+                return 'Street';
+            },
+            'highway-primary': function (feature) {
+                return 'Street';
+            },
+            'highway-trunk': function (feature) {
+                return 'Street';
+            },
+            'waterway-other': function (feature) {
+                return 'Water';
+            },
+            'waterway-stream-canal': function (feature) {
+                return 'Water';
+            },
+            'waterway-river': function (feature) {
+                return 'Water';
+            },
+            'water-pattern': function (feature) {
+                return 'Water';
+            },
+            'highway-name-path': function (feature) {
+                return feature.properties.name;
+            },
+            'highway-name-minor': function (feature) {
+                return feature.properties.name;
+            },
+            'highway-name-major': function (feature) {
+                return feature.properties.name;
+            },
+            'waterway-name': function (feature) {
+                return feature.properties.name;
+            },
+            'water-name-lakeline': function (feature) {
+                return feature.properties.name;
+            },
+            'water-name-ocean': function (feature) {
+                return feature.properties.name;
+            },
+            'water-name-other': function (feature) {
+                return feature.properties.name;
+            },
+            'highway-motorway': function (feature) {
+                return 'Street';
+            },
+            'railway-transit': function (feature) {
+                return 'Railway';
+            },
+            'railway-service': function (feature) {
+                return 'Railway';
+            },
+            'railway': function (feature) {
+                return 'Railway';
             },
         }
     });
@@ -61,20 +110,16 @@ $(document).ready(function () {
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
             const collected_feature_groups = [
+                /*
                 {
-                    title: "Transportation",
-                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'ohm-transportation' ] }),
+                    title: "Buildings",
+                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'building' ] }),
                     template: function (feature) {
+                        console.log([ 'building', feature.properties ]);
                         return `${feature.properties.class}`;
                     },
                 },
-                {
-                    title: "POIs",
-                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'ohm-poi' ] }),
-                    template: function (feature) {
-                        return `${feature.properties.name}`;
-                    },
-                },
+                */
             ];
 
             // ready; hand off

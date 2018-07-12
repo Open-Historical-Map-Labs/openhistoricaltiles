@@ -10,14 +10,19 @@ export class MapHoversControl {
         this._map = map;
 
         // when the map comes ready, attach the given events to the given layers
+        // each layer is a callback, which will be passed a feature and should return the tooltip text
         this._map.on('load', () => {
-            Object.entries(this.options.layers).forEach( ([layerid, callbacks]) => {
-                if (callbacks.enter) {
-                    this._map.on("mousemove", layerid, callbacks.enter);
-                }
-                if (callbacks.leave) {
-                    this._map.on("mouseleave", layerid, callbacks.leave);
-                }
+            Object.entries(this.options.layers).forEach( ([layerid, callback]) => {
+                this._map.on("mousemove", layerid, (mouseevent) => {
+                    const feature = mouseevent.features[0];
+                    console.log(['MapHoversControl', layerid, feature ]);
+
+                    const tooltip = callback(feature);
+                    this.setMapToolTip(tooltip);
+                });
+                this._map.on("mouseleave", layerid, () => {
+                    this.clearMapToolTip();
+                });
             });
         });
 
@@ -29,12 +34,8 @@ export class MapHoversControl {
     onRemove () {
         // detach events
         Object.entries(this.options.layers).forEach( ([layerid, callbacks]) => {
-            if (callbacks.enter) {
                 this._map.off("mousemove", layerid, callbacks.enter);
-            }
-            if (callbacks.leave) {
                 this._map.off("mouseleave", layerid, callbacks.leave);
-            }
         });
 
         this._container.parentNode.removeChild(this._container);
