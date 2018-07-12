@@ -39,6 +39,44 @@ Terminology note: "Datasource" is what we normally call a "layer" or "feature gr
 This file is recompiled whenever the OpenMapTiles step `make build/openmaptiles.tm2source/data.yml` is run (which is part of `make`). So you should stow your edits someplace else.
 
 
+## Custom Patches
+
+After installing tessera, some mods are made to it.
+
+### Data leakage
+
+The output of `/index.json` includes the Layer configuration straight from the config file. This includes database connection params, actual SQL queries including potentially table or view names, and other pathnames.
+
+Patch to `node_modules/tessera/lib/app.js`
+
+Search for `app.get("/index.json"`
+
+Add this before it:
+
+```
+// make JSON outputs prettier, and more legible
+app.set('json spaces', 2);
+```
+
+The JSON output is not readily legible. Adding spacing into it would make for much nicer debugging.
+
+Patch to `node_modules/tessera/lib/app.js`
+
+Search for `app.get("/index.json"` then scroll down about 10 lines to the `tessera.getInfo` callback.
+
+Add this in there, above the protocol and URL stuff:
+
+```
+// https://github.com/OpenHistoricalMap/openhistoricaltiles/issues/5
+// the default output includes a lot of sensitive information e.g. DB credentials
+delete info.Layer;
+delete info.id;
+delete info.mtime;
+delete info._prefs;
+```
+
+
+
 ## The Service Wrapper
 
 The `service tessera stop` etc. commands, work because of a service wrapper script. Normally you wouldn't need to worry about that since the script is already set up. Still, if you need to do this on another server...
