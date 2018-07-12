@@ -5,4 +5,4 @@ require('./index.src.html');
 require('./index.src.js');
 require('./index.src.scss');
 
-require('./js/mbgl-control-inspectorpanel.scss');
+require('./js/mbgl-control-mouseclicks.scss');
