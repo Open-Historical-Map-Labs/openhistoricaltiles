@@ -2,7 +2,8 @@
 
 NAME="Tessera vectortile server"
 HOMEDIR="/home/ubuntu"
-OMTDIR="$HOMEDIR/OPENMAPTILES/openmaptiles"
+OMTDIR="$HOMEDIR/OPENMAPTILES/openhistoricaltiles"
+TMSOURCEFOLDER="./openmaptiles.tm2source"  # relative to $OMTDIR
 NODEVERSION="6.14.3"
 
 
@@ -20,7 +21,7 @@ case "$1" in
 
         # start it
         cd $OMTDIR
-        $HOMEDIR/node_modules/.bin/tessera --multiprocess --processes=4 --cache-size=100 tmsource://./build/openmaptiles.tm2source &
+        $HOMEDIR/node_modules/.bin/tessera --multiprocess --processes=4 --cache-size=100 tmsource://$TMSOURCEFOLDER &
         ;;
   stop)
         echo "Stopping $NAME"

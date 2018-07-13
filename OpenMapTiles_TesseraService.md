@@ -32,7 +32,9 @@ docker ps
 
 ## Tessera Config File
 
-The file `build/openmaptiles.tm2source/data.yml` is the configuration for what data services exist. It also configures global stuff like the `minzoom` and `maxzoom` If this file is changed, you will need to restart tessera: `sudo service tessera restart`
+The file `openmaptiles.tm2source/data.yml` is the configuration for what data services exist. It also configures global stuff like the `minzoom` and `maxzoom` If this file is changed, you will need to restart tessera: `sudo service tessera restart`
+
+This file is based on the *build/openmaptiles.tm2source/data.yml* file which was generated during openhistoricaltiles setup. It was then split off and modified for cleanup and additional attributes and layers.
 
 Terminology note: "Datasource" is what we normally call a "layer" or "feature group" such as buildings, lakes, or coastlines. A "Layer" is the whole data service.
 
