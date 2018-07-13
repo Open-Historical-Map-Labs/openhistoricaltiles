@@ -42,6 +42,12 @@ $(document).ready(function () {
                 return toTitleCase(feature.properties.building.replace(/_/g, ' '));
             },
             //
+            // water; has a proper name field
+            //
+            'water': function (feature) {
+                return feature.properties.name;
+            },
+            //
             // POIs; no name, but a type
             //
             'poi-level-3': function (feature) {
