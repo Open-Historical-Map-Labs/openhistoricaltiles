@@ -118,9 +118,25 @@ $(document).ready(function () {
                 return toTitleCase(feature.properties.building.replace(/_/g, ' '));
             },
             //
-            // water; has a proper name field
+            // water (bodies); has a proper name field
             //
             'water': function water(feature) {
+                return feature.properties.name;
+            },
+
+            //
+            // waterways; have a name field
+            //
+            'waterway_tunnel': function waterway_tunnel(feature) {
+                return feature.properties.name;
+            },
+            'waterway-other': function waterwayOther(feature) {
+                return feature.properties.name;
+            },
+            'waterway-stream-canal': function waterwayStreamCanal(feature) {
+                return feature.properties.name;
+            },
+            'waterway-river': function waterwayRiver(feature) {
                 return feature.properties.name;
             },
             //

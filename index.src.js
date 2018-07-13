@@ -42,9 +42,25 @@ $(document).ready(function () {
                 return toTitleCase(feature.properties.building.replace(/_/g, ' '));
             },
             //
-            // water; has a proper name field
+            // water (bodies); has a proper name field
             //
             'water': function (feature) {
+                return feature.properties.name;
+            },
+
+            //
+            // waterways; have a name field
+            //
+            'waterway_tunnel': function (feature) {
+                return feature.properties.name;
+            },
+            'waterway-other': function (feature) {
+                return feature.properties.name;
+            },
+            'waterway-stream-canal': function (feature) {
+                return feature.properties.name;
+            },
+            'waterway-river': function (feature) {
                 return feature.properties.name;
             },
             //
