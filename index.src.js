@@ -183,17 +183,84 @@ $(document).ready(function () {
             // - "title" for that set, e.g. Water Features
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
+            //    tip: return a empty string to effectively skip this feature
             const collected_feature_groups = [
-                /*
                 {
-                    title: "Buildings",
-                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'building' ] }),
+                    title: "Roads, Rails, and Routes",
+                    features: MAP.queryRenderedFeatures(clickevent.point, {
+                        layers: [
+                            'highway-primary',
+                            'highway-trunk',
+                            'highway-secondary-tertiary',
+                            'highway-motorway',
+                            'highway-minor',
+                            'highway-motorway-link',
+                            'highway-link',
+                            'bridge-motorway-link',
+                            'bridge-link',
+                            'bridge-secondary-tertiary',
+                            'bridge-trunk-primary',
+                            'bridge-motorway',
+                            'railway-transit',
+                            'railway-service',
+                            'railway',
+                            'bridge-railway',
+                            'tunnel-path',
+                            'tunnel-service-track',
+                            'tunnel-minor',
+                            'tunnel-secondary-tertiary',
+                            'tunnel-trunk-primary',
+                            'tunnel-motorway',
+                            'tunnel-railway',
+                            'ferry',
+                            'cablecar',
+                            'road_oneway',
+                            'road_oneway_opposite',
+                        ],
+                    }),
                     template: function (feature) {
-                        console.log([ 'building', feature.properties ]);
-                        return `${feature.properties.class}`;
+                        return `${feature.properties.name}`;
                     },
                 },
-                */
+                {
+                    title: "Water Features",
+                    features: MAP.queryRenderedFeatures(clickevent.point, {
+                        layers: [
+                            'water',
+                            'waterway_tunnel',
+                            'waterway-other',
+                            'waterway-stream-canal',
+                            'waterway-river',
+                        ],
+                    }),
+                    template: function (feature) {
+                        return `${feature.properties.name}`;
+                    },
+                },
+                {
+                    title: "Points of Interest",
+                    features: MAP.queryRenderedFeatures(clickevent.point, {
+                        layers: [
+                            'poi-level-3',
+                            'poi-level-2',
+                            'poi-level-1',
+                            'poi-railway',
+                            'building',
+                        ],
+                    }),
+                    template: function (feature) {
+                        let name = "";
+                        switch (feature.layer.id) {
+                            case 'building':
+                                name = toTitleCase(feature.properties.building.replace(/_/g, ' '));
+                                break;
+                            default:
+                                name = `${feature.properties.name}`;
+                                break;
+                        }
+                        return name;
+                    },
+                },
             ];
 
             // ready; hand off

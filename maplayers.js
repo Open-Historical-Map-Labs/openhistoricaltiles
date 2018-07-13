@@ -3545,7 +3545,7 @@ export const GLMAP_STYLE = {
           "Noto Sans Italic"
         ],
         "text-size": 14,
-        "text-field": "{name:latin} {name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 5,
         "text-rotation-alignment": "map",
         "symbol-placement": "line",
@@ -3573,7 +3573,7 @@ export const GLMAP_STYLE = {
           "Noto Sans Italic"
         ],
         "text-size": 14,
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 5,
         "text-rotation-alignment": "map",
         "symbol-placement": "line",
@@ -3609,7 +3609,7 @@ export const GLMAP_STYLE = {
           "Noto Sans Italic"
         ],
         "text-size": 14,
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-max-width": 5,
         "text-rotation-alignment": "map",
         "symbol-placement": "point",
@@ -3656,7 +3656,7 @@ export const GLMAP_STYLE = {
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 5,
         "text-rotation-alignment": "map",
         "symbol-placement": "point",
@@ -3696,7 +3696,7 @@ export const GLMAP_STYLE = {
         ],
         "text-anchor": "top",
         "icon-image": "{class}_11",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-offset": [
           0,
           0.6
@@ -3742,7 +3742,7 @@ export const GLMAP_STYLE = {
         ],
         "text-anchor": "top",
         "icon-image": "{class}_11",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-offset": [
           0,
           0.6
@@ -3787,7 +3787,7 @@ export const GLMAP_STYLE = {
         ],
         "text-anchor": "top",
         "icon-image": "{class}_11",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-offset": [
           0,
           0.6
@@ -3837,7 +3837,7 @@ export const GLMAP_STYLE = {
         ],
         "text-anchor": "top",
         "icon-image": "{class}_11",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-offset": [
           0,
           0.6
@@ -3984,7 +3984,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-field": "{name:latin} {name:nonlatin}",
+        "text-field": "{name}",
         "symbol-placement": "line",
         "text-rotation-alignment": "map"
       },
@@ -4032,7 +4032,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-field": "{name:latin} {name:nonlatin}",
+        "text-field": "{name}",
         "symbol-placement": "line",
         "text-rotation-alignment": "map"
       },
@@ -4073,7 +4073,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-field": "{name:latin} {name:nonlatin}",
+        "text-field": "{name}",
         "symbol-placement": "line",
         "text-rotation-alignment": "map"
       },
@@ -4267,7 +4267,7 @@ export const GLMAP_STYLE = {
         ],
         "text-anchor": "top",
         "icon-image": "airport_11",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-offset": [
           0,
           0.6
@@ -4317,7 +4317,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Bold"
         ],
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-transform": "uppercase",
         "text-max-width": 9,
         "visibility": "visible"
@@ -4355,7 +4355,7 @@ export const GLMAP_STYLE = {
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 8,
         "visibility": "visible"
       },
@@ -4392,7 +4392,7 @@ export const GLMAP_STYLE = {
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 8,
         "visibility": "visible"
       },
@@ -4437,7 +4437,7 @@ export const GLMAP_STYLE = {
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 8,
         "visibility": "visible"
       },
@@ -4482,7 +4482,7 @@ export const GLMAP_STYLE = {
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name}",
         "text-max-width": 8,
         "icon-image": "star_11",
         "text-offset": [
@@ -4525,7 +4525,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Italic"
         ],
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-size": {
           "stops": [
             [
@@ -4575,7 +4575,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Bold"
         ],
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-size": {
           "stops": [
             [
@@ -4625,7 +4625,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Bold"
         ],
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-size": {
           "stops": [
             [
@@ -4675,7 +4675,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Bold"
         ],
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-size": {
           "stops": [
             [
@@ -4714,7 +4714,7 @@ export const GLMAP_STYLE = {
         "text-font": [
           "Noto Sans Bold"
         ],
-        "text-field": "{name:latin}",
+        "text-field": "{name}",
         "text-size": 14,
         "text-max-width": 6.25,
         "text-transform": "uppercase",

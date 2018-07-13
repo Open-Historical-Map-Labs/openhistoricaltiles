@@ -102,6 +102,7 @@ export class MapClicksControl {
 
             featuregroup.features.forEach(function (feature) {
                 const thishtml = featuregroup.template(feature);
+                if (! thishtml) return;  // returning blank HTML = skip this feature
                 collected_html.push(`<div class="mbgl-control-mouseclicks-feature">${thishtml}</div>`);
             });
 
