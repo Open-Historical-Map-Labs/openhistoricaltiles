@@ -13,7 +13,7 @@ Layer:
     max_size: 512
     srid: 900913
     table: (
-      SELECT geometry, class
+      SELECT geometry, class, name
       FROM layer_water(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water
