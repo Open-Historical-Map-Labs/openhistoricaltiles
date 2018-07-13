@@ -11,6 +11,13 @@ const START_CENTER = [-99.5, 37.9];
 
 window.MAP = undefined;
 
+window.toTitleCase = function (str) {
+    return str.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
+
+
 $(document).ready(function () {
     //
     // basic map
@@ -28,74 +35,119 @@ $(document).ready(function () {
 
     MAP.HOVERS = new MapHoversControl({
         layers: {
+            //
+            // buildings; no name, but a type
+            //
+            'building': function (feature) {
+                return toTitleCase(feature.properties.building.replace(/_/g, ' '));
+            },
+            //
+            // POIs; no name, but a type
+            //
+            'poi-level-3': function (feature) {
+                return feature.properties.name;
+            },
+            'poi-level-2': function (feature) {
+                return feature.properties.name;
+            },
+            'poi-level-1': function (feature) {
+                return feature.properties.name;
+            },
+            'poi-railway': function (feature) {
+                return feature.properties.name;
+            },
+            //
+            // Roads etc; have a name
+            //
+            'tunnel-path': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-service-track': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-minor': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-secondary-tertiary': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-trunk-primary': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-motorway': function (feature) {
+                return feature.properties.name;
+            },
+            'tunnel-railway': function (feature) {
+                return feature.properties.name;
+            },
+            'ferry': function (feature) {
+                return feature.properties.name;
+            },
             'highway-area': function (feature) {
-                return 'street';
+                return feature.properties.name;
             },
             'highway-path': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-motorway-link': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-link': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-minor': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-secondary-tertiary': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-primary': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'highway-trunk': function (feature) {
-                return 'Street';
-            },
-            'waterway-other': function (feature) {
-                return 'Water';
-            },
-            'waterway-stream-canal': function (feature) {
-                return 'Water';
-            },
-            'waterway-river': function (feature) {
-                return 'Water';
-            },
-            'water-pattern': function (feature) {
-                return 'Water';
-            },
-            'highway-name-path': function (feature) {
-                return feature.properties.name;
-            },
-            'highway-name-minor': function (feature) {
-                return feature.properties.name;
-            },
-            'highway-name-major': function (feature) {
-                return feature.properties.name;
-            },
-            'waterway-name': function (feature) {
-                return feature.properties.name;
-            },
-            'water-name-lakeline': function (feature) {
-                return feature.properties.name;
-            },
-            'water-name-ocean': function (feature) {
-                return feature.properties.name;
-            },
-            'water-name-other': function (feature) {
                 return feature.properties.name;
             },
             'highway-motorway': function (feature) {
-                return 'Street';
+                return feature.properties.name;
             },
             'railway-transit': function (feature) {
-                return 'Railway';
+                return feature.properties.name;
             },
             'railway-service': function (feature) {
-                return 'Railway';
+                return feature.properties.name;
             },
             'railway': function (feature) {
-                return 'Railway';
+                return feature.properties.name;
+            },
+            'bridge-path': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-motorway-link': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-link': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-secondary-tertiary': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-trunk-primary': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-motorway': function (feature) {
+                return feature.properties.name;
+            },
+            'bridge-railway': function (feature) {
+                return feature.properties.name;
+            },
+            'cablecar': function (feature) {
+                return feature.properties.name;
+            },
+            'road_oneway': function (feature) {
+                return feature.properties.name;
+            },
+            'road_oneway_opposite': function (feature) {
+                return feature.properties.name;
             },
         }
     });

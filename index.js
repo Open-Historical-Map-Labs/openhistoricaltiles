@@ -88,6 +88,12 @@ var START_CENTER = [-99.5, 37.9];
 
 window.MAP = undefined;
 
+window.toTitleCase = function (str) {
+    return str.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
+
 $(document).ready(function () {
     //
     // basic map
@@ -105,25 +111,119 @@ $(document).ready(function () {
 
     MAP.HOVERS = new _mbglControlMousehovers.MapHoversControl({
         layers: {
-            'ohm-transportation': {
-                enter: function enter(mouseevent) {
-                    // console.log(mouseevent.features[0].properties);
-                    var tooltip = 'Transportation: ' + mouseevent.features[0].properties.class;
-                    MAP.HOVERS.setMapToolTip(tooltip);
-                },
-                leave: function leave(mouseevent) {
-                    MAP.HOVERS.clearMapToolTip();
-                }
+            //
+            // buildings; no name, but a type
+            //
+            'building': function building(feature) {
+                return toTitleCase(feature.properties.building.replace(/_/g, ' '));
             },
-            'ohm-poi': {
-                enter: function enter(mouseevent) {
-                    // console.log(mouseevent.features[0].properties);
-                    var tooltip = 'POI: ' + mouseevent.features[0].properties.name;
-                    MAP.HOVERS.setMapToolTip(tooltip);
-                },
-                leave: function leave(mouseevent) {
-                    MAP.HOVERS.clearMapToolTip();
-                }
+            //
+            // POIs; no name, but a type
+            //
+            'poi-level-3': function poiLevel3(feature) {
+                return feature.properties.name;
+            },
+            'poi-level-2': function poiLevel2(feature) {
+                return feature.properties.name;
+            },
+            'poi-level-1': function poiLevel1(feature) {
+                return feature.properties.name;
+            },
+            'poi-railway': function poiRailway(feature) {
+                return feature.properties.name;
+            },
+            //
+            // Roads etc; have a name
+            //
+            'tunnel-path': function tunnelPath(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-service-track': function tunnelServiceTrack(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-minor': function tunnelMinor(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-secondary-tertiary': function tunnelSecondaryTertiary(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-trunk-primary': function tunnelTrunkPrimary(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-motorway': function tunnelMotorway(feature) {
+                return feature.properties.name;
+            },
+            'tunnel-railway': function tunnelRailway(feature) {
+                return feature.properties.name;
+            },
+            'ferry': function ferry(feature) {
+                return feature.properties.name;
+            },
+            'highway-area': function highwayArea(feature) {
+                return feature.properties.name;
+            },
+            'highway-path': function highwayPath(feature) {
+                return feature.properties.name;
+            },
+            'highway-motorway-link': function highwayMotorwayLink(feature) {
+                return feature.properties.name;
+            },
+            'highway-link': function highwayLink(feature) {
+                return feature.properties.name;
+            },
+            'highway-minor': function highwayMinor(feature) {
+                return feature.properties.name;
+            },
+            'highway-secondary-tertiary': function highwaySecondaryTertiary(feature) {
+                return feature.properties.name;
+            },
+            'highway-primary': function highwayPrimary(feature) {
+                return feature.properties.name;
+            },
+            'highway-trunk': function highwayTrunk(feature) {
+                return feature.properties.name;
+            },
+            'highway-motorway': function highwayMotorway(feature) {
+                return feature.properties.name;
+            },
+            'railway-transit': function railwayTransit(feature) {
+                return feature.properties.name;
+            },
+            'railway-service': function railwayService(feature) {
+                return feature.properties.name;
+            },
+            'railway': function railway(feature) {
+                return feature.properties.name;
+            },
+            'bridge-path': function bridgePath(feature) {
+                return feature.properties.name;
+            },
+            'bridge-motorway-link': function bridgeMotorwayLink(feature) {
+                return feature.properties.name;
+            },
+            'bridge-link': function bridgeLink(feature) {
+                return feature.properties.name;
+            },
+            'bridge-secondary-tertiary': function bridgeSecondaryTertiary(feature) {
+                return feature.properties.name;
+            },
+            'bridge-trunk-primary': function bridgeTrunkPrimary(feature) {
+                return feature.properties.name;
+            },
+            'bridge-motorway': function bridgeMotorway(feature) {
+                return feature.properties.name;
+            },
+            'bridge-railway': function bridgeRailway(feature) {
+                return feature.properties.name;
+            },
+            'cablecar': function cablecar(feature) {
+                return feature.properties.name;
+            },
+            'road_oneway': function road_oneway(feature) {
+                return feature.properties.name;
+            },
+            'road_oneway_opposite': function road_oneway_opposite(feature) {
+                return feature.properties.name;
             }
         }
     });
@@ -136,19 +236,18 @@ $(document).ready(function () {
             // - "title" for that set, e.g. Water Features
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
-            var collected_feature_groups = [{
-                title: "Transportation",
-                features: MAP.queryRenderedFeatures(clickevent.point, { layers: ['ohm-transportation'] }),
-                template: function template(feature) {
-                    return '' + feature.properties.class;
-                }
-            }, {
-                title: "POIs",
-                features: MAP.queryRenderedFeatures(clickevent.point, { layers: ['ohm-poi'] }),
-                template: function template(feature) {
-                    return '' + feature.properties.name;
-                }
-            }];
+            var collected_feature_groups = [
+                /*
+                {
+                    title: "Buildings",
+                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'building' ] }),
+                    template: function (feature) {
+                        console.log([ 'building', feature.properties ]);
+                        return `${feature.properties.class}`;
+                    },
+                },
+                */
+            ];
 
             // ready; hand off
             MAP.CLICKS.displayFeatures(collected_feature_groups);
@@ -390,25 +489,30 @@ var MapHoversControl = exports.MapHoversControl = function () {
     }
 
     _createClass(MapHoversControl, [{
-        key: "onAdd",
+        key: 'onAdd',
         value: function onAdd(map) {
             var _this = this;
 
             this._map = map;
 
             // when the map comes ready, attach the given events to the given layers
+            // each layer is a callback, which will be passed a feature and should return the tooltip text
             this._map.on('load', function () {
                 Object.entries(_this.options.layers).forEach(function (_ref) {
                     var _ref2 = _slicedToArray(_ref, 2),
                         layerid = _ref2[0],
-                        callbacks = _ref2[1];
+                        callback = _ref2[1];
 
-                    if (callbacks.enter) {
-                        _this._map.on("mousemove", layerid, callbacks.enter);
-                    }
-                    if (callbacks.leave) {
-                        _this._map.on("mouseleave", layerid, callbacks.leave);
-                    }
+                    _this._map.on("mousemove", layerid, function (mouseevent) {
+                        var feature = mouseevent.features[0];
+                        console.log(['MapHoversControl', layerid, feature]);
+
+                        var tooltip = callback(feature);
+                        _this.setMapToolTip(tooltip);
+                    });
+                    _this._map.on("mouseleave", layerid, function () {
+                        _this.clearMapToolTip();
+                    });
                 });
             });
 
@@ -417,7 +521,7 @@ var MapHoversControl = exports.MapHoversControl = function () {
             return this._container;
         }
     }, {
-        key: "onRemove",
+        key: 'onRemove',
         value: function onRemove() {
             var _this2 = this;
 
@@ -427,19 +531,15 @@ var MapHoversControl = exports.MapHoversControl = function () {
                     layerid = _ref4[0],
                     callbacks = _ref4[1];
 
-                if (callbacks.enter) {
-                    _this2._map.off("mousemove", layerid, callbacks.enter);
-                }
-                if (callbacks.leave) {
-                    _this2._map.off("mouseleave", layerid, callbacks.leave);
-                }
+                _this2._map.off("mousemove", layerid, callbacks.enter);
+                _this2._map.off("mouseleave", layerid, callbacks.leave);
             });
 
             this._container.parentNode.removeChild(this._container);
             this._map = undefined;
         }
     }, {
-        key: "setMapToolTip",
+        key: 'setMapToolTip',
         value: function setMapToolTip(tooltip) {
             if (!tooltip) {
                 return this.clearMapToolTip(); // setting a blank = they meant to clear it
@@ -450,7 +550,7 @@ var MapHoversControl = exports.MapHoversControl = function () {
             this._map.getCanvas().style.cursor = 'crosshair';
         }
     }, {
-        key: "clearMapToolTip",
+        key: 'clearMapToolTip',
         value: function clearMapToolTip() {
             //GDA clean up DIV name, auto-detection
             document.getElementById('map').title = '';
