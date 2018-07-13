@@ -255,7 +255,8 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, render_height, render_min_height FROM layer_building(!bbox!, z(!scale_denominator!))
+      SELECT geometry, render_height, render_min_height, building
+      FROM layer_building(!bbox!, z(!scale_denominator!))
       ) AS t
   id: building
   properties: {buffer-size: 4}

@@ -58,6 +58,36 @@ index f064f58..ae931f8 100644
 
 
 
+## Adding Fields to Vector Tile Output
+
+Short version:
+
+See attached `dbmods-XXXX.sql` files for a set of changes made to the OpenMapTiles data after it is loaded. These enable some features beyond OSM standard, but which are requested, e.g. adding names to parks and streets, so these are exposed via click and hover/tooltip behaviors.
+
+Long version:
+
+Tessera's `table` definitions use a set of wrapper functions defined as part of the OSM loading process, e.g. `layer_building()` which is not a table but a function which returns a table-like structure. In reality, the data are preprocessed into a whole bunch of sub-tables, views, and more virtual-table functions based on zoom level.
+
+Depending on the whim of whoever wrote these scripts, and on the data collected in OSM/OHM, many of these tables lack any attributes beyond the geometry.
+
+Example: `layer_building()` is a function which performs a UNION against the following:
+* `osm_building_polygon_gen1` -- a table, has a `building` field indicating its usage
+* `osm_all_buildings` -- a view filtering and joining the tables `osm_building_relation`, `osm_building_associatedstreet`, `osm_building_street`, and `osm_building_polygon`
+* The total attributes here do *not* include a field for name/label/address, but does include fields for number of levels and total height of the building
+
+Example: `layer_water()` is a function which performs a UNION of a dozen views named `water_z0` through `water_z14`
+* each of these views is different as to what it uses:
+  * `water_z0` pulls only the geometry from the `ne_110m_ocean` and `ne_110m_lakes` tables, which lack any identifying information such as the name of the ocean
+  * `water_z14` pulls from tables `osm_ocean_polygon` and `osm_water_polygon`; the `osm_water_polygon` table does name name fields
+  * `water_z6` pulls from `ne_10m_ocean` and `osm_water_polygon_gen6`; the `osm_water_polygon_gen6` table does name name fields
+* as such, it would theoreticaly be possible to modify **some of** these water views, to incorporate the name fields and to modify `layer_water()` to include them
+
+On the other hand, `layer_water_name()` uses completely different tables, than are used by either the `layer_water()` or `layer_waterway()` functions:
+* `osm_water_lakeline`, `osm_water_point`, and `osm_marine_point`
+
+
+
+
 ## Using NVM and a Less-Ancient Node
 
 The version of Node with ubuntu is really old and we need a newer one (6.14.3). Use NVM instead.
