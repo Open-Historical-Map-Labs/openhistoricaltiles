@@ -235,7 +235,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
+      SELECT geometry, name, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
       FROM layer_transportation(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation
