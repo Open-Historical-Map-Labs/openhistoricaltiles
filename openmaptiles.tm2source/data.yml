@@ -33,38 +33,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
-      "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, brunnel
+      SELECT geometry, name_en AS name, class, brunnel
       FROM layer_waterway(!bbox!, z(!scale_denominator!))
       ) AS t
   id: waterway
@@ -124,38 +93,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
-      '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", ele, ele_ft, rank
+      SELECT osm_id, geometry, name_en AS name, ele, ele_ft, rank
       FROM layer_mountain_peak(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: mountain_peak
@@ -275,38 +213,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
-      '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class
+      SELECT osm_id, geometry, name_en AS name, class
       FROM layer_water_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water_name
@@ -326,38 +233,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
-      "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", ref, ref_length, network::text, class::text, subclass, layer, level, indoor
+      SELECT geometry, name_en AS name, ref, ref_length, network::text, class::text, subclass, layer, level, indoor
       FROM layer_transportation_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation_name
@@ -377,38 +253,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
-      '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, rank, capital, iso_a2
+      SELECT osm_id, geometry, name_en AS name, class, rank, capital, iso_a2
       FROM layer_place(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: place
@@ -448,38 +293,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
-      '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, subclass, agg_stop, rank
+      SELECT osm_id, geometry, name_en AS name, class, subclass, agg_stop, rank
       FROM layer_poi(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: poi
@@ -499,38 +313,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
-      '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
-      '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
-      '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
-      '') AS "name:ca", NULLIF(tags->'name:cs', '') AS "name:cs", NULLIF(tags->'name:cy',
-      '') AS "name:cy", NULLIF(tags->'name:da', '') AS "name:da", NULLIF(tags->'name:de',
-      '') AS "name:de", NULLIF(tags->'name:el', '') AS "name:el", NULLIF(tags->'name:en',
-      '') AS "name:en", NULLIF(tags->'name:eo', '') AS "name:eo", NULLIF(tags->'name:es',
-      '') AS "name:es", NULLIF(tags->'name:et', '') AS "name:et", NULLIF(tags->'name:fi',
-      '') AS "name:fi", NULLIF(tags->'name:fr', '') AS "name:fr", NULLIF(tags->'name:fy',
-      '') AS "name:fy", NULLIF(tags->'name:ga', '') AS "name:ga", NULLIF(tags->'name:gd',
-      '') AS "name:gd", NULLIF(tags->'name:he', '') AS "name:he", NULLIF(tags->'name:hr',
-      '') AS "name:hr", NULLIF(tags->'name:hu', '') AS "name:hu", NULLIF(tags->'name:hy',
-      '') AS "name:hy", NULLIF(tags->'name:is', '') AS "name:is", NULLIF(tags->'name:it',
-      '') AS "name:it", NULLIF(tags->'name:ja', '') AS "name:ja", NULLIF(tags->'name:ja_kana',
-      '') AS "name:ja_kana", NULLIF(tags->'name:ja_rm', '') AS "name:ja_rm", NULLIF(tags->'name:ka',
-      '') AS "name:ka", NULLIF(tags->'name:kk', '') AS "name:kk", NULLIF(tags->'name:kn',
-      '') AS "name:kn", NULLIF(tags->'name:ko', '') AS "name:ko", NULLIF(tags->'name:ko_rm',
-      '') AS "name:ko_rm", NULLIF(tags->'name:la', '') AS "name:la", NULLIF(tags->'name:lb',
-      '') AS "name:lb", NULLIF(tags->'name:lt', '') AS "name:lt", NULLIF(tags->'name:lv',
-      '') AS "name:lv", NULLIF(tags->'name:mk', '') AS "name:mk", NULLIF(tags->'name:mt',
-      '') AS "name:mt", NULLIF(tags->'name:nl', '') AS "name:nl", NULLIF(tags->'name:no',
-      '') AS "name:no", NULLIF(tags->'name:pl', '') AS "name:pl", NULLIF(tags->'name:pt',
-      '') AS "name:pt", NULLIF(tags->'name:rm', '') AS "name:rm", NULLIF(tags->'name:ro',
-      '') AS "name:ro", NULLIF(tags->'name:ru', '') AS "name:ru", NULLIF(tags->'name:sk',
-      '') AS "name:sk", NULLIF(tags->'name:sl', '') AS "name:sl", NULLIF(tags->'name:sq',
-      '') AS "name:sq", NULLIF(tags->'name:sr', '') AS "name:sr", NULLIF(tags->'name:sr-Latn',
-      '') AS "name:sr-Latn", NULLIF(tags->'name:sv', '') AS "name:sv", NULLIF(tags->'name:th',
-      '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
-      '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
-      '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, iata, icao, ele, ele_ft
+      SELECT osm_id, geometry, name_en AS name, class, iata, icao, ele, ele_ft
       FROM layer_aerodrome_label(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: aerodrome_label
