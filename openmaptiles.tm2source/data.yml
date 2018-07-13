@@ -1,35 +1,39 @@
 Layer:
 - Datasource:
+    type: postgis
+    host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
     dbname: openmaptiles
     extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     geometry_field: geometry
-    host: localhost
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
     srid: 900913
-    table: (SELECT geometry, class FROM layer_water(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, class
+      FROM layer_water(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: water
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
+    table: (
+      SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
       "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -60,64 +64,67 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, brunnel FROM layer_waterway(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", class, brunnel
+      FROM layer_waterway(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: waterway
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, class, subclass FROM layer_landcover(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, class, subclass
+      FROM layer_landcover(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: landcover
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, class FROM layer_landuse(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, class
+      FROM layer_landuse(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: landuse
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
+    table: (
+      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
       '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -148,122 +155,126 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", ele, ele_ft, rank FROM layer_mountain_peak(!bbox!, z(!scale_denominator!),
-      !pixel_width!)) AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", ele, ele_ft, rank
+      FROM layer_mountain_peak(!bbox!, z(!scale_denominator!), !pixel_width!)
+      ) AS t
   id: mountain_peak
   properties: {buffer-size: 64}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, class FROM layer_park(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, class
+      FROM layer_park(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: park
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, admin_level, disputed, maritime FROM layer_boundary(!bbox!,
-      z(!scale_denominator!))) AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, admin_level, disputed, maritime
+      FROM layer_boundary(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: boundary
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, ref, class FROM layer_aeroway(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, ref, class
+      FROM layer_aeroway(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: aeroway
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, class, subclass, oneway, ramp, brunnel, service, layer,
-      level, indoor FROM layer_transportation(!bbox!, z(!scale_denominator!))) AS
-      t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
+      FROM layer_transportation(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: transportation
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, render_height, render_min_height FROM layer_building(!bbox!,
-      z(!scale_denominator!))) AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, render_height, render_min_height FROM layer_building(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: building
   properties: {buffer-size: 4}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: osm_id
     key_field_as_attribute: false
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
+    table: (
+      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
       '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -294,26 +305,27 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class FROM layer_water_name(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", class
+      FROM layer_water_name(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: water_name
   properties: {buffer-size: 256}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
+    table: (
+      SELECT geometry, name, name_en, name_de, NULLIF(tags->'name:ar', '') AS
       "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -344,27 +356,27 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", ref, ref_length, network::text, class::text, subclass,
-      layer, level, indoor FROM layer_transportation_name(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", ref, ref_length, network::text, class::text, subclass, layer, level, indoor
+      FROM layer_transportation_name(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: transportation_name
   properties: {buffer-size: 8}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: osm_id
     key_field_as_attribute: false
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
+    table: (
+      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
       '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -395,45 +407,47 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, rank, capital, iso_a2 FROM layer_place(!bbox!,
-      z(!scale_denominator!), !pixel_width!)) AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", class, rank, capital, iso_a2
+      FROM layer_place(!bbox!, z(!scale_denominator!), !pixel_width!)
+      ) AS t
   id: place
   properties: {buffer-size: 256}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT geometry, housenumber FROM layer_housenumber(!bbox!, z(!scale_denominator!)))
-      AS t
-    type: postgis
-    user: openmaptiles
+    table: (
+      SELECT geometry, housenumber
+      FROM layer_housenumber(!bbox!, z(!scale_denominator!))
+      ) AS t
   id: housenumber
   properties: {buffer-size: 8}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: osm_id
     key_field_as_attribute: false
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
+    table: (
+      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
       '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -464,26 +478,27 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, subclass, agg_stop, rank FROM layer_poi(!bbox!,
-      z(!scale_denominator!), !pixel_width!)) AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", class, subclass, agg_stop, rank
+      FROM layer_poi(!bbox!, z(!scale_denominator!), !pixel_width!)
+      ) AS t
   id: poi
   properties: {buffer-size: 64}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
 - Datasource:
-    dbname: openmaptiles
-    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
-    geometry_field: geometry
+    type: postgis
     host: localhost
+    port: 5432
+    user: openmaptiles
+    password: openmaptiles
+    dbname: openmaptiles
+    geometry_field: geometry
+    srid: 900913
+    extent: [-20037508.34, -20037508.34, 20037508.34, 20037508.34]
     key_field: ''
     key_field_as_attribute: ''
     max_size: 512
-    password: openmaptiles
-    port: 5432
-    srid: 900913
-    table: (SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
+    table: (
+      SELECT osm_id, geometry, name, name_en, name_de, NULLIF(tags->'name:ar',
       '') AS "name:ar", NULLIF(tags->'name:az', '') AS "name:az", NULLIF(tags->'name:be',
       '') AS "name:be", NULLIF(tags->'name:bg', '') AS "name:bg", NULLIF(tags->'name:br',
       '') AS "name:br", NULLIF(tags->'name:bs', '') AS "name:bs", NULLIF(tags->'name:ca',
@@ -514,17 +529,13 @@ Layer:
       '') AS "name:th", NULLIF(tags->'name:tr', '') AS "name:tr", NULLIF(tags->'name:uk',
       '') AS "name:uk", NULLIF(tags->'name:zh', '') AS "name:zh", NULLIF(tags->'name_int',
       '') AS "name_int", NULLIF(tags->'name:latin', '') AS "name:latin", NULLIF(tags->'name:nonlatin',
-      '') AS "name:nonlatin", class, iata, icao, ele, ele_ft FROM layer_aerodrome_label
-      (!bbox!, z(!scale_denominator!), !pixel_width!)) AS t
-    type: postgis
-    user: openmaptiles
+      '') AS "name:nonlatin", class, iata, icao, ele, ele_ft
+      FROM layer_aerodrome_label(!bbox!, z(!scale_denominator!), !pixel_width!)
+      ) AS t
   id: aerodrome_label
   properties: {buffer-size: 64}
-  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0
-    +units=m +nadgrids=@null +wktext +no_defs +over
-attribution: <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a>
-  <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap
-  contributors</a>
+  srs: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over
+attribution: <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 center: [-12.2168, 28.6135, 4]
 description: A tileset showcasing all layers in OpenMapTiles. https://openmaptiles.org
 maxzoom: 18
