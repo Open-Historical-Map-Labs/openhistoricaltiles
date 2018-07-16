@@ -1,4 +1,4 @@
-import { GLMAP_STYLE } from './maplayers';
+import { GLMAP_STYLE } from './mapconstants';
 
 import { UrlHashControl } from './js/mbgl-control-urlhash';
 import { MapHoversControl } from './js/mbgl-control-mousehovers';

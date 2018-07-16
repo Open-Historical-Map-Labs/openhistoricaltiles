@@ -73,7 +73,7 @@
 "use strict";
 
 
-var _maplayers = __webpack_require__(7);
+var _mapconstants = __webpack_require__(7);
 
 var _mbglControlUrlhash = __webpack_require__(6);
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
     //
     MAP = new mapboxgl.Map({
         container: "map",
-        style: _maplayers.GLMAP_STYLE,
+        style: _mapconstants.GLMAP_STYLE,
         zoom: START_ZOOM,
         center: START_CENTER,
         minZoom: MIN_ZOOM,
