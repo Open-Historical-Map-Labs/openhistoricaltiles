@@ -38,54 +38,72 @@ CREATE OR REPLACE VIEW water_z6 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM ne_10m_ocean
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen6
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z7 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM ne_10m_ocean
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen5
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z8 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon_gen4
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen4
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z9 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon_gen3
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen3
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z10 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon_gen2
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen2
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z11 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon_gen1
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon_gen1
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z12 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z13 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 CREATE OR REPLACE VIEW water_z14 AS (
     SELECT geometry, 'ocean'::text AS class, ''::text AS name FROM osm_ocean_polygon
     UNION ALL
     SELECT geometry, water_class(waterway) AS class, name_en AS name FROM osm_water_polygon
+    UNION ALL
+    SELECT geometry, 'lake'::text AS class, name FROM ne_10m_lakes
 );
 
 
