@@ -13,7 +13,7 @@ Layer:
     max_size: 512
     srid: 900913
     table: (
-      SELECT geometry, class, name
+      SELECT geometry, start_date, end_date, class, name
       FROM layer_water(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water
@@ -33,7 +33,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, name_en AS name, class, brunnel
+      SELECT geometry, start_date, end_date, name_en AS name, class, brunnel
       FROM layer_waterway(!bbox!, z(!scale_denominator!))
       ) AS t
   id: waterway
@@ -53,7 +53,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, class, subclass
+      SELECT geometry, start_date, end_date, class, subclass
       FROM layer_landcover(!bbox!, z(!scale_denominator!))
       ) AS t
   id: landcover
@@ -73,7 +73,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, class
+      SELECT geometry, start_date, end_date, class
       FROM layer_landuse(!bbox!, z(!scale_denominator!))
       ) AS t
   id: landuse
@@ -93,7 +93,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name_en AS name, ele, ele_ft, rank
+      SELECT osm_id, geometry, start_date, end_date, name_en AS name, ele, ele_ft, rank
       FROM layer_mountain_peak(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: mountain_peak
@@ -113,7 +113,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, class
+      SELECT geometry, start_date, end_date, class
       FROM layer_park(!bbox!, z(!scale_denominator!))
       ) AS t
   id: park
@@ -133,7 +133,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, admin_level, disputed, maritime
+      SELECT geometry, start_date, end_date, admin_level, disputed, maritime
       FROM layer_boundary(!bbox!, z(!scale_denominator!))
       ) AS t
   id: boundary
@@ -153,7 +153,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, ref, class
+      SELECT geometry, start_date, end_date, ref, class
       FROM layer_aeroway(!bbox!, z(!scale_denominator!))
       ) AS t
   id: aeroway
@@ -173,7 +173,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, name, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
+      SELECT geometry, start_date, end_date, name, name_en, name_de, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
       FROM layer_transportation(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation
@@ -193,7 +193,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, render_height, render_min_height, building
+      SELECT geometry, start_date, end_date, render_height, render_min_height, building
       FROM layer_building(!bbox!, z(!scale_denominator!))
       ) AS t
   id: building
@@ -213,7 +213,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name_en AS name, class
+      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class
       FROM layer_water_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water_name
@@ -233,7 +233,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, name_en AS name, ref, ref_length, network::text, class::text, subclass, layer, level, indoor
+      SELECT geometry, start_date, end_date, name_en AS name, ref, ref_length, network::text, class::text, subclass, layer, level, indoor
       FROM layer_transportation_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation_name
@@ -253,7 +253,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name_en AS name, class, rank, capital, iso_a2
+      SELECT osm_id, geometry, start_date, end_date, name, name_en, name_de, class, rank, capital, iso_a2
       FROM layer_place(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: place
@@ -273,7 +273,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT geometry, housenumber
+      SELECT geometry, start_date, end_date, housenumber
       FROM layer_housenumber(!bbox!, z(!scale_denominator!))
       ) AS t
   id: housenumber
@@ -293,7 +293,7 @@ Layer:
     key_field_as_attribute: false
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name_en AS name, class, subclass, agg_stop, rank
+      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class, subclass, agg_stop, rank
       FROM layer_poi(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: poi
@@ -313,7 +313,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name_en AS name, class, iata, icao, ele, ele_ft
+      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class, iata, icao, ele, ele_ft
       FROM layer_aerodrome_label(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: aerodrome_label
