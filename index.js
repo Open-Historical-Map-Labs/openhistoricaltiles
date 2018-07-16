@@ -258,18 +258,73 @@ $(document).ready(function () {
             // - "title" for that set, e.g. Water Features
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
-            var collected_feature_groups = [
-                /*
-                {
-                    title: "Buildings",
-                    features: MAP.queryRenderedFeatures(clickevent.point, { layers: [ 'building' ] }),
-                    template: function (feature) {
-                        console.log([ 'building', feature.properties ]);
-                        return `${feature.properties.class}`;
-                    },
-                },
-                */
-            ];
+            //    tip: return a empty string to effectively skip this feature
+            var collected_feature_groups = [{
+                title: "Roads, Rails, and Routes",
+                features: MAP.queryRenderedFeatures(clickevent.point, {
+                    layers: ['highway-primary', 'highway-trunk', 'highway-secondary-tertiary', 'highway-motorway', 'highway-minor', 'highway-motorway-link', 'highway-link', 'bridge-motorway-link', 'bridge-link', 'bridge-secondary-tertiary', 'bridge-trunk-primary', 'bridge-motorway', 'railway-transit', 'railway-service', 'railway', 'bridge-railway', 'tunnel-path', 'tunnel-service-track', 'tunnel-minor', 'tunnel-secondary-tertiary', 'tunnel-trunk-primary', 'tunnel-motorway', 'tunnel-railway', 'ferry', 'cablecar', 'road_oneway', 'road_oneway_opposite']
+                }),
+                template: function template(feature) {
+                    var infohtml = '' + feature.properties.name;
+
+                    // add date info, if we have any
+                    if (feature.properties.start_date && feature.properties.end_date) {
+                        infohtml += '<br/>From ' + feature.properties.start_date + ' to ' + feature.properties.end_date;
+                    } else if (feature.properties.start_date) {
+                        infohtml += '<br/>Starting ' + feature.properties.start_date;
+                    } else if (feature.properties.end_date) {
+                        infohtml += '<br/>Until ' + feature.properties.end_date;
+                    }
+
+                    return infohtml;
+                }
+            }, {
+                title: "Water Features",
+                features: MAP.queryRenderedFeatures(clickevent.point, {
+                    layers: ['water', 'waterway_tunnel', 'waterway-other', 'waterway-stream-canal', 'waterway-river']
+                }),
+                template: function template(feature) {
+                    var infohtml = '' + feature.properties.name;
+
+                    // add date info, if we have any
+                    if (feature.properties.start_date && feature.properties.end_date) {
+                        infohtml += '<br/>From ' + feature.properties.start_date + ' to ' + feature.properties.end_date;
+                    } else if (feature.properties.start_date) {
+                        infohtml += '<br/>Starting ' + feature.properties.start_date;
+                    } else if (feature.properties.end_date) {
+                        infohtml += '<br/>Until ' + feature.properties.end_date;
+                    }
+
+                    return infohtml;
+                }
+            }, {
+                title: "Points of Interest",
+                features: MAP.queryRenderedFeatures(clickevent.point, {
+                    layers: ['poi-level-3', 'poi-level-2', 'poi-level-1', 'poi-railway', 'building']
+                }),
+                template: function template(feature) {
+                    var infohtml = "";
+                    switch (feature.layer.id) {
+                        case 'building':
+                            infohtml = toTitleCase(feature.properties.building.replace(/_/g, ' '));
+                            break;
+                        default:
+                            infohtml = '' + feature.properties.name;
+                            break;
+                    }
+
+                    // add date info, if we have any
+                    if (feature.properties.start_date && feature.properties.end_date) {
+                        infohtml += '<br/>From ' + feature.properties.start_date + ' to ' + feature.properties.end_date;
+                    } else if (feature.properties.start_date) {
+                        infohtml += '<br/>Starting ' + feature.properties.start_date;
+                    } else if (feature.properties.end_date) {
+                        infohtml += '<br/>Until ' + feature.properties.end_date;
+                    }
+
+                    return infohtml;
+                }
+            }];
 
             // ready; hand off
             MAP.CLICKS.displayFeatures(collected_feature_groups);
@@ -450,6 +505,7 @@ var MapClicksControl = exports.MapClicksControl = function () {
 
                 featuregroup.features.forEach(function (feature) {
                     var thishtml = featuregroup.template(feature);
+                    if (!thishtml) return; // returning blank HTML = skip this feature
                     collected_html.push('<div class="mbgl-control-mouseclicks-feature">' + thishtml + '</div>');
                 });
 
@@ -2119,7 +2175,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "layout": {
       "text-font": ["Noto Sans Italic"],
       "text-size": 14,
-      "text-field": "{name:latin} {name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 5,
       "text-rotation-alignment": "map",
       "symbol-placement": "line",
@@ -2140,7 +2196,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "layout": {
       "text-font": ["Noto Sans Italic"],
       "text-size": 14,
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 5,
       "text-rotation-alignment": "map",
       "symbol-placement": "line",
@@ -2161,7 +2217,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "layout": {
       "text-font": ["Noto Sans Italic"],
       "text-size": 14,
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-max-width": 5,
       "text-rotation-alignment": "map",
       "symbol-placement": "point",
@@ -2184,7 +2240,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-size": {
         "stops": [[0, 10], [6, 14]]
       },
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 5,
       "text-rotation-alignment": "map",
       "symbol-placement": "point",
@@ -2209,7 +2265,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-font": ["Noto Sans Regular"],
       "text-anchor": "top",
       "icon-image": "{class}_11",
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-offset": [0, 0.6],
       "text-size": 12,
       "text-max-width": 9
@@ -2232,7 +2288,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-font": ["Noto Sans Regular"],
       "text-anchor": "top",
       "icon-image": "{class}_11",
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-offset": [0, 0.6],
       "text-size": 12,
       "text-max-width": 9
@@ -2255,7 +2311,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-font": ["Noto Sans Regular"],
       "text-anchor": "top",
       "icon-image": "{class}_11",
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-offset": [0, 0.6],
       "text-size": 12,
       "text-max-width": 9
@@ -2278,7 +2334,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-font": ["Noto Sans Regular"],
       "text-anchor": "top",
       "icon-image": "{class}_11",
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-offset": [0, 0.6],
       "text-size": 12,
       "text-max-width": 9,
@@ -2350,7 +2406,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "stops": [[13, 12], [14, 13]]
       },
       "text-font": ["Noto Sans Regular"],
-      "text-field": "{name:latin} {name:nonlatin}",
+      "text-field": "{name}",
       "symbol-placement": "line",
       "text-rotation-alignment": "map"
     },
@@ -2372,7 +2428,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "stops": [[13, 12], [14, 13]]
       },
       "text-font": ["Noto Sans Regular"],
-      "text-field": "{name:latin} {name:nonlatin}",
+      "text-field": "{name}",
       "symbol-placement": "line",
       "text-rotation-alignment": "map"
     },
@@ -2394,7 +2450,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "stops": [[13, 12], [14, 13]]
       },
       "text-font": ["Noto Sans Regular"],
-      "text-field": "{name:latin} {name:nonlatin}",
+      "text-field": "{name}",
       "symbol-placement": "line",
       "text-rotation-alignment": "map"
     },
@@ -2485,7 +2541,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
       "text-font": ["Noto Sans Regular"],
       "text-anchor": "top",
       "icon-image": "airport_11",
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-offset": [0, 0.6],
       "text-size": 12,
       "text-max-width": 9,
@@ -2512,7 +2568,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "stops": [[12, 10], [15, 14]]
       },
       "text-font": ["Noto Sans Bold"],
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-transform": "uppercase",
       "text-max-width": 9,
       "visibility": "visible"
@@ -2534,7 +2590,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "base": 1.2,
         "stops": [[10, 12], [15, 22]]
       },
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 8,
       "visibility": "visible"
     },
@@ -2555,7 +2611,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "base": 1.2,
         "stops": [[10, 14], [15, 24]]
       },
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 8,
       "visibility": "visible"
     },
@@ -2576,7 +2632,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "base": 1.2,
         "stops": [[7, 14], [11, 24]]
       },
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 8,
       "visibility": "visible"
     },
@@ -2597,7 +2653,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
         "base": 1.2,
         "stops": [[7, 14], [11, 24]]
       },
-      "text-field": "{name:latin}\n{name:nonlatin}",
+      "text-field": "{name}",
       "text-max-width": 8,
       "icon-image": "star_11",
       "text-offset": [0.4, 0],
@@ -2618,7 +2674,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "filter": ["all", ["==", "class", "country"], [">=", "rank", 3], ["!has", "iso_a2"]],
     "layout": {
       "text-font": ["Noto Sans Italic"],
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-size": {
         "stops": [[3, 11], [7, 17]]
       },
@@ -2640,7 +2696,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "filter": ["all", ["==", "class", "country"], [">=", "rank", 3], ["has", "iso_a2"]],
     "layout": {
       "text-font": ["Noto Sans Bold"],
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-size": {
         "stops": [[3, 11], [7, 17]]
       },
@@ -2662,7 +2718,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "filter": ["all", ["==", "class", "country"], ["==", "rank", 2], ["has", "iso_a2"]],
     "layout": {
       "text-font": ["Noto Sans Bold"],
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-size": {
         "stops": [[2, 11], [5, 17]]
       },
@@ -2684,7 +2740,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "filter": ["all", ["==", "class", "country"], ["==", "rank", 1], ["has", "iso_a2"]],
     "layout": {
       "text-font": ["Noto Sans Bold"],
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-size": {
         "stops": [[1, 11], [4, 17]]
       },
@@ -2707,7 +2763,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
     "filter": ["==", "class", "continent"],
     "layout": {
       "text-font": ["Noto Sans Bold"],
-      "text-field": "{name:latin}",
+      "text-field": "{name}",
       "text-size": 14,
       "text-max-width": 6.25,
       "text-transform": "uppercase",

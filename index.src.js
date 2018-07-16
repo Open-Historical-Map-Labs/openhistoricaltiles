@@ -219,7 +219,20 @@ $(document).ready(function () {
                         ],
                     }),
                     template: function (feature) {
-                        return `${feature.properties.name}`;
+                        let infohtml = `${feature.properties.name}`;
+
+                        // add date info, if we have any
+                        if (feature.properties.start_date && feature.properties.end_date) {
+                            infohtml += `<br/>From ${feature.properties.start_date} to ${feature.properties.end_date}`;
+                        }
+                        else if (feature.properties.start_date) {
+                            infohtml += `<br/>Starting ${feature.properties.start_date}`;
+                        }
+                        else if (feature.properties.end_date) {
+                            infohtml += `<br/>Until ${feature.properties.end_date}`;
+                        }
+
+                        return infohtml;
                     },
                 },
                 {
@@ -234,7 +247,20 @@ $(document).ready(function () {
                         ],
                     }),
                     template: function (feature) {
-                        return `${feature.properties.name}`;
+                        let infohtml = `${feature.properties.name}`;
+
+                        // add date info, if we have any
+                        if (feature.properties.start_date && feature.properties.end_date) {
+                            infohtml += `<br/>From ${feature.properties.start_date} to ${feature.properties.end_date}`;
+                        }
+                        else if (feature.properties.start_date) {
+                            infohtml += `<br/>Starting ${feature.properties.start_date}`;
+                        }
+                        else if (feature.properties.end_date) {
+                            infohtml += `<br/>Until ${feature.properties.end_date}`;
+                        }
+
+                        return infohtml;
                     },
                 },
                 {
@@ -249,16 +275,28 @@ $(document).ready(function () {
                         ],
                     }),
                     template: function (feature) {
-                        let name = "";
+                        let infohtml = "";
                         switch (feature.layer.id) {
                             case 'building':
-                                name = toTitleCase(feature.properties.building.replace(/_/g, ' '));
+                                infohtml = toTitleCase(feature.properties.building.replace(/_/g, ' '));
                                 break;
                             default:
-                                name = `${feature.properties.name}`;
+                                infohtml = `${feature.properties.name}`;
                                 break;
                         }
-                        return name;
+
+                        // add date info, if we have any
+                        if (feature.properties.start_date && feature.properties.end_date) {
+                            infohtml += `<br/>From ${feature.properties.start_date} to ${feature.properties.end_date}`;
+                        }
+                        else if (feature.properties.start_date) {
+                            infohtml += `<br/>Starting ${feature.properties.start_date}`;
+                        }
+                        else if (feature.properties.end_date) {
+                            infohtml += `<br/>Until ${feature.properties.end_date}`;
+                        }
+
+                        return infohtml;
                     },
                 },
             ];
