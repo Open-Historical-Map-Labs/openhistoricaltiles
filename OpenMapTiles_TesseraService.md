@@ -41,62 +41,15 @@ Terminology note: "Datasource" is what we normally call a "layer" or "feature gr
 This file is recompiled whenever the OpenMapTiles step `make build/openmaptiles.tm2source/data.yml` is run (which is part of `make`). So you should stow your edits someplace else.
 
 
-## Custom Patches
 
-After installing tessera, some mods are made to it.
+## Debugging Tip
 
-### Data leakage
+Tessera performs a query against each datasource (layer) b running its SQL. This means that if any of your SQL definitions don't work properly, the service won't start properly. Fortunately, it will crash with a verbose SQL error and you'll know what's going on.
 
-The output of `/index.json` includes the Layer configuration straight from the config file. This includes database connection params, actual SQL queries including potentially table or view names, and other pathnames.
-
-Patch to `node_modules/tessera/lib/app.js`
-
-Search for `app.get("/index.json"`
-
-Add this before it:
+In fact, while developing the datasourcelayers, you may find it useful to manually start the service without `systemctl` so you can see the error messages:
 
 ```
-// make JSON outputs prettier, and more legible
-app.set('json spaces', 2);
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh stop
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh start
 ```
 
-The JSON output is not readily legible. Adding spacing into it would make for much nicer debugging.
-
-Patch to `node_modules/tessera/lib/app.js`
-
-Search for `app.get("/index.json"` then scroll down about 10 lines to the `tessera.getInfo` callback.
-
-Add this in there, above the protocol and URL stuff:
-
-```
-// https://github.com/OpenHistoricalMap/openhistoricaltiles/issues/5
-// the default output includes a lot of sensitive information e.g. DB credentials
-delete info.Layer;
-delete info.id;
-delete info.mtime;
-delete info._prefs;
-```
-
-
-
-## The Service Wrapper
-
-The `service tessera stop` etc. commands, work because of a service wrapper script. Normally you wouldn't need to worry about that since the script is already set up. Still, if you need to do this on another server...
-
-File **/etc/systemd/system/tessera.service**
-```
-[Unit]
-Description=Tessera vectortile server
-User=ubuntu
-
-[Service]
-ExecStart=/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh start
-ExecStop=/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh stop
-
-[Install]
-WantedBy=multi-user.target
-```
-
-After you put the systemd file into place, `sudo systemctl daemon-reload && sudo systemctl enable tessera` to enable it as a service.
-
-The **tessera_service.sh** file is in this repository. After you put it into place, don't forget to `chmod 755 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh`
