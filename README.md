@@ -4,6 +4,8 @@ A simple vector-tiles map which displays OpenHistoricalMap data from the OpenMap
 
 http://openhistoricalmap.github.io/openhistoricaltiles
 
+There are two separate but very similar maps here. One is meant to look good, the other is intended to point out issues of malformed dates. Both have the same development process: build tools, etc.
+
 
 ## Tech Stack
 
