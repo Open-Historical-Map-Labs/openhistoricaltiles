@@ -232,6 +232,11 @@ $(document).ready(function () {
                             infohtml += `<br/>Until ${feature.properties.end_date}`;
                         }
 
+                        // add OSM ID, if it has one
+                        if (feature.properties.osm_id) {
+                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
+                        }
+
                         return infohtml;
                     },
                 },
@@ -258,6 +263,11 @@ $(document).ready(function () {
                         }
                         else if (feature.properties.end_date) {
                             infohtml += `<br/>Until ${feature.properties.end_date}`;
+                        }
+
+                        // add OSM ID, if it has one
+                        if (feature.properties.osm_id) {
+                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
                         }
 
                         return infohtml;
@@ -294,6 +304,11 @@ $(document).ready(function () {
                         }
                         else if (feature.properties.end_date) {
                             infohtml += `<br/>Until ${feature.properties.end_date}`;
+                        }
+
+                        // add OSM ID, if it has one
+                        if (feature.properties.osm_id) {
+                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
                         }
 
                         return infohtml;
