@@ -15,6 +15,8 @@ The OpenHistoricalMap planet file (as of July 9 2018) may be had from https://gr
 
 This repository (OpenHistoricalTiles) has a `gh-pages` branch, which is used to create a more customized demo.  https://openhistoricalmap.github.io/openhistoricaltiles/
 
-The OpenMapTiles server is running at http://ec2-18-209-171-18.compute-1.amazonaws.com/ Pointing your browser at this URL will bring up a demo using raster tiles, but wil also point to vector tile sources.
+The OpenMapTiles server is running at http://ec2-18-209-171-18.compute-1.amazonaws.com/ which is better known at https://vtiles.openhistoricalmap.org/ Pointing your browser at this URL will bring up a demo using raster tiles, but will also point to vector tile sources.
+
+The tilejson URL is https://vtiles.openhistoricalmap.org/index.json and this URL will provide configuration info for vectile consumers.
 
 The OMT server has some modifications to the data-loading process; refer to updated scripts & docs there.
