@@ -13,7 +13,8 @@ export const OHM_BASE_URL = "https://vtiles.openhistoricalmap.org/";
 export const OHM_TILEJSON = `${OHM_BASE_URL}/index.json`;
 export const OHM_URL      = `${OHM_BASE_URL}/{z}/{x}/{y}.pbf`;
 
-export const SPRITE_URL_ROOT = "http://localhost:9000/" + "styles/osm-bright-gl-style/sprite";
+export const THIS_URL = window.location.href.split('#')[0];
+export const SPRITE_URL_ROOT = THIS_URL + "styles/osm-bright-gl-style/sprite";
 
 /*
  * This style is a direct lift of openmaptiles/osm-bright-gl-style    https://github.com/openmaptiles/osm-bright-gl-style    - GA 2018 July

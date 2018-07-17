@@ -786,7 +786,8 @@ var OHM_BASE_URL = exports.OHM_BASE_URL = "https://vtiles.openhistoricalmap.org/
 var OHM_TILEJSON = exports.OHM_TILEJSON = OHM_BASE_URL + "/index.json";
 var OHM_URL = exports.OHM_URL = OHM_BASE_URL + "/{z}/{x}/{y}.pbf";
 
-var SPRITE_URL_ROOT = exports.SPRITE_URL_ROOT = "http://localhost:9000/" + "styles/osm-bright-gl-style/sprite";
+var THIS_URL = exports.THIS_URL = window.location.href.split('#')[0];
+var SPRITE_URL_ROOT = exports.SPRITE_URL_ROOT = THIS_URL + "styles/osm-bright-gl-style/sprite";
 
 /*
  * This style is a direct lift of openmaptiles/osm-bright-gl-style    https://github.com/openmaptiles/osm-bright-gl-style    - GA 2018 July
