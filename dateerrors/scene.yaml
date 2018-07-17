@@ -1,0 +1,244 @@
+sources:
+    ohm:
+        max_zoom: 15
+        max_display_zoom: 22
+        min_display_zoom: 12
+        type: MVT
+        url: https://vtiles.openhistoricalmap.org/{z}/{x}/{y}.pbf
+    modern-basemap-light:
+        type: Raster
+        url: https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
+scene:
+    background:
+        color: white
+styles:
+    bad_lines:
+        base: lines
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0, 0, 1]
+            width: 1.5px
+    bad_polygons:
+        base: polygons
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0, 0, 1]
+    bad_points:
+        base: points
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0, 0, 1]
+layers:
+    modern-basemap:
+        enabled: true
+        data: { source: modern-basemap-light }
+        draw:
+            raster:
+                order: 0 # draw on bottom
+    transportation:
+        enabled: true
+        data:
+            source: ohm
+            layer: transportation
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_lines
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    landcover:
+        enabled: true
+        data:
+            source: ohm
+            layer: landcover
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    landuse:
+        enabled: true
+        data:
+            source: ohm
+            layer: landuse
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    park:
+        enabled: true
+        data:
+            source: ohm
+            layer: park
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    poi:
+        enabled: true
+        data:
+            source: ohm
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    water:
+        enabled: true
+        data:
+            source: water
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    waterway:
+        enabled: true
+        data:
+            source: waterway
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    mountain_peak:
+        enabled: true
+        data:
+            source: mountain_peak
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    boundary:
+        enabled: true
+        data:
+            source: boundary
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    aeroway:
+        enabled: true
+        data:
+            source: aeroway
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    building:
+        enabled: true
+        data:
+            source: building
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
+    place:
+        enabled: true
+        data:
+            source: place
+            layer: poi
+        filter: |
+            function() {
+              console.log(feature);
+              return true;
+            }
+        draw:
+            lines:
+                style: bad_polygons
+            polygons:
+                style: bad_polygons
+            points:
+                style: bad_points
