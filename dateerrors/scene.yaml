@@ -12,233 +12,506 @@ scene:
     background:
         color: white
 styles:
-    bad_lines:
+    # 
+    # separate styles for features with no start_date/end_date at all
+    # and for those which have either one defined but not in proper yyyy-mm-dd format
+    # this does mean a whole parallel set of layers as well!
+    # 
+    lines-malformed:
         base: lines
         blend: inlay
         draw:
             order: 10
             color: [1, 0, 0, 1]
             width: 1.5px
-    bad_polygons:
+    polygons-malformed:
         base: polygons
         blend: inlay
         draw:
             order: 10
             color: [1, 0, 0, 1]
-    bad_points:
+    points-malformed:
         base: points
         blend: inlay
         draw:
             order: 10
             color: [1, 0, 0, 1]
+    lines-missing:
+        base: lines
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0.5, 0.3, 1]
+            width: 1.5px
+    polygons-missing:
+        base: polygons
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0.5, 0.3, 1]
+    points-missing:
+        base: points
+        blend: inlay
+        draw:
+            order: 10
+            color: [1, 0.5, 0.3, 1]
 layers:
+    # 
+    # basemap for reference
+    # 
     modern-basemap:
         enabled: true
         data: { source: modern-basemap-light }
         draw:
             raster:
                 order: 0 # draw on bottom
-    transportation:
+    # 
+    # each layer appears twice
+    # once for start_date and end_date both wholly blank, and again for either/both being filled in but not both in yyyy-mm-dd format
+    # thus: missing date info, and has bad date info
+    # this is achieved via the filter functions (yay Tangram)
+    # 
+    transportation-malformed:
         enabled: true
         data:
             source: ohm
             layer: transportation
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_lines
+                style: lines-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    landcover:
+                style: points-malformed
+    transportation-missing:
+        enabled: true
+        data:
+            source: ohm
+            layer: transportation
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: lines-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    landcover-malformed:
         enabled: true
         data:
             source: ohm
             layer: landcover
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    landuse:
+                style: points-malformed
+    landcover-missing:
+        enabled: true
+        data:
+            source: ohm
+            layer: landcover
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    landuse-malformed:
         enabled: true
         data:
             source: ohm
             layer: landuse
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    park:
+                style: points-malformed
+    landuse-missing:
+        enabled: true
+        data:
+            source: ohm
+            layer: landuse
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    park-malformed:
         enabled: true
         data:
             source: ohm
             layer: park
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    poi:
+                style: points-malformed
+    park-missing:
+        enabled: true
+        data:
+            source: ohm
+            layer: park
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    poi-malformed:
         enabled: true
         data:
             source: ohm
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    water:
+                style: points-malformed
+    poi-missing:
+        enabled: true
+        data:
+            source: ohm
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    water-malformed:
         enabled: true
         data:
             source: water
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    waterway:
+                style: points-malformed
+    water-missing:
+        enabled: true
+        data:
+            source: water
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    waterway-malformed:
         enabled: true
         data:
             source: waterway
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    mountain_peak:
+                style: points-malformed
+    waterway-missing:
+        enabled: true
+        data:
+            source: waterway
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    mountain_peak-malformed:
         enabled: true
         data:
             source: mountain_peak
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    boundary:
+                style: points-malformed
+    mountain_peak-missing:
+        enabled: true
+        data:
+            source: mountain_peak
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    boundary-malformed:
         enabled: true
         data:
             source: boundary
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    aeroway:
+                style: points-malformed
+    boundary-missing:
+        enabled: true
+        data:
+            source: boundary
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    aeroway-malformed:
         enabled: true
         data:
             source: aeroway
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    building:
+                style: points-malformed
+    aeroway-missing:
+        enabled: true
+        data:
+            source: aeroway
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    building-malformed:
         enabled: true
         data:
             source: building
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
-    place:
+                style: points-malformed
+    building-missing:
+        enabled: true
+        data:
+            source: building
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
+    place-malformed:
         enabled: true
         data:
             source: place
             layer: poi
         filter: |
             function() {
-              console.log(feature);
-              return true;
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
             }
         draw:
             lines:
-                style: bad_polygons
+                style: polygons-malformed
             polygons:
-                style: bad_polygons
+                style: polygons-malformed
             points:
-                style: bad_points
+                style: points-malformed
+    place-missing:
+        enabled: true
+        data:
+            source: place
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (! feature.start_date && ! feature.start_date) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-missing
+            polygons:
+                style: polygons-missing
+            points:
+                style: points-missing
