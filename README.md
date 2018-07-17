@@ -6,6 +6,8 @@ http://openhistoricalmap.github.io/openhistoricaltiles
 
 There are two separate but very similar maps here. One is meant to look good, the other is intended to point out issues of malformed dates. Both have the same development process: build tools, etc.
 
+The `dateerrors` map is described in more deails in https://github.com/OpenHistoricalMap/openhistoricaltiles/issues/3 which describes the need to visualize features with malformed/missing dates.
+
 
 ## Tech Stack
 

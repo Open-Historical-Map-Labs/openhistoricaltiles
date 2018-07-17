@@ -1,3 +1,7 @@
+#
+# Configuration file for the Tangram vector tile ovelay
+# reference: https://tangrams.readthedocs.io/en/latest/
+#
 sources:
     ohm:
         max_zoom: 15
@@ -17,44 +21,50 @@ styles:
     # and for those which have either one defined but not in proper yyyy-mm-dd format
     # this does mean a whole parallel set of layers as well!
     # 
-    lines-malformed:
-        base: lines
-        blend: inlay
-        draw:
-            order: 10
-            color: [1, 0, 0, 1]
-            width: 1.5px
-    polygons-malformed:
-        base: polygons
-        blend: inlay
-        draw:
-            order: 10
-            color: [1, 0, 0, 1]
-    points-malformed:
-        base: points
-        blend: inlay
-        draw:
-            order: 10
-            color: [1, 0, 0, 1]
     lines-missing:
         base: lines
-        blend: inlay
+        blend: overlay
         draw:
-            order: 10
+            interactive: true
             color: [1, 0.5, 0.3, 1]
             width: 1.5px
+            order: 20
     polygons-missing:
         base: polygons
-        blend: inlay
+        blend: overlay
         draw:
-            order: 10
+            interactive: true
             color: [1, 0.5, 0.3, 1]
+            order: 10
     points-missing:
         base: points
-        blend: inlay
+        blend: overlay
         draw:
-            order: 10
+            interactive: true
             color: [1, 0.5, 0.3, 1]
+            order: 30
+    lines-malformed:
+        base: lines
+        blend: overlay
+        draw:
+            interactive: true
+            color: [1, 0, 0, 1]
+            width: 1.5px
+            order: 20
+    polygons-malformed:
+        base: polygons
+        blend: overlay
+        draw:
+            interactive: true
+            color: [1, 0, 0, 1]
+            order: 10
+    points-malformed:
+        base: points
+        blend: overlay
+        draw:
+            interactive: true
+            color: [1, 0, 0, 1]
+            order: 30
 layers:
     # 
     # basemap for reference
@@ -71,25 +81,6 @@ layers:
     # thus: missing date info, and has bad date info
     # this is achieved via the filter functions (yay Tangram)
     # 
-    transportation-malformed:
-        enabled: true
-        data:
-            source: ohm
-            layer: transportation
-        filter: |
-            function() {
-              if (! feature.osm_id) return false;
-              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
-              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
-              return false;
-            }
-        draw:
-            lines:
-                style: lines-malformed
-            polygons:
-                style: polygons-malformed
-            points:
-                style: points-malformed
     transportation-missing:
         enabled: true
         data:
@@ -108,11 +99,11 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    landcover-malformed:
+    transportation-malformed:
         enabled: true
         data:
             source: ohm
-            layer: landcover
+            layer: transportation
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -122,7 +113,7 @@ layers:
             }
         draw:
             lines:
-                style: polygons-malformed
+                style: lines-malformed
             polygons:
                 style: polygons-malformed
             points:
@@ -145,11 +136,11 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    landuse-malformed:
+    landcover-malformed:
         enabled: true
         data:
             source: ohm
-            layer: landuse
+            layer: landcover
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -182,11 +173,11 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    park-malformed:
+    landuse-malformed:
         enabled: true
         data:
             source: ohm
-            layer: park
+            layer: landuse
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -219,11 +210,11 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    poi-malformed:
+    park-malformed:
         enabled: true
         data:
             source: ohm
-            layer: poi
+            layer: park
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -256,10 +247,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    water-malformed:
+    poi-malformed:
         enabled: true
         data:
-            source: water
+            source: ohm
             layer: poi
         filter: |
             function() {
@@ -293,10 +284,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    waterway-malformed:
+    water-malformed:
         enabled: true
         data:
-            source: waterway
+            source: water
             layer: poi
         filter: |
             function() {
@@ -330,10 +321,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    mountain_peak-malformed:
+    waterway-malformed:
         enabled: true
         data:
-            source: mountain_peak
+            source: waterway
             layer: poi
         filter: |
             function() {
@@ -367,10 +358,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    boundary-malformed:
+    mountain_peak-malformed:
         enabled: true
         data:
-            source: boundary
+            source: mountain_peak
             layer: poi
         filter: |
             function() {
@@ -404,10 +395,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    aeroway-malformed:
+    boundary-malformed:
         enabled: true
         data:
-            source: aeroway
+            source: boundary
             layer: poi
         filter: |
             function() {
@@ -441,10 +432,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    building-malformed:
+    aeroway-malformed:
         enabled: true
         data:
-            source: building
+            source: aeroway
             layer: poi
         filter: |
             function() {
@@ -478,10 +469,10 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
-    place-malformed:
+    building-malformed:
         enabled: true
         data:
-            source: place
+            source: building
             layer: poi
         filter: |
             function() {
@@ -515,3 +506,22 @@ layers:
                 style: polygons-missing
             points:
                 style: points-missing
+    place-malformed:
+        enabled: true
+        data:
+            source: place
+            layer: poi
+        filter: |
+            function() {
+              if (! feature.osm_id) return false;
+              if (feature.start_date && ! feature.start_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              if (feature.end_date && ! feature.end_date.match(/^\d\d\d\d\-\d\d\-\d\d$/)) return true;
+              return false;
+            }
+        draw:
+            lines:
+                style: polygons-malformed
+            polygons:
+                style: polygons-malformed
+            points:
+                style: points-malformed
