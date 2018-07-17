@@ -782,18 +782,15 @@ Object.defineProperty(exports, "__esModule", {
  * and it's the LayerPickerControl which will change the visibility of these layers (that's why they're all "none" right now)
  */
 
-/*
- * July 12 2018 - GA
- * This style is a direct lift of openmaptiles/osm-bright-gl-style
- * https://github.com/openmaptiles/osm-bright-gl-style
- */
-
-var OHM_BASE_URL = exports.OHM_BASE_URL = "http://ec2-18-209-171-18.compute-1.amazonaws.com";
+var OHM_BASE_URL = exports.OHM_BASE_URL = "https://vtiles.openhistoricalmap.org/";
 var OHM_TILEJSON = exports.OHM_TILEJSON = OHM_BASE_URL + "/index.json";
 var OHM_URL = exports.OHM_URL = OHM_BASE_URL + "/{z}/{x}/{y}.pbf";
 
 var SPRITE_URL_ROOT = exports.SPRITE_URL_ROOT = "http://localhost:9000/" + "styles/osm-bright-gl-style/sprite";
 
+/*
+ * This style is a direct lift of openmaptiles/osm-bright-gl-style    https://github.com/openmaptiles/osm-bright-gl-style    - GA 2018 July
+ */
 var GLMAP_STYLE = exports.GLMAP_STYLE = {
   "version": 8,
   "name": "mandesdemo",
