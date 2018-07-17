@@ -13,7 +13,7 @@
  * This style is intended to highlight date issues, where the start_date and/or end_date are blank or otherwise not in YYYY-MM-DD format
  */
 
-export const OHM_BASE_URL = "http://ec2-18-209-171-18.compute-1.amazonaws.com";
+export const OHM_BASE_URL = "https://vtiles.openhistoricalmap.org/";
 export const OHM_TILEJSON = `${OHM_BASE_URL}/index.json`;
 export const OHM_URL      = `${OHM_BASE_URL}/{z}/{x}/{y}.pbf`;
 
