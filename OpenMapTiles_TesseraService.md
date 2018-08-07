@@ -11,23 +11,30 @@ http://ec2-18-209-171-18.compute-1.amazonaws.com/index.json
 
 ## Launching Tessera and PostgreSQL
 
-Use systemctl to start/stop the Tessera service:
+To start and stop the services:
 ```
-sudo systemctl start tessera
-sudo systemctl stop tessera
-sudo systemctl restart tessera
-sudo systemctl status tessera
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/postgresql_service.sh start
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh start
 ```
 
-The Tessera service runs on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` and there is an Apache proxy simply proxying all website requests to `localhost:8080` so Tessera answers them.
-
-Use `docker` to start/stop the PostgreSQL container:
 ```
-docker start openmaptiles_postgres_1
-docker stop openmaptiles_postgres_1
-docker ps
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh stop
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/postgresql_service.sh stop
 ```
 
+
+The Tessera service runs on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` and there is an Apache proxy redirecting all website requests to `localhost:8080` so Tessera answers them. This Apache proxy provides HTTPS/SSL service.
+
+PostgreSQL runs in a Docker container, but redirects port 5432 so it may be used like a typical, non-Dockerized PostgreSQL.
+
+
+## PostgreSQL
+
+You may use PostgreSQL as usual:
+
+```
+psql -U openmaptiles openmaptiles
+```
 
 
 ## Tessera Config File
@@ -44,7 +51,7 @@ This file is recompiled whenever the OpenMapTiles step `make build/openmaptiles.
 
 ## Debugging Tip
 
-Tessera performs a query against each datasource (layer) b running its SQL. This means that if any of your SQL definitions don't work properly, the service won't start properly. Fortunately, it will crash with a verbose SQL error and you'll know what's going on.
+Tessera performs a query against each datasource (layer) by running the defined SQL query. This means that if any of your SQL definitions don't work properly, the service won't start properly. Fortunately, it will crash with a verbose SQL error and you'll know what's going on.
 
 In fact, while developing the datasourcelayers, you may find it useful to manually start the service without `systemctl` so you can see the error messages:
 

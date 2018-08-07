@@ -15,10 +15,6 @@ case "$1" in
         source $HOMEDIR/.nvm/nvm.sh
         nvm use $NODEVERSION
 
-        # start the PostgerSQL docker
-        docker start openmaptiles_postgres_1
-        sleep 10
-
         # start it
         cd $OMTDIR
         $HOMEDIR/node_modules/.bin/tessera --multiprocess --processes=4 --cache-size=100 tmsource://$TMSOURCEFOLDER &
@@ -26,10 +22,12 @@ case "$1" in
   stop)
         echo "Stopping $NAME"
 
-        # stop the PostgerSQL docker
-        docker stop openmaptiles_postgres_1
-
-        kill `pgrep -f tessera`
+        pid=`ps ax | grep tessera | grep node | grep -v grep | grep -v nvm | cut -d ' ' -f 2`
+        if [ "$pid" = "" ]; then
+            echo "Tessera is not running"
+        else
+            kill $pid
+        fi
         ;;
   restart)
         $0 stop
