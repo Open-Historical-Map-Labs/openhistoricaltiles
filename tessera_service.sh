@@ -6,6 +6,7 @@ OMTDIR="$HOMEDIR/OPENMAPTILES/openhistoricaltiles"
 TMSOURCEFOLDER="./openmaptiles.tm2source"  # relative to $OMTDIR
 NODEVERSION="6.14.3"
 
+TESSERA_MORE_FLAGS="--multiprocess --processes=4 --cache-size=1"
 
 case "$1" in
   start)
@@ -17,12 +18,12 @@ case "$1" in
 
         # start it
         cd $OMTDIR
-        $HOMEDIR/node_modules/.bin/tessera --multiprocess --processes=4 --cache-size=100 tmsource://$TMSOURCEFOLDER &
+        $HOMEDIR/node_modules/.bin/tessera $TESSERA_MORE_FLAGS tmsource://$TMSOURCEFOLDER &
         ;;
   stop)
         echo "Stopping $NAME"
 
-        pid=`ps ax | grep tessera | grep node | grep -v grep | grep -v nvm | cut -d ' ' -f 2`
+        pid=`ps ax | grep tessera | grep node | grep -v grep | grep -v nvm | awk '{ print $1 }'`
         if [ "$pid" = "" ]; then
             echo "Tessera is not running"
         else
@@ -31,6 +32,7 @@ case "$1" in
         ;;
   restart)
         $0 stop
+        sleep 2
         $0 start
         ;;
   *)
