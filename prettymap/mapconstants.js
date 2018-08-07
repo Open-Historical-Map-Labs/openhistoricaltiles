@@ -15,6 +15,8 @@ export const OHM_URL      = `${OHM_BASE_URL}/{z}/{x}/{y}.pbf`;
 
 export const THIS_URL = window.location.href.split('#')[0];
 export const SPRITE_URL_ROOT = THIS_URL + "styles/osm-bright-gl-style/sprite";
+export const FONT_URL_STRING = THIS_URL + "fonts/{fontstack}/{range}.pbf";
+
 
 /*
  * This style is a direct lift of openmaptiles/osm-bright-gl-style    https://github.com/openmaptiles/osm-bright-gl-style    - GA 2018 July
@@ -51,7 +53,7 @@ export const GLMAP_STYLE = {
     }
   },
   "sprite": SPRITE_URL_ROOT,
-  "glyphs": "https://free.tilehosting.com/fonts/{fontstack}/{range}.pbf?key=RiS4gsgZPZqeeMlIyxFo",
+  "glyphs": FONT_URL_STRING,
   "layers": [
     /*
      * BASEMAP OPTIONS
