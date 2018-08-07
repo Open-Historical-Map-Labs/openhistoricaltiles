@@ -22,15 +22,15 @@ To start and stop the services:
 ```
 
 ```
-/home/ubuntu/OPENMAPTILES/openhistoricaltiles/osmdiffs_service.sh start
-/home/ubuntu/OPENMAPTILES/openhistoricaltiles/osmdiffs_service.sh stop
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh start
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh stop
 ```
 
 The Tessera service runs on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` and there is an Apache proxy redirecting all website requests to `localhost:8080` so Tessera answers them. This Apache proxy provides HTTPS/SSL service.
 
 PostgreSQL runs in a Docker container, but redirects port 5432 so it may be used like a typical, non-Dockerized PostgreSQL.
 
-OSM diffs are consumed every 5 minutes by their service, which is a Docker wrapper over `imposm run`
+OSM diffs are consumed every 5 minutes by their service, which is a Docker wrapper over `imposm run` The output is sent to `/home/ubuntu/OPENMAPTILES/openmaptiles/data/ohmdiffs_service.log` and the logfile is cycled periodically (daily, 7 days kept).
 
 
 ## PostgreSQL
