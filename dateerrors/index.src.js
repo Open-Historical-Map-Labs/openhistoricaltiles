@@ -21,6 +21,9 @@ $(document).ready(function () {
     });
     MAP.setView(MAP_START.slice(0, 2), MAP_START[2]);
 
+    // add this fixed basemap
+    L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(MAP);
+
     // add control: GreenInfo credits
     new L.controlCredits({
         image: 'images/greeninfo.png',
@@ -41,7 +44,7 @@ $(document).ready(function () {
     // reference https://tangrams.readthedocs.io/en/latest/
     // reference https://github.com/tangrams/tangram
     VLAYER = Tangram.leafletLayer({
-        scene: "scene.yaml",
+        scene: "scene-dateerrors.yaml",
         attribution: "&copy; OSM contributors",
         events: {
             hover: handleMouseHover,

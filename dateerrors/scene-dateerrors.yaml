@@ -9,12 +9,6 @@ sources:
         min_display_zoom: 12
         type: MVT
         url: https://vtiles.openhistoricalmap.org/{z}/{x}/{y}.pbf
-    modern-basemap-light:
-        type: Raster
-        url: https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
-scene:
-    background:
-        color: white
 styles:
     # 
     # separate styles for features with no start_date/end_date at all
@@ -66,15 +60,6 @@ styles:
             color: [1, 0, 0, 1]
             order: 30
 layers:
-    # 
-    # basemap for reference
-    # 
-    modern-basemap:
-        enabled: true
-        data: { source: modern-basemap-light }
-        draw:
-            raster:
-                order: 0 # draw on bottom
     # 
     # each layer appears twice
     # once for start_date and end_date both wholly blank, and again for either/both being filled in but not both in yyyy-mm-dd format
