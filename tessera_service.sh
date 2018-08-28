@@ -6,7 +6,7 @@ OMTDIR="$HOMEDIR/OPENMAPTILES/openhistoricaltiles"
 TMSOURCEFOLDER="./openmaptiles.tm2source"  # relative to $OMTDIR
 NODEVERSION="6.14.3"
 
-TESSERA_MORE_FLAGS="--multiprocess --processes=4 --cache-size=1"
+TESSERA_MORE_FLAGS="--multiprocess --processes=4 --cache-size=0"
 
 case "$1" in
   start)
@@ -18,7 +18,7 @@ case "$1" in
 
         # start it
         cd $OMTDIR
-        $HOMEDIR/node_modules/.bin/tessera $TESSERA_MORE_FLAGS tmsource://$TMSOURCEFOLDER &
+        nohup $HOMEDIR/node_modules/.bin/tessera $TESSERA_MORE_FLAGS tmsource://$TMSOURCEFOLDER >/dev/null &
         ;;
   stop)
         echo "Stopping $NAME"
