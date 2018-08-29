@@ -31,42 +31,10 @@ export const GLMAP_STYLE = {
         OHM_URL
       ]
     },
-    "modern-basemap-light": {
-      "type": "raster",
-      "tiles": [
-        "https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
-        "https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
-        "https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
-        "https://d.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
-      ],
-      "tileSize": 256
-    },
-    "modern-basemap-labels": {
-      "type": "raster",
-      "tiles": [
-        "https://a.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png",
-        "https://b.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png",
-        "https://c.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png",
-        "https://d.tiles.mapbox.com/v3/greeninfo.map-qwnj26en/{z}/{x}/{y}.png"
-      ],
-      "tileSize": 256
-    }
   },
   "sprite": SPRITE_URL_ROOT,
   "glyphs": FONT_URL_STRING,
   "layers": [
-    /*
-     * BASEMAP OPTIONS
-     */
-    {
-      "id": "modern-basemap-light",
-      "type": "raster",
-      "source": "modern-basemap-light",
-      "layout": {
-        "visibility": "none"
-      }
-    },
-
     /*
      * THE OHM LAYER, the real meat of the matter
      * Layer list of of July 12 2018:
@@ -4727,20 +4695,5 @@ export const GLMAP_STYLE = {
         "text-halo-color": "rgba(255,255,255,0.8)"
       }
     },
-
-    /*
-     * MODERN LABELS, over top of everything else
-     */
-    {
-      "id": "modern-basemap-labels",
-      "type": "raster",
-      "source": "modern-basemap-labels",
-      "paint": {
-        "raster-opacity": 0.50
-      },
-      "layout": {
-        "visibility": "none"
-      }
-    }
   ]
 };
