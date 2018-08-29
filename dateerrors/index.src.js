@@ -1,5 +1,6 @@
 let MAP = null;
 let VLAYER = null;
+let OHMBASE = null;
 let SCENE = null;
 
 let MAP_START = [47.605, -122.331, 16]; // Seattle
@@ -22,7 +23,7 @@ $(document).ready(function () {
     MAP.setView(MAP_START.slice(0, 2), MAP_START[2]);
 
     // add this fixed basemap
-    L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(MAP);
+    // L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(MAP);
 
     // add control: GreenInfo credits
     new L.controlCredits({
@@ -40,24 +41,44 @@ $(document).ready(function () {
     // add control: hash updater/watcher
     new L.Hash(MAP);
 
-    // add the vector tile scene from Tangram
+    // add the vector tile scenes from Tangram
+    // one for the date errors
+    // and one pretty version for a basemap
+    // both from the same data source, but one is pretty and one is for data review
+    //
     // reference https://tangrams.readthedocs.io/en/latest/
     // reference https://github.com/tangrams/tangram
-    VLAYER = Tangram.leafletLayer({
-        scene: "scene-dateerrors.yaml",
+    OHMBASE = Tangram.leafletLayer({
+        scene: "themes/osmbright/scene.yaml",
         attribution: "&copy; OSM contributors",
         events: {
             hover: handleMouseHover,
             click: handleMouseClick,
         }
-    });
-    VLAYER.addTo(MAP);
-
-    VLAYER.scene.subscribe({
+    })
+    .addTo(MAP)
+    .scene.subscribe({
         view_complete: function() {
-            console.log("scene view complete");
+            console.log("basemap scene view complete");
         }
     });
+
+/*
+    VLAYER = Tangram.leafletLayer({
+        scene: "themes/dateerrors/scene.yaml",
+        attribution: "&copy; OSM contributors",
+        events: {
+            hover: handleMouseHover,
+            click: handleMouseClick,
+        }
+    })
+    .addTo(MAP)
+    .scene.subscribe({
+        view_complete: function() {
+            console.log("daterrors scene view complete");
+        }
+    });
+*/
 });
 
 
@@ -67,7 +88,8 @@ window.handleMouseHover = function (selection) {
         return;
     }
 
-console.log(selection.feature);
+    console.log(selection.feature);
+
     let tooltip = `${selection.feature.source_layer}`;
 
     if (selection.feature.properties.name) {
@@ -87,7 +109,7 @@ window.handleMouseClick = function (selection) {
     }
 
     // compose HTML
-    let html = `Layer: ${selection.feature.source_layer}`;
+    let html = `Layer: ${selection.feature.layers[0]}`;
 
     if (selection.feature.properties.osm_id) {
         html += `<br/>OSM ID: ${selection.feature.properties.osm_id}`;

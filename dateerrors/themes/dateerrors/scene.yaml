@@ -254,8 +254,8 @@ layers:
     water-missing:
         enabled: true
         data:
-            source: water
-            layer: poi
+            source: ohm
+            layer: water
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -272,8 +272,8 @@ layers:
     water-malformed:
         enabled: true
         data:
-            source: water
-            layer: poi
+            source: ohm
+            layer: water
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -291,8 +291,8 @@ layers:
     waterway-missing:
         enabled: true
         data:
-            source: waterway
-            layer: poi
+            source: ohm
+            layer: waterway
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -309,8 +309,8 @@ layers:
     waterway-malformed:
         enabled: true
         data:
-            source: waterway
-            layer: poi
+            source: ohm
+            layer: waterway
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -328,8 +328,8 @@ layers:
     mountain_peak-missing:
         enabled: true
         data:
-            source: mountain_peak
-            layer: poi
+            source: ohm
+            layer: mountain_peak
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -346,8 +346,8 @@ layers:
     mountain_peak-malformed:
         enabled: true
         data:
-            source: mountain_peak
-            layer: poi
+            source: ohm
+            layer: mountain_peak
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -365,8 +365,8 @@ layers:
     boundary-missing:
         enabled: true
         data:
-            source: boundary
-            layer: poi
+            source: ohm
+            layer: boundary
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -383,8 +383,8 @@ layers:
     boundary-malformed:
         enabled: true
         data:
-            source: boundary
-            layer: poi
+            source: ohm
+            layer: boundary
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -402,8 +402,8 @@ layers:
     aeroway-missing:
         enabled: true
         data:
-            source: aeroway
-            layer: poi
+            source: ohm
+            layer: aeroway
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -420,8 +420,8 @@ layers:
     aeroway-malformed:
         enabled: true
         data:
-            source: aeroway
-            layer: poi
+            source: ohm
+            layer: aeroway
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -439,8 +439,8 @@ layers:
     building-missing:
         enabled: true
         data:
-            source: building
-            layer: poi
+            source: ohm
+            layer: building
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -457,8 +457,8 @@ layers:
     building-malformed:
         enabled: true
         data:
-            source: building
-            layer: poi
+            source: ohm
+            layer: building
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -476,8 +476,8 @@ layers:
     place-missing:
         enabled: true
         data:
-            source: place
-            layer: poi
+            source: ohm
+            layer: place
         filter: |
             function() {
               if (! feature.osm_id) return false;
@@ -494,8 +494,8 @@ layers:
     place-malformed:
         enabled: true
         data:
-            source: place
-            layer: poi
+            source: ohm
+            layer: place
         filter: |
             function() {
               if (! feature.osm_id) return false;
