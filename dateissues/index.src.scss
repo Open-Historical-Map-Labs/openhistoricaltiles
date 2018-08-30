@@ -1,20 +1,88 @@
+/*
+ * BASIC POSITIONING AND TWO-COLUMN LAYOUT
+ */
 body, html {
     margin: 0;
     padding: 0;
 }
 
-#map {
-    background-color:#fff;
-    width: 100%;
+#sidebar-map-container {
+}
+#sidebar {
+    float: left;
+    width: 299px;
     height: 100vh;
-    border: 0px solid black;
+    border-right: 1px solid black;
+}
+#map {
+    float: left;
+    background-color:#fff;
+    width: calc(100% - 300px);  /* minus = #sidebar width & border & margin  if you get this wrong, map falls down below */
+    height: 100vh;
 }
 
+/*
+ * GENERAL UTILITY CLASSES
+ */
 .small {
     font-size: 80%;
     line-height: 1.5;
 }
 
-.pointercusor {
-    cursor: pointer;
+.center { text-align: center; }
+.right { text-align: right; }
+.left { text-align: left; }
+
+
+/*
+ * SIDEBAR
+ */
+#sidebar {
+    h3 {
+    }
+    > p {
+        padding-right: 1em;
+        padding-left: 1em;
+    }
+    #sidebar-count {
+        margin-bottom: 0;
+    }
+
+    #sidebar-listing {
+        max-height: calc(100vh - 195px);  /* contrive this to match the height + font size of intro text, headings, ...  */
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        padding-bottom: 3em;
+
+        div.entry {
+            padding-right: 1em;
+            padding-left: 1em;
+
+            font-size: 12px;
+
+            div.icon {
+            }
+
+            p {
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+            border-bottom: 2px solid black;
+            &:first-child {
+                border-top: 2px solid black;
+            }
+        }
+        div.entry-datemissing {
+            div.icon {
+            }
+        }
+        div.entry-dateinvalid {
+            div.icon {
+            }
+        }
+    }
 }

@@ -28,7 +28,7 @@ export class MapClicksControl {
     }
 
     getDefaultPosition () {
-        return 'bottom-right';
+        return 'top-left';
     }
 
     onAdd (map) {

@@ -5,7 +5,7 @@ import { MapHoversControl } from './js/mbgl-control-mousehovers';
 import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 
 const MIN_ZOOM = 2;
-const MAX_ZOOM = 16;
+const MAX_ZOOM = 18;
 const START_ZOOM = 3;
 const START_CENTER = [-99.5, 37.9];
 
@@ -15,6 +15,23 @@ window.toTitleCase = function (str) {
     return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
+};
+
+window.makeOHMUrl = function (feature) {
+    // if it's a line or polygon w/ a positive osm_id, it's a way
+    // if it's a point w/ a positive osm_id, it's a node
+    // if it's a line or polygon w/ a negative osm_id, it's a relation
+
+    let osmtype = 'way';
+    if (feature.geometry.type  == 'Point') {
+        osmtype = 'node';
+    }
+    else if (feature.properties.osm_id < 0) {
+        osmtype = 'relation';
+    }
+
+    const url = `http://www.openhistoricalmap.org/${osmtype}/${feature.properties.osm_id}`;
+    return url;
 };
 
 Array.prototype.unique = function () {
@@ -184,21 +201,12 @@ $(document).ready(function () {
 
             const collected_feature_groups = [
                 {
-                    title: "Object Details",
+                    title: "Where You Clicked",
                     features: clicked_objectdetails,
                     template: function (feature) {
-                        // if it's a line or polygon w/ a positive osm_id, it's a way
-                        // if it's a point w/ a positive osm_id, it's a node
-                        // if it's a line or polygon w/ a negative osm_id, it's a relation
-                        let osmtype = 'way';
-                        if (feature.geometry.type  == 'Point') {
-                            osmtype = 'node';
-                        }
-                        else if (feature.properties.osm_id < 0) {
-                            osmtype = 'relation';
-                        }
+                        const ohmlink = makeOHMUrl(feature);
 
-                        let infohtml = `<br/>OSM ID: <a href="http://www.openhistoricalmap.org/${osmtype}/${feature.properties.osm_id}" target="_blank">${feature.properties.osm_id}</a>`;
+                        let infohtml = `<br/>OSM ID: <a href="${ohmlink}" target="_blank">${feature.properties.osm_id}</a>`;
                         infohtml += `<br/>Name: ${feature.properties.name}`;
                         infohtml += `<br/>Start Date: ${feature.properties.start_date}`;
                         infohtml += `<br/>End Date: ${feature.properties.end_date}`;
@@ -217,7 +225,6 @@ $(document).ready(function () {
 
     MAP.HASHWATCHER = new UrlHashControl();
     MAP.addControl(MAP.HASHWATCHER);
-
 
     // the heart of this app
     // whenever the map is moved, get all the rendered features and examine their start_date and end_date
@@ -265,6 +272,54 @@ $(document).ready(function () {
             const thesefilters = MAP.getFilter(layerinfo.id);
             thesefilters[3] = [ 'match', ['id'], list_datemissing_id, true, false ];
             MAP.setFilter(layerinfo.id, thesefilters);
+        });
+
+        // step 3: update the readout on the sidebar
+        // we do re-uniqueify these in a different way, by properties.osm_id
+        const list_datemissing_features = [];
+        const list_dateinvalid_features = [];
+
+        const seen_missing = {};
+        const seen_invalid = {};
+        list_datemissing.forEach(function (feature) {
+            // seen it? skip it. no? we have now
+            if (seen_missing[feature.properties.osm_id]) return;
+            seen_missing[feature.properties.osm_id] = true;
+            list_datemissing_features.push(feature);
+        });
+        list_dateinvalid.forEach(function (feature) {
+            // seen it? skip it. no? we have now
+            if (seen_invalid[feature.properties.osm_id]) return;
+            seen_invalid[feature.properties.osm_id] = true;
+            list_dateinvalid_features.push(feature);
+        });
+
+        const howmany = list_dateinvalid_features.length + list_datemissing_features.length;
+        $('#sidebar-count').text(`${howmany} features`);
+
+        const $readout = $('#sidebar-listing').empty();
+
+        list_dateinvalid_features.forEach(function (feature) {
+            var $div = $('<div class="entry entry-dateinvalid"></div>').appendTo($readout);
+
+            const ohmlink = makeOHMUrl(feature);
+            $(`<div class="icon"></div> <a href="${ohmlink}" target="_blank">${feature.properties.osm_id}</a>`).appendTo($div);
+
+            $(`<p>Name: ${feature.properties.name}</p>`).appendTo($div);
+            $(`<p>Start Date: ${feature.properties.start_date}</p>`).appendTo($div);
+            $(`<p>End Date: ${feature.properties.end_date}</p>`).appendTo($div);
+            $(`<p>Map Layer: ${feature.layer.id}</p>`).appendTo($div);
+        });
+        list_datemissing_features.forEach(function (feature) {
+            var $div = $('<div class="entry entry-datemissing"></div>').appendTo($readout);
+
+            const ohmlink = makeOHMUrl(feature);
+            $(`<div class="icon"></div> <a href="${ohmlink}" target="_blank">${feature.properties.osm_id}</a>`).appendTo($div);
+
+            $(`<p>Name: ${feature.properties.name}</p>`).appendTo($div);
+            $(`<p>Start Date: ${feature.properties.start_date}</p>`).appendTo($div);
+            $(`<p>End Date: ${feature.properties.end_date}</p>`).appendTo($div);
+            $(`<p>Map Layer: ${feature.layer.id}</p>`).appendTo($div);
         });
     });
 

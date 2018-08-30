@@ -82,7 +82,7 @@ var _mbglControlMousehovers = __webpack_require__(5);
 var _mbglControlMouseclicks = __webpack_require__(4);
 
 var MIN_ZOOM = 2;
-var MAX_ZOOM = 16;
+var MAX_ZOOM = 18;
 var START_ZOOM = 3;
 var START_CENTER = [-99.5, 37.9];
 
@@ -92,6 +92,22 @@ window.toTitleCase = function (str) {
     return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
+};
+
+window.makeOHMUrl = function (feature) {
+    // if it's a line or polygon w/ a positive osm_id, it's a way
+    // if it's a point w/ a positive osm_id, it's a node
+    // if it's a line or polygon w/ a negative osm_id, it's a relation
+
+    var osmtype = 'way';
+    if (feature.geometry.type == 'Point') {
+        osmtype = 'node';
+    } else if (feature.properties.osm_id < 0) {
+        osmtype = 'relation';
+    }
+
+    var url = 'http://www.openhistoricalmap.org/' + osmtype + '/' + feature.properties.osm_id;
+    return url;
 };
 
 Array.prototype.unique = function () {
@@ -212,21 +228,28 @@ $(document).ready(function () {
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
             //    tip: return a empty string to effectively skip this feature
+
+            // here, we use only one feature group
+            // automatically compile the list of "clickable" layers in that group,
+            // by checking for datemissing-X and dateinvalid-X layers in the style
+            var clicklayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
+                return layerinfo.id.indexOf('datemissing-') == 0 || layerinfo.id.indexOf('dateinvalid-') == 0;
+            }).map(function (layerinfo) {
+                return layerinfo.id;
+            });
+            var clicked_objectdetails = MAP.queryRenderedFeatures(clickevent.point, {
+                layers: clicklayers
+            }).filter(function (feature) {
+                return feature.properties.osm_id;
+            });
+
             var collected_feature_groups = [{
-                title: "Object Details",
-                features: MAP.queryRenderedFeatures(clickevent.point, {
-                    // automatically compile the list of "clickable" layers in this group,
-                    // by checking for datemissing-X and dateinvalid-X layers in the style
-                    layers: _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
-                        return layerinfo.id.indexOf('datemissing-') == 0 || layerinfo.id.indexOf('dateinvalid-');
-                    }).map(function (layerinfo) {
-                        return layerinfo.id;
-                    })
-                }).filter(function (feature) {
-                    return feature.properties.osm_id;
-                }),
+                title: "Where You Clicked",
+                features: clicked_objectdetails,
                 template: function template(feature) {
-                    var infohtml = '<br/>OSM ID: ' + feature.properties.osm_id;
+                    var ohmlink = makeOHMUrl(feature);
+
+                    var infohtml = '<br/>OSM ID: <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>';
                     infohtml += '<br/>Name: ' + feature.properties.name;
                     infohtml += '<br/>Start Date: ' + feature.properties.start_date;
                     infohtml += '<br/>End Date: ' + feature.properties.end_date;
@@ -293,6 +316,54 @@ $(document).ready(function () {
             var thesefilters = MAP.getFilter(layerinfo.id);
             thesefilters[3] = ['match', ['id'], list_datemissing_id, true, false];
             MAP.setFilter(layerinfo.id, thesefilters);
+        });
+
+        // step 3: update the readout on the sidebar
+        // we do re-uniqueify these in a different way, by properties.osm_id
+        var list_datemissing_features = [];
+        var list_dateinvalid_features = [];
+
+        var seen_missing = {};
+        var seen_invalid = {};
+        list_datemissing.forEach(function (feature) {
+            // seen it? skip it. no? we have now
+            if (seen_missing[feature.properties.osm_id]) return;
+            seen_missing[feature.properties.osm_id] = true;
+            list_datemissing_features.push(feature);
+        });
+        list_dateinvalid.forEach(function (feature) {
+            // seen it? skip it. no? we have now
+            if (seen_invalid[feature.properties.osm_id]) return;
+            seen_invalid[feature.properties.osm_id] = true;
+            list_dateinvalid_features.push(feature);
+        });
+
+        var howmany = list_dateinvalid_features.length + list_datemissing_features.length;
+        $('#sidebar-count').text(howmany + ' features');
+
+        var $readout = $('#sidebar-listing').empty();
+
+        list_dateinvalid_features.forEach(function (feature) {
+            var $div = $('<div class="entry entry-dateinvalid"></div>').appendTo($readout);
+
+            var ohmlink = makeOHMUrl(feature);
+            $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
+
+            $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
+            $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
+            $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
+            $('<p>Map Layer: ' + feature.layer.id + '</p>').appendTo($div);
+        });
+        list_datemissing_features.forEach(function (feature) {
+            var $div = $('<div class="entry entry-datemissing"></div>').appendTo($readout);
+
+            var ohmlink = makeOHMUrl(feature);
+            $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
+
+            $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
+            $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
+            $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
+            $('<p>Map Layer: ' + feature.layer.id + '</p>').appendTo($div);
         });
     });
 
@@ -376,7 +447,7 @@ var MapClicksControl = exports.MapClicksControl = function () {
     _createClass(MapClicksControl, [{
         key: 'getDefaultPosition',
         value: function getDefaultPosition() {
-            return 'bottom-right';
+            return 'top-left';
         }
     }, {
         key: 'onAdd',
