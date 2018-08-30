@@ -166,20 +166,39 @@ $(document).ready(function () {
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
             //    tip: return a empty string to effectively skip this feature
+
+            // here, we use only one feature group
+            // automatically compile the list of "clickable" layers in that group,
+            // by checking for datemissing-X and dateinvalid-X layers in the style
+            const clicklayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
+                return layerinfo.id.indexOf('datemissing-') == 0 || layerinfo.id.indexOf('dateinvalid-') == 0;
+            }).map(function (layerinfo) {
+                return layerinfo.id;
+            });
+            const clicked_objectdetails = MAP.queryRenderedFeatures(clickevent.point, {
+                layers: clicklayers,
+            })
+            .filter(function (feature) {
+                return feature.properties.osm_id;
+            });
+
             const collected_feature_groups = [
                 {
                     title: "Object Details",
-                    features: MAP.queryRenderedFeatures(clickevent.point, {
-                        // automatically compile the list of "clickable" layers in this group,
-                        // by checking for datemissing-X and dateinvalid-X layers in the style
-                        layers: GLMAP_STYLE.layers.filter(function (layerinfo) {
-                                        return layerinfo.id.indexOf('datemissing-') == 0 || layerinfo.id.indexOf('dateinvalid-');
-                                    }).map(function (layerinfo) {
-                                        return layerinfo.id;
-                                    })
-                    }).filter(function (feature) { return feature.properties.osm_id; }),
+                    features: clicked_objectdetails,
                     template: function (feature) {
-                        let infohtml = `<br/>OSM ID: ${feature.properties.osm_id}`;
+                        // if it's a line or polygon w/ a positive osm_id, it's a way
+                        // if it's a point w/ a positive osm_id, it's a node
+                        // if it's a line or polygon w/ a negative osm_id, it's a relation
+                        let osmtype = 'way';
+                        if (feature.geometry.type  == 'Point') {
+                            osmtype = 'node';
+                        }
+                        else if (feature.properties.osm_id < 0) {
+                            osmtype = 'relation';
+                        }
+
+                        let infohtml = `<br/>OSM ID: <a href="http://www.openhistoricalmap.org/${osmtype}/${feature.properties.osm_id}" target="_blank">${feature.properties.osm_id}</a>`;
                         infohtml += `<br/>Name: ${feature.properties.name}`;
                         infohtml += `<br/>Start Date: ${feature.properties.start_date}`;
                         infohtml += `<br/>End Date: ${feature.properties.end_date}`;

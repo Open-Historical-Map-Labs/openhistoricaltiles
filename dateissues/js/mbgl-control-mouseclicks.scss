@@ -9,10 +9,13 @@ div.mbgl-control-mouseclicks {
     }
 
     i.mbgl-control-mouseclicks-closebutton {
+        display: none;
+        /*
         cursor: pointer;
         float: right;
         font-size: 20px;
         margin-bottom: 10px;
+        */
     }
 
     div.mbgl-control-mouseclicks-listing {
