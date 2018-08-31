@@ -110,6 +110,124 @@ window.makeOHMUrl = function (feature) {
     return url;
 };
 
+window.checkMapForDateIssues = function () {
+    // prep work
+    // make lists of layer IDs: the real map layers, missing and invalid layers, ...
+    var realmaplayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == -1 && layerinfo.id.indexOf('dateinvalid-') == -1 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+
+    var invalidlayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('dateinvalid-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+
+    var missinglayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+
+    // step 1
+    // query all rendered features in the viewport, and generate lists of OHM IDs for features with invalid dates and missing dates
+    var allvisiblefeatures = MAP.queryRenderedFeatures({
+        layers: realmaplayers
+    });
+
+    var re_iso8601 = /^\d\d\d\d\-\d\d\-\d\d$/;
+
+    var features_datemissing = allvisiblefeatures.filter(function (feature) {
+        return feature.properties.osm_id && !feature.properties.start_date && !feature.properties.end_date;
+    });
+    var osmid_datemissing = features_datemissing.map(function (feature) {
+        return feature.properties.osm_id;
+    }).unique();
+    osmid_datemissing.sort();
+
+    var features_dateinvalid = allvisiblefeatures.filter(function (feature) {
+        return feature.properties.osm_id && feature.properties.start_date && feature.properties.end_date && !feature.properties.start_date.match(re_iso8601) && !feature.properties.end_date.match(re_iso8601);
+    });
+    var osmid_dateinvalid = features_dateinvalid.map(function (feature) {
+        return feature.properties.osm_id;
+    }).unique();
+    osmid_dateinvalid.sort();
+
+    var features_datemissing_unique = [];var seen_missing = {};
+    var features_dateinvalid_unique = [];var seen_invalid = {};
+
+    features_datemissing.forEach(function (feature) {
+        // seen it? skip it. no? we have now
+        if (seen_missing[feature.properties.osm_id]) return;
+        seen_missing[feature.properties.osm_id] = true;
+        features_datemissing_unique.push(feature);
+    });
+    features_dateinvalid.forEach(function (feature) {
+        // seen it? skip it. no? we have now
+        if (seen_invalid[feature.properties.osm_id]) return;
+        seen_invalid[feature.properties.osm_id] = true;
+        features_dateinvalid_unique.push(feature);
+    });
+    features_datemissing_unique.sort(function (p, q) {
+        return p.properties.osm_id < q.properties.osm_id ? -1 : 1;
+    });
+    features_dateinvalid_unique.sort(function (p, q) {
+        return p.properties.osm_id < q.properties.osm_id ? -1 : 1;
+    });
+
+    // console.log([ 'OSM IDs Missing dates', osmid_datemissing ]);
+    // console.log([ 'OSM IDs Invalid dates', osmid_dateinvalid ]);
+
+    // step 2
+    // update those datemissing-X and dateinvalid-X map layers, asserting a new filter to those OSM IDs
+    // filter [3] is the 'match' against IDs, and we replace it here
+    invalidlayers.forEach(function (layerid) {
+        var matchids = osmid_dateinvalid.length ? osmid_dateinvalid : [-1]; // what a nuisance, it can't accept empty lists
+
+        var thesefilters = MAP.getFilter(layerid);
+        thesefilters[3] = ['match', ['get', 'osm_id'], matchids, true, false];
+        MAP.setFilter(layerid, thesefilters);
+    });
+    missinglayers.forEach(function (layerid) {
+        var matchids = osmid_datemissing.length ? osmid_datemissing : [-1]; // what a nuisance, it can't accept empty lists
+
+        var thesefilters = MAP.getFilter(layerid);
+        thesefilters[3] = ['match', ['get', 'osm_id'], matchids, true, false];
+        MAP.setFilter(layerid, thesefilters);
+    });
+
+    // step 3
+    // go through those features with missing/invalid dates, and load them into the sidebar
+    // 
+    var howmany = features_datemissing_unique.length + features_dateinvalid_unique.length;
+    $('#sidebar-count').text(howmany + ' features');
+
+    var $readout = $('#sidebar-listing').empty();
+
+    features_dateinvalid_unique.forEach(function (feature) {
+        var $div = $('<div class="entry entry-dateinvalid"></div>').appendTo($readout);
+
+        var ohmlink = makeOHMUrl(feature);
+        $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
+
+        $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
+        $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
+        $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
+    });
+    features_datemissing_unique.forEach(function (feature) {
+        var $div = $('<div class="entry entry-datemissing"></div>').appendTo($readout);
+
+        var ohmlink = makeOHMUrl(feature);
+        $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
+
+        $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
+        $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
+        $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
+    });
+};
+
 Array.prototype.unique = function () {
     var result = [],
         val,
@@ -142,31 +260,6 @@ $(document).ready(function () {
         var _GLMAP_STYLE$layers;
 
         (_GLMAP_STYLE$layers = _mapconstants.GLMAP_STYLE.layers).push.apply(_GLMAP_STYLE$layers, [{
-            "id": 'dateinvalid-' + sourcelayername + '-polygon',
-            "source": "ohm-data", "source-layer": sourcelayername,
-            "type": "fill",
-            "paint": {
-                "fill-color": "orange"
-            },
-            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
-        }, {
-            "id": 'dateinvalid-' + sourcelayername + '-line',
-            "source": "ohm-data", "source-layer": sourcelayername,
-            "type": "line",
-            "paint": {
-                "line-color": "orange"
-            },
-            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
-        }, {
-            "id": 'dateinvalid-' + sourcelayername + '-point',
-            "source": "ohm-data", "source-layer": sourcelayername,
-            "type": "circle",
-            "paint": {
-                "circle-color": "orange",
-                "circle-radius": 5
-            },
-            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
-        }, {
             "id": 'datemissing-' + sourcelayername + '-polygon',
             "source": "ohm-data", "source-layer": sourcelayername,
             "type": "fill",
@@ -188,6 +281,31 @@ $(document).ready(function () {
             "type": "circle",
             "paint": {
                 "circle-color": "red",
+                "circle-radius": 5
+            },
+            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+        }, {
+            "id": 'dateinvalid-' + sourcelayername + '-polygon',
+            "source": "ohm-data", "source-layer": sourcelayername,
+            "type": "fill",
+            "paint": {
+                "fill-color": "orange"
+            },
+            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+        }, {
+            "id": 'dateinvalid-' + sourcelayername + '-line',
+            "source": "ohm-data", "source-layer": sourcelayername,
+            "type": "line",
+            "paint": {
+                "line-color": "orange"
+            },
+            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+        }, {
+            "id": 'dateinvalid-' + sourcelayername + '-point',
+            "source": "ohm-data", "source-layer": sourcelayername,
+            "type": "circle",
+            "paint": {
+                "circle-color": "orange",
                 "circle-radius": 5
             },
             "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
@@ -229,11 +347,14 @@ $(document).ready(function () {
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
             //    tip: return a empty string to effectively skip this feature
 
+            //GDA room for improvement: bounce the queryRenderedFeatures() IDs off getOHMFeatureInfo() so we can get the best possible data
+            //GDA the thing actually being clicked may have little/no real info, e.g. buildings are just footprints and a POI may have its name & dates
+
             // here, we use only one feature group
             // automatically compile the list of "clickable" layers in that group,
             // by checking for datemissing-X and dateinvalid-X layers in the style
             var clicklayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
-                return layerinfo.id.indexOf('datemissing-') == 0 || layerinfo.id.indexOf('dateinvalid-') == 0;
+                return layerinfo.id.indexOf('datemissing-') == -1 && layerinfo.id.indexOf('dateinvalid-') == -1 && layerinfo.source == 'ohm-data';
             }).map(function (layerinfo) {
                 return layerinfo.id;
             });
@@ -272,99 +393,7 @@ $(document).ready(function () {
     // whenever the map is moved, get all the rendered features and examine their start_date and end_date
     // and collect lists of those features where either date is not in YYYY-MM-DD format (ISO 8601)
     MAP.on('moveend', function () {
-        // step 1: collect lists of features with a missing date or an badly-formatted date
-        var list_datemissing = [];
-        var list_dateinvalid = [];
-
-        var re_iso8601 = /^\d\d\d\d\-\d\d\-\d\d$/;
-
-        MAP.queryRenderedFeatures().forEach(function (feature) {
-            if (!feature.properties.osm_id) return; // not a OHM feature, so no dates and no way to fix them if there were
-
-            if (!feature.properties.start_date || !feature.properties.end_date) {
-                list_datemissing.push(feature);
-            } else if (!feature.properties.start_date.match(re_iso8601) || !feature.properties.end_date.match(re_iso8601)) {
-                list_dateinvalid.push(feature);
-            }
-        });
-        // console.log([ 'no date', list_datemissing ]);
-        // console.log([ 'bad date', list_dateinvalid ]);
-
-        // step 2: apply a filter to the relevant map layers (which we dynamically created above)
-        // filters[3] is the match-ID filter which we will rewrite
-        // MB GL's filtering is a nuisance as far as stability: the array list must be unique AND cannot be empty
-        var list_datemissing_id = list_datemissing.map(function (feature) {
-            return feature.id;
-        }).unique();
-        var list_dateinvalid_id = list_dateinvalid.map(function (feature) {
-            return feature.id;
-        }).unique();
-        if (!list_datemissing_id.length) list_datemissing_id.push(-1);
-        if (!list_dateinvalid_id.length) list_dateinvalid_id.push(-1);
-
-        _mapconstants.GLMAP_STYLE.layers.forEach(function (layerinfo) {
-            if (layerinfo.id.indexOf('dateinvalid-') !== 0) return; // only to the dateissues layers
-
-            var thesefilters = MAP.getFilter(layerinfo.id);
-            thesefilters[3] = ['match', ['id'], list_dateinvalid_id, true, false];
-            MAP.setFilter(layerinfo.id, thesefilters);
-        });
-
-        _mapconstants.GLMAP_STYLE.layers.forEach(function (layerinfo) {
-            if (layerinfo.id.indexOf('datemissing-') !== 0) return; // only to the dateissues layers
-
-            var thesefilters = MAP.getFilter(layerinfo.id);
-            thesefilters[3] = ['match', ['id'], list_datemissing_id, true, false];
-            MAP.setFilter(layerinfo.id, thesefilters);
-        });
-
-        // step 3: update the readout on the sidebar
-        // we do re-uniqueify these in a different way, by properties.osm_id
-        var list_datemissing_features = [];
-        var list_dateinvalid_features = [];
-
-        var seen_missing = {};
-        var seen_invalid = {};
-        list_datemissing.forEach(function (feature) {
-            // seen it? skip it. no? we have now
-            if (seen_missing[feature.properties.osm_id]) return;
-            seen_missing[feature.properties.osm_id] = true;
-            list_datemissing_features.push(feature);
-        });
-        list_dateinvalid.forEach(function (feature) {
-            // seen it? skip it. no? we have now
-            if (seen_invalid[feature.properties.osm_id]) return;
-            seen_invalid[feature.properties.osm_id] = true;
-            list_dateinvalid_features.push(feature);
-        });
-
-        var howmany = list_dateinvalid_features.length + list_datemissing_features.length;
-        $('#sidebar-count').text(howmany + ' features');
-
-        var $readout = $('#sidebar-listing').empty();
-
-        list_dateinvalid_features.forEach(function (feature) {
-            var $div = $('<div class="entry entry-dateinvalid"></div>').appendTo($readout);
-
-            var ohmlink = makeOHMUrl(feature);
-            $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
-
-            $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
-            $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
-            $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
-            $('<p>Map Layer: ' + feature.layer.id + '</p>').appendTo($div);
-        });
-        list_datemissing_features.forEach(function (feature) {
-            var $div = $('<div class="entry entry-datemissing"></div>').appendTo($readout);
-
-            var ohmlink = makeOHMUrl(feature);
-            $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
-
-            $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
-            $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
-            $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
-            $('<p>Map Layer: ' + feature.layer.id + '</p>').appendTo($div);
-        });
+        checkMapForDateIssues();
     });
 
     //  
@@ -372,7 +401,7 @@ $(document).ready(function () {
     //
     MAP.on('load', function () {
         // fire that scanner for invalid dates in the viewport
-        MAP.fire('moveend');
+        checkMapForDateIssues();
     });
 });
 
