@@ -184,7 +184,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "Polygon" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
             {
@@ -198,7 +198,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "LineString" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
             {
@@ -213,7 +213,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "Point" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
             {
@@ -227,7 +227,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "Polygon" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
             {
@@ -241,7 +241,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "LineString" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
             {
@@ -256,7 +256,7 @@ $(document).ready(function () {
                     'all',
                     [ '==', ['geometry-type'], "Point" ],
                     [ 'has', 'osm_id' ],
-                    [ 'match', ['id'], [ -1 ], true, false ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
                 ],
             },
         ]);
