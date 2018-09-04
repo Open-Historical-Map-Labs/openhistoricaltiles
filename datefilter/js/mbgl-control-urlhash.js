@@ -51,23 +51,31 @@ export class UrlHashControl {
     }
 
     applyUrlHashToMap (hashstring) {
-        const zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
-        const zxy = hashstring.match(zxy_regex);
+        const params_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)\/(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)/;
+        const zxy = hashstring.match(params_regex);
         if (! zxy) return;  // not a match, maybe blank, maybe malformed?
 
         const z = zxy[1];
         const lat = zxy[2];
         const lng = zxy[3];
+        const date1 = zxy[4];
+        const date2 = zxy[5];
 
         this._map.setZoom(z);
         this._map.setCenter([ lng, lat ]);
+
+        setTimeout(() => {
+            this._map.DATESLIDER.setDates(date1, date2);
+        }, 1000);
     }
 
     updateUrlHashFromMap () {
         const z = this._map.getZoom().toFixed(2);
         const lat = this._map.getCenter().lat.toFixed(5);
         const lng = this._map.getCenter().lng.toFixed(5);
-        const hashstring = `${z}/${lat}/${lng}/`;
+        const dates = this._map.DATESLIDER.getDates().join(',');
+
+        const hashstring = `${z}/${lat}/${lng}/${dates}/`;
         window.location.hash = hashstring;
     }
 }

@@ -10,8 +10,12 @@ export class MapDateFilterControl {
     constructor (options={}) {
         // merge suppplied options with these defaults
         this.options = Object.assign({
+            // the default start/end dates
             mindate: "1900-01-01",
             maxdate: "2100-12-31",
+            // when dates are changed, do the following callback
+            onChange: function () {
+            },
         }, options);
 
         // some preliminary checks on config, worth panicking to death here and now
@@ -57,6 +61,7 @@ export class MapDateFilterControl {
                 return alert("Invalid start date.");
             }
             this.applyDateFiltering();
+            this.options.onChange();
         });
 
         this._input_enddate = document.createElement('input');
@@ -68,6 +73,7 @@ export class MapDateFilterControl {
                 return alert("Invalid end date.");
             }
             this.applyDateFiltering();
+            this.options.onChange();
         });
 
 /*
@@ -96,8 +102,9 @@ export class MapDateFilterControl {
         // but allows us to opt-in only the specific map layers which we want to be affected by date filtering
 
         // the date range
-        const mindate = this._input_startdate.value;
-        const maxdate = this._input_enddate.value;
+        const thedates = this.getDates();
+        const mindate = thedates[0];
+        const maxdate = thedates[1];
         // console.debug([ `MapDateFilterControl applyDateFiltering() dates are`, mindate, maxdate ]);
 
         // go over the stated map layers, collecting a list of unique source + source-layer cmobinations
@@ -237,4 +244,23 @@ export class MapDateFilterControl {
         }
     }
 
+    getDates () {
+        // return the dates currently in use for filtering
+        return [ this._input_startdate.value, this._input_enddate.value ];
+    }
+
+    setDates (mindate, maxdate) {
+        if (! this.validateDateFormat(mindate)) {
+            throw "MapDateFilterControl setDates() mindate ${mindate} is not valid";
+        }
+        if (! this.validateDateFormat(maxdate)) {
+            throw "MapDateFilterControl setDates() maxdate ${maxdate} is not valid";
+        }
+
+        this._input_startdate.value = mindate;
+        this._input_enddate.value = maxdate;
+
+        this.applyDateFiltering();
+        this.options.onChange();
+    }
 }

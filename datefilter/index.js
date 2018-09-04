@@ -373,9 +373,6 @@ $(document).ready(function () {
     });
     MAP.addControl(MAP.CLICKS);
 
-    MAP.HASHWATCHER = new _mbglControlUrlhash.UrlHashControl();
-    MAP.addControl(MAP.HASHWATCHER);
-
     MAP.DATESLIDER = new _mbglControlDateslider.MapDateFilterControl({
         // which layers get a date filter prepended to whatever filters are already in place?
         // for us, all of them
@@ -387,7 +384,12 @@ $(document).ready(function () {
         // the default dates for the boxes
         // this won't be enforced (yet), so the names "min" and "max" are kind of a misnomer... for the moment
         mindate: "2008-01-01",
-        maxdate: "2010-12-31"
+        maxdate: "2010-12-31",
+
+        // a few custom hooks whenever the dates change
+        onChange: function onChange() {
+            MAP.HASHWATCHER.updateUrlHashFromMap();
+        }
     });
 
     //  
@@ -396,6 +398,10 @@ $(document).ready(function () {
     MAP.on('load', function () {
         // the date slider does involve mutating the filters, and that's most safely done after the layers are clearly loaded onto the map
         MAP.addControl(MAP.DATESLIDER);
+
+        // now that we're ready, apply the hash which will in turn trigger the dateslider control
+        MAP.HASHWATCHER = new _mbglControlUrlhash.UrlHashControl(); // hacked to include MapDateFilterControl as a param
+        MAP.addControl(MAP.HASHWATCHER);
     });
 });
 
@@ -451,8 +457,11 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
 
         // merge suppplied options with these defaults
         this.options = Object.assign({
+            // the default start/end dates
             mindate: "1900-01-01",
-            maxdate: "2100-12-31"
+            maxdate: "2100-12-31",
+            // when dates are changed, do the following callback
+            onChange: function onChange() {}
         }, options);
 
         // some preliminary checks on config, worth panicking to death here and now
@@ -505,6 +514,7 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
                     return alert("Invalid start date.");
                 }
                 _this2.applyDateFiltering();
+                _this2.options.onChange();
             });
 
             this._input_enddate = document.createElement('input');
@@ -516,6 +526,7 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
                     return alert("Invalid end date.");
                 }
                 _this2.applyDateFiltering();
+                _this2.options.onChange();
             });
 
             /*
@@ -548,8 +559,9 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
             // but allows us to opt-in only the specific map layers which we want to be affected by date filtering
 
             // the date range
-            var mindate = this._input_startdate.value;
-            var maxdate = this._input_enddate.value;
+            var thedates = this.getDates();
+            var mindate = thedates[0];
+            var maxdate = thedates[1];
             // console.debug([ `MapDateFilterControl applyDateFiltering() dates are`, mindate, maxdate ]);
 
             // go over the stated map layers, collecting a list of unique source + source-layer cmobinations
@@ -676,6 +688,28 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
                 console.error(oldfilters);
                 throw "MapDateFilterControl addFilteringOptionToSublayer() got unexpected filtering condition on layer " + layerid;
             }
+        }
+    }, {
+        key: "getDates",
+        value: function getDates() {
+            // return the dates currently in use for filtering
+            return [this._input_startdate.value, this._input_enddate.value];
+        }
+    }, {
+        key: "setDates",
+        value: function setDates(mindate, maxdate) {
+            if (!this.validateDateFormat(mindate)) {
+                throw "MapDateFilterControl setDates() mindate ${mindate} is not valid";
+            }
+            if (!this.validateDateFormat(maxdate)) {
+                throw "MapDateFilterControl setDates() maxdate ${maxdate} is not valid";
+            }
+
+            this._input_startdate.value = mindate;
+            this._input_enddate.value = maxdate;
+
+            this.applyDateFiltering();
+            this.options.onChange();
         }
     }]);
 
@@ -1042,16 +1076,24 @@ var UrlHashControl = exports.UrlHashControl = function () {
     }, {
         key: "applyUrlHashToMap",
         value: function applyUrlHashToMap(hashstring) {
-            var zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
-            var zxy = hashstring.match(zxy_regex);
+            var _this2 = this;
+
+            var params_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)\/(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)/;
+            var zxy = hashstring.match(params_regex);
             if (!zxy) return; // not a match, maybe blank, maybe malformed?
 
             var z = zxy[1];
             var lat = zxy[2];
             var lng = zxy[3];
+            var date1 = zxy[4];
+            var date2 = zxy[5];
 
             this._map.setZoom(z);
             this._map.setCenter([lng, lat]);
+
+            setTimeout(function () {
+                _this2._map.DATESLIDER.setDates(date1, date2);
+            }, 1000);
         }
     }, {
         key: "updateUrlHashFromMap",
@@ -1059,7 +1101,9 @@ var UrlHashControl = exports.UrlHashControl = function () {
             var z = this._map.getZoom().toFixed(2);
             var lat = this._map.getCenter().lat.toFixed(5);
             var lng = this._map.getCenter().lng.toFixed(5);
-            var hashstring = z + "/" + lat + "/" + lng + "/";
+            var dates = this._map.DATESLIDER.getDates().join(',');
+
+            var hashstring = z + "/" + lat + "/" + lng + "/" + dates + "/";
             window.location.hash = hashstring;
         }
     }]);

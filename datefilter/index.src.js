@@ -344,9 +344,6 @@ $(document).ready(function () {
     });
     MAP.addControl(MAP.CLICKS);
 
-    MAP.HASHWATCHER = new UrlHashControl();
-    MAP.addControl(MAP.HASHWATCHER);
-
     MAP.DATESLIDER = new MapDateFilterControl({
         // which layers get a date filter prepended to whatever filters are already in place?
         // for us, all of them
@@ -470,6 +467,11 @@ $(document).ready(function () {
         // this won't be enforced (yet), so the names "min" and "max" are kind of a misnomer... for the moment
         mindate: "2008-01-01",
         maxdate: "2010-12-31",
+
+        // a few custom hooks whenever the dates change
+        onChange: function () {
+            MAP.HASHWATCHER.updateUrlHashFromMap();
+        },
     });
 
     //  
@@ -478,5 +480,9 @@ $(document).ready(function () {
     MAP.on('load', function () {
         // the date slider does involve mutating the filters, and that's most safely done after the layers are clearly loaded onto the map
         MAP.addControl(MAP.DATESLIDER);
+
+        // now that we're ready, apply the hash which will in turn trigger the dateslider control
+        MAP.HASHWATCHER = new UrlHashControl(); // hacked to include MapDateFilterControl as a param
+        MAP.addControl(MAP.HASHWATCHER);
     });
 });
