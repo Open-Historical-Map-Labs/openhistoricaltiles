@@ -1,7 +1,5 @@
-/*
 import flatpickr from "flatpickr";
 require('flatpickr/dist/flatpickr.min.css');
-*/
 
 require('./mbgl-control-dateslider.scss');
 
@@ -76,11 +74,11 @@ export class MapDateFilterControl {
             this.options.onChange();
         });
 
-/*
-        const datepickerconfig = {};
+        const datepickerconfig = {
+            allowInput: true,
+        };
         flatpickr(this._input_startdate, datepickerconfig);
         flatpickr(this._input_enddate, datepickerconfig);
-*/
 
         this._gobutton = document.createElement('input'); // doesn't really DO anything except prompt the user to blur the text inputs
         this._gobutton.type = "button";
