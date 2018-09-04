@@ -326,6 +326,15 @@ $(document).ready(function () {
 
     MAP.addControl(new mapboxgl.NavigationControl());
 
+    MAP.addControl(new mapboxgl.ScaleControl({
+        maxWidth: 80,
+        unit: 'imperial'
+    }));
+    MAP.addControl(new mapboxgl.ScaleControl({
+        maxWidth: 80,
+        unit: 'metric'
+    }));
+
     var hovercallbacks = {};
     _mapconstants.GLMAP_STYLE.layers.forEach(function (layerinfo) {
         if (layerinfo.id.indexOf('datemissing-') < 0 && layerinfo.id.indexOf('dateinvalid-') < 0) return;
