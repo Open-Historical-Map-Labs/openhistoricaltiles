@@ -133,7 +133,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, admin_level, disputed, maritime
+      SELECT osm_id, geometry, name, start_date, end_date, admin_level, disputed, maritime
       FROM layer_boundary(!bbox!, z(!scale_denominator!))
       ) AS t
   id: boundary
