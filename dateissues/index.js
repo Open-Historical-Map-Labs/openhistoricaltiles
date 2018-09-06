@@ -148,15 +148,28 @@ window.checkMapForDateIssues = function () {
     osmid_datemissing.sort();
 
     var features_dateinvalid = allvisiblefeatures.filter(function (feature) {
-        return feature.properties.osm_id && feature.properties.start_date && feature.properties.end_date && !feature.properties.start_date.match(re_iso8601) && !feature.properties.end_date.match(re_iso8601);
+        if (!feature.properties.osm_id) return false;
+        if (!feature.properties.start_date && !feature.properties.end_date) return false;
+        if (!feature.properties.start_date.match(re_iso8601)) return true;
+        if (!feature.properties.end_date.match(re_iso8601)) return true;
+        return false;
     });
     var osmid_dateinvalid = features_dateinvalid.map(function (feature) {
         return feature.properties.osm_id;
     }).unique();
     osmid_dateinvalid.sort();
 
+    var features_datelooksok = allvisiblefeatures.filter(function (feature) {
+        return feature.properties.osm_id && feature.properties.start_date && feature.properties.end_date && feature.properties.start_date.match(re_iso8601) && feature.properties.end_date.match(re_iso8601);
+    });
+    var osmid_datelooksok = features_datelooksok.map(function (feature) {
+        return feature.properties.osm_id;
+    }).unique();
+    osmid_datelooksok.sort();
+
     var features_datemissing_unique = [];var seen_missing = {};
     var features_dateinvalid_unique = [];var seen_invalid = {};
+    var features_datelooksok_unique = [];var seen_looksok = {};
 
     features_datemissing.forEach(function (feature) {
         // seen it? skip it. no? we have now
@@ -170,15 +183,25 @@ window.checkMapForDateIssues = function () {
         seen_invalid[feature.properties.osm_id] = true;
         features_dateinvalid_unique.push(feature);
     });
+    features_datelooksok.forEach(function (feature) {
+        // seen it? skip it. no? we have now
+        if (seen_looksok[feature.properties.osm_id]) return;
+        seen_looksok[feature.properties.osm_id] = true;
+        features_datelooksok_unique.push(feature);
+    });
     features_datemissing_unique.sort(function (p, q) {
         return p.properties.osm_id < q.properties.osm_id ? -1 : 1;
     });
     features_dateinvalid_unique.sort(function (p, q) {
         return p.properties.osm_id < q.properties.osm_id ? -1 : 1;
     });
+    features_datelooksok_unique.sort(function (p, q) {
+        return p.properties.osm_id < q.properties.osm_id ? -1 : 1;
+    });
 
     // console.log([ 'OSM IDs Missing dates', osmid_datemissing ]);
     // console.log([ 'OSM IDs Invalid dates', osmid_dateinvalid ]);
+    // console.log([ 'OSM IDs Good dates', osmid_datelooksok ]);
 
     // step 2
     // update those datemissing-X and dateinvalid-X map layers, asserting a new filter to those OSM IDs
@@ -199,7 +222,7 @@ window.checkMapForDateIssues = function () {
     });
 
     // step 3
-    // go through those features with missing/invalid dates, and load them into the sidebar
+    // go through those features with missing/invalid/looksok dates, and load them into the sidebar
     // 
     var howmany = features_datemissing_unique.length + features_dateinvalid_unique.length;
     $('#sidebar-count').text(howmany + ' features');
@@ -218,6 +241,16 @@ window.checkMapForDateIssues = function () {
     });
     features_datemissing_unique.forEach(function (feature) {
         var $div = $('<div class="entry entry-datemissing"></div>').appendTo($readout);
+
+        var ohmlink = makeOHMUrl(feature);
+        $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
+
+        $('<p>Name: ' + feature.properties.name + '</p>').appendTo($div);
+        $('<p>Start Date: ' + feature.properties.start_date + '</p>').appendTo($div);
+        $('<p>End Date: ' + feature.properties.end_date + '</p>').appendTo($div);
+    });
+    features_datelooksok_unique.forEach(function (feature) {
+        var $div = $('<div class="entry entry-datelooksok"></div>').appendTo($readout);
 
         var ohmlink = makeOHMUrl(feature);
         $('<div class="icon"></div> <a href="' + ohmlink + '" target="_blank">' + feature.properties.osm_id + '</a>').appendTo($div);
@@ -266,7 +299,7 @@ $(document).ready(function () {
             "paint": {
                 "fill-color": "red"
             },
-            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }, {
             "id": 'datemissing-' + sourcelayername + '-line',
             "source": "ohm-data", "source-layer": sourcelayername,
@@ -274,7 +307,7 @@ $(document).ready(function () {
             "paint": {
                 "line-color": "red"
             },
-            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }, {
             "id": 'datemissing-' + sourcelayername + '-point',
             "source": "ohm-data", "source-layer": sourcelayername,
@@ -283,7 +316,7 @@ $(document).ready(function () {
                 "circle-color": "red",
                 "circle-radius": 5
             },
-            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }, {
             "id": 'dateinvalid-' + sourcelayername + '-polygon',
             "source": "ohm-data", "source-layer": sourcelayername,
@@ -291,7 +324,7 @@ $(document).ready(function () {
             "paint": {
                 "fill-color": "orange"
             },
-            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "Polygon"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }, {
             "id": 'dateinvalid-' + sourcelayername + '-line',
             "source": "ohm-data", "source-layer": sourcelayername,
@@ -299,7 +332,7 @@ $(document).ready(function () {
             "paint": {
                 "line-color": "orange"
             },
-            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "LineString"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }, {
             "id": 'dateinvalid-' + sourcelayername + '-point',
             "source": "ohm-data", "source-layer": sourcelayername,
@@ -308,7 +341,7 @@ $(document).ready(function () {
                 "circle-color": "orange",
                 "circle-radius": 5
             },
-            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['id'], [-1], true, false]]
+            "filter": ['all', ['==', ['geometry-type'], "Point"], ['has', 'osm_id'], ['match', ['get', 'osm_id'], [-1], true, false]]
         }]);
     });
 
@@ -355,11 +388,8 @@ $(document).ready(function () {
             // - "features" list of features to be displayed, e.g. from MAP.queryRenderedFeatures()
             // - "template" function to return a HTML string for each feature (function, means can contain conditionals, etc)
             //    tip: return a empty string to effectively skip this feature
+            // here, we use only one feature group: Where You Clicked
 
-            //GDA room for improvement: bounce the queryRenderedFeatures() IDs off getOHMFeatureInfo() so we can get the best possible data
-            //GDA the thing actually being clicked may have little/no real info, e.g. buildings are just footprints and a POI may have its name & dates
-
-            // here, we use only one feature group
             // automatically compile the list of "clickable" layers in that group,
             // by checking for datemissing-X and dateinvalid-X layers in the style
             var clicklayers = _mapconstants.GLMAP_STYLE.layers.filter(function (layerinfo) {
