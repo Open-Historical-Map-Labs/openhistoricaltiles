@@ -25,12 +25,19 @@ To start and stop the services:
 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh start
 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh stop
 ```
+```
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmboundaries_service.sh start
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmboundaries_service.sh stop
+```
 
 The Tessera service runs on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` and there is an Apache proxy redirecting all website requests to `localhost:8080` so Tessera answers them. This Apache proxy provides HTTPS/SSL service.
 
 PostgreSQL runs in a Docker container, but redirects port 5432 so it may be used like a typical, non-Dockerized PostgreSQL.
 
-OSM diffs are consumed every 5 minutes by their service, which is a Docker wrapper over `imposm run` The output is sent to `/home/ubuntu/OPENMAPTILES/openmaptiles/data/ohmdiffs_service.log` and the logfile is cycled periodically (daily, 7 days kept).
+OSM diffs are consumed every 5 minutes by their service, which is a Docker wrapper over `imposm run` The output is sent to `/home/ubuntu/OPENMAPTILES/openmaptiles/data/ohmdiffs_service.log` and the logfile is cycled periodically (daily, 7 days kept). See `/etc/logrotate.d/openhistoricalmap_diffs` for the log-cycling configuration.
+
+OSM Boundaries have a separate import method using a customized `osmborder` to filter boundaries and generate a CSV, then load that CSV into the database. Unlike OHM diffs, this process does involve dropping and re-creating the `osm_boundary_linestring` tables and `boundary_zX` views; it is a destroy-and-reload and not diffs. Progress is logged to a logfile which is cycled daily and 7 days retained; see `/home/ubuntu/OPENMAPTILES/openmaptiles/data/ohmborders_cronjob.log` for the logfile and `/etc/logrotate.d/openhistoricalmap_borders` for the logrotate configuration.
+
 
 
 ## PostgreSQL
