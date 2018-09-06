@@ -70,7 +70,11 @@ window.checkMapForDateIssues = function () {
     osmid_datemissing.sort();
 
     const features_dateinvalid = allvisiblefeatures.filter(function (feature) {
-        return feature.properties.osm_id && feature.properties.start_date && feature.properties.end_date && ! feature.properties.start_date.match(re_iso8601) && ! feature.properties.end_date.match(re_iso8601);
+        if (! feature.properties.osm_id) return false;
+        if (! feature.properties.start_date && ! feature.properties.end_date) return false;
+        if (! feature.properties.start_date.match(re_iso8601)) return true;
+        if (! feature.properties.end_date.match(re_iso8601)) return true;
+        return false;
     });
     const osmid_dateinvalid = features_dateinvalid.map(function (feature) { return feature.properties.osm_id; }).unique();
     osmid_dateinvalid.sort();
@@ -115,8 +119,7 @@ window.checkMapForDateIssues = function () {
 
     // console.log([ 'OSM IDs Missing dates', osmid_datemissing ]);
     // console.log([ 'OSM IDs Invalid dates', osmid_dateinvalid ]);
-//GDA
-console.log([ 'OSM IDs Good dates', osmid_datelooksok ]);
+    // console.log([ 'OSM IDs Good dates', osmid_datelooksok ]);
 
     // step 2
     // update those datemissing-X and dateinvalid-X map layers, asserting a new filter to those OSM IDs
