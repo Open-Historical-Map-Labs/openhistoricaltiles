@@ -37,9 +37,7 @@ export class MapDateFilterControl {
             this.addFilteringOptionToSublayer(layerid);
         });
 
-        // apply our filter to whatever is the initial state
-        // and re-filter every time the map is moved
-        this.applyDateFiltering();
+        // don't apply date filtering yet; our caller can use setDates() or applyDateFiltering() when they're ready
 
         // done; hand back our UI element as expected by the framework
         return this._container;
@@ -54,25 +52,11 @@ export class MapDateFilterControl {
         this._input_startdate.type = "text";
         this._input_startdate.value = this.options.mindate;
         this._container.appendChild(this._input_startdate);
-        this._input_startdate.addEventListener('change', () => {
-            if (! this.validateDateFormat(this._input_startdate.value)) {
-                return alert("Invalid start date.");
-            }
-            this.applyDateFiltering();
-            this.options.onChange();
-        });
 
         this._input_enddate = document.createElement('input');
         this._input_enddate.type = "text";
         this._input_enddate.value = this.options.maxdate;
         this._container.appendChild(this._input_enddate);
-        this._input_enddate.addEventListener('change', () => {
-            if (! this.validateDateFormat(this._input_enddate.value)) {
-                return alert("Invalid end date.");
-            }
-            this.applyDateFiltering();
-            this.options.onChange();
-        });
 
         const datepickerconfig = {
             allowInput: true,
@@ -80,10 +64,53 @@ export class MapDateFilterControl {
         flatpickr(this._input_startdate, datepickerconfig);
         flatpickr(this._input_enddate, datepickerconfig);
 
-        this._gobutton = document.createElement('input'); // doesn't really DO anything except prompt the user to blur the text inputs
+        this._gobutton = document.createElement('input');
         this._gobutton.type = "button";
         this._gobutton.value = 'Apply';
+        this._gobutton.addEventListener('click', () => {
+            if (! this.validateDateFormat(this._input_startdate.value)) return alert("Invalid start date.");
+            if (! this.validateDateFormat(this._input_enddate.value)) return alert("Invalid start date.");
+
+            this.applyDateFiltering();
+            this.options.onChange();
+        });
         this._container.appendChild(this._gobutton);
+
+        this._buttonbar = document.createElement('div');
+        this._buttonbar.className = "buttonbar";
+        this._container.appendChild(this._buttonbar);
+
+        this._timebackmore = document.createElement('i');
+        this._timebackmore.className = "glyphicons glyphicons-fast-backward";
+        this._timebackmore.title = "Back 10 years";
+        this._buttonbar.appendChild(this._timebackmore);
+        this._timebackmore.addEventListener('click', () => {
+            this.shiftDateWindowByYears(-10);
+        });
+
+        this._timebacksome = document.createElement('i');
+        this._timebacksome.className = "glyphicons glyphicons-step-backward";
+        this._timebacksome.title = "Back 1 year";
+        this._buttonbar.appendChild(this._timebacksome);
+        this._timebacksome.addEventListener('click', () => {
+            this.shiftDateWindowByYears(-1);
+        });
+
+        this._timeaheadsome = document.createElement('i');
+        this._timeaheadsome.className = "glyphicons glyphicons-step-forward";
+        this._timeaheadsome.title = "Forward 1 year";
+        this._buttonbar.appendChild(this._timeaheadsome);
+        this._timeaheadsome.addEventListener('click', () => {
+            this.shiftDateWindowByYears(1);
+        });
+
+        this._timeaheadmore = document.createElement('i');
+        this._timeaheadmore.className = "glyphicons glyphicons-fast-forward";
+        this._timeaheadmore.title = "Forward 10 years";
+        this._buttonbar.appendChild(this._timeaheadmore);
+        this._timeaheadmore.addEventListener('click', () => {
+            this.shiftDateWindowByYears(10);
+        });
     }
 
     getDefaultPosition () {
@@ -260,5 +287,11 @@ export class MapDateFilterControl {
 
         this.applyDateFiltering();
         this.options.onChange();
+    }
+
+    shiftDateWindowByYears (yearshift) {
+        const newstart = (parseInt(this._input_startdate.value.substr(0, 4)) + yearshift) + this._input_startdate.value.substr(4);
+        const newend = (parseInt(this._input_enddate.value.substr(0, 4)) + yearshift) + this._input_enddate.value.substr(4);
+        this.setDates(newstart, newend);
     }
 }

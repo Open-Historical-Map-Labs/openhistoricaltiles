@@ -18,3 +18,18 @@ body, html {
 .pointercusor {
     cursor: pointer;
 }
+
+
+/*
+ * FLATPICKR date picker mods
+ */
+
+.flatpickr-months .flatpickr-month {
+    height: 33px;
+}
+.flatpickr-current-month span.cur-month {
+    padding-right: 0.5em;
+}
+.flatpickr-current-month input.cur-year {
+    border: 1px inset silver;
+}

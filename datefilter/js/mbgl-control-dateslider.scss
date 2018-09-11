@@ -18,4 +18,17 @@ div.mapboxgl-ctrl.mbgl-control-dateslider {
     }
     input[type="button"] {
     }
+
+    div.buttonbar {
+        margin-top: .5em;
+        text-align: center;
+
+        i {
+            cursor: pointer;
+            margin-right: 1em;
+        }
+        i:last-child {
+            margin-right: 0;
+        }
+    }
 }
