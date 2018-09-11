@@ -51,22 +51,19 @@ export class UrlHashControl {
     }
 
     applyUrlHashToMap (hashstring) {
-        const params_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)\/(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)/;
-        const zxy = hashstring.match(params_regex);
-        if (! zxy) return;  // not a match, maybe blank, maybe malformed?
+        const params = hashstring.replace(/^#/, '').split('/');
+        const [ z, x, y, d ] = [  ...params ];
 
-        const z = zxy[1];
-        const lat = zxy[2];
-        const lng = zxy[3];
-        const date1 = zxy[4];
-        const date2 = zxy[5];
-
-        this._map.setZoom(z);
-        this._map.setCenter([ lng, lat ]);
-
-        setTimeout(() => {
-            this._map.DATESLIDER.setDates(date1, date2);
-        }, 1000);
+        if (z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
+            this._map.setZoom( parseFloat(z) );
+            this._map.setCenter([ parseFloat(y), parseFloat(x) ]);
+        }
+        if (d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
+            const dates = d.split(',');
+            setTimeout(() => {  // why the timeout? race conditions inside MBGL that 'load' happens before it has really loaded
+                this._map.DATESLIDER.setDates(dates[0], dates[1]);
+            }, 1000);
+        }
     }
 
     updateUrlHashFromMap () {
