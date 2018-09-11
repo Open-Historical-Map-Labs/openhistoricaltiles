@@ -37,7 +37,10 @@ export class MapDateFilterControl {
             this.addFilteringOptionToSublayer(layerid);
         });
 
-        // don't apply date filtering yet; our caller can use setDates() or applyDateFiltering() when they're ready
+        // go ahead and apply our starting filters, but do so in our own thread
+        setTimeout(() => {
+            this.applyDateFiltering();
+        }, 1);
 
         // done; hand back our UI element as expected by the framework
         return this._container;

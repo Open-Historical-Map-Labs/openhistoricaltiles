@@ -60,9 +60,7 @@ export class UrlHashControl {
         }
         if (d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
             const dates = d.split(',');
-            setTimeout(() => {  // why the timeout? race conditions inside MBGL that 'load' happens before it has really loaded
-                this._map.DATESLIDER.setDates(dates[0], dates[1]);
-            }, 1000);
+            this._map.DATESLIDER.setDates(dates[0], dates[1]);
         }
     }
 
