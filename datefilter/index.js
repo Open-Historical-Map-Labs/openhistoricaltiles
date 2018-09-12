@@ -420,6 +420,10 @@ $(document).ready(function () {
                 title: "Black Rock Desert 2009",
                 hashstring: "#14.00/40.77159/-119.21816/2009-08-15,2009-09-15/",
                 description: "Toggle between 2008 and 2009."
+            }, {
+                title: "Petit Vimy",
+                hashstring: "#13.00/50.36110/2.79070/1917-01-01,1920-12-31/",
+                description: "An airbase in France during World War I"
             }]
         });
         MAP.addControl(MAP.HELPPANEL);
