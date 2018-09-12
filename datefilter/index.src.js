@@ -4,6 +4,7 @@ import { UrlHashControl } from './js/mbgl-control-urlhash';
 import { MapHoversControl } from './js/mbgl-control-mousehovers';
 import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 import { MapDateFilterControl } from './js/mbgl-control-dateslider';
+import { InstructionsPanelControl } from './js/mbgl-control-instructionpanel';
 
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 16;
@@ -488,5 +489,23 @@ $(document).ready(function () {
         setTimeout(function () {
             MAP.DATESLIDER.applyDateFiltering();
         }, 1000);
+
+        // while it would be safe to add this control before 'load'
+        // we want this control to come after the datefilter
+        MAP.HELPPANEL = new InstructionsPanelControl({
+            places: [
+                {
+                    title: "Black Rock Desert 2008",
+                    hashstring: "#14.00/40.77159/-119.21816/2008-08-15,2008-09-15/",
+                    description: "Toggle between 2008 and 2009.",
+                },
+                {
+                    title: "Black Rock Desert 2009",
+                    hashstring: "#14.00/40.77159/-119.21816/2009-08-15,2009-09-15/",
+                    description: "Toggle between 2008 and 2009.",
+                },
+            ],
+        });
+        MAP.addControl(MAP.HELPPANEL);
     });
 });
