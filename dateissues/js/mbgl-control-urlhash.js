@@ -51,7 +51,7 @@ export class UrlHashControl {
     }
 
     applyUrlHashToMap (hashstring) {
-        const zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
+        const zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\//;
         const zxy = hashstring.match(zxy_regex);
         if (! zxy) return;  // not a match, maybe blank, maybe malformed?
 

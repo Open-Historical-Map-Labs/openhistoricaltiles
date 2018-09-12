@@ -822,7 +822,7 @@ var UrlHashControl = exports.UrlHashControl = function () {
     }, {
         key: "applyUrlHashToMap",
         value: function applyUrlHashToMap(hashstring) {
-            var zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)/;
+            var zxy_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\//;
             var zxy = hashstring.match(zxy_regex);
             if (!zxy) return; // not a match, maybe blank, maybe malformed?
 
