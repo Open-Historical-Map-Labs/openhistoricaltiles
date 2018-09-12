@@ -1176,7 +1176,7 @@ var UrlHashControl = exports.UrlHashControl = function () {
 
             // effectively on load: read existing hash and apply it
             if (window.location.hash) {
-                this.applyUrlHashToMap(window.location.hash);
+                this.readUrlHashAndApply();
             }
 
             // start listening for changes to the hash, and to the map
@@ -1206,12 +1206,14 @@ var UrlHashControl = exports.UrlHashControl = function () {
     }, {
         key: "readUrlHashAndApply",
         value: function readUrlHashAndApply() {
-            var hashstring = window.location.hash;
+            var hashstring = window.location.hash || "";
             this.applyUrlHashToMap(hashstring);
         }
     }, {
         key: "applyUrlHashToMap",
         value: function applyUrlHashToMap(hashstring) {
+            var _this2 = this;
+
             var params = hashstring.replace(/^#/, '').split('/');
 
             var _ref = [].concat(_toConsumableArray(params)),
@@ -1220,13 +1222,16 @@ var UrlHashControl = exports.UrlHashControl = function () {
                 y = _ref[2],
                 d = _ref[3];
 
-            if (z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
+            if (z && x && y && z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
                 this._map.setZoom(parseFloat(z));
                 this._map.setCenter([parseFloat(y), parseFloat(x)]);
             }
-            if (d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
+            if (d && d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
                 var dates = d.split(',');
                 this._map.DATESLIDER.setDates(dates[0], dates[1]);
+                setTimeout(function () {
+                    _this2._map.DATESLIDER.applyDateFiltering(); // bug workaround, during initial change from no hash at all to a hash
+                }, 500);
             }
         }
     }, {

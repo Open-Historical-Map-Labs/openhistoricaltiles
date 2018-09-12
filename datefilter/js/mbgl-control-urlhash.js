@@ -22,7 +22,7 @@ export class UrlHashControl {
 
         // effectively on load: read existing hash and apply it
         if (window.location.hash) {
-            this.applyUrlHashToMap(window.location.hash);
+            this.readUrlHashAndApply();
         }
 
         // start listening for changes to the hash, and to the map
@@ -46,7 +46,7 @@ export class UrlHashControl {
     }
 
     readUrlHashAndApply () {
-        const hashstring = window.location.hash;
+        const hashstring = window.location.hash || "";
         this.applyUrlHashToMap(hashstring);
     }
 
@@ -54,13 +54,16 @@ export class UrlHashControl {
         const params = hashstring.replace(/^#/, '').split('/');
         const [ z, x, y, d ] = [  ...params ];
 
-        if (z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
+        if (z && x && y && z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
             this._map.setZoom( parseFloat(z) );
             this._map.setCenter([ parseFloat(y), parseFloat(x) ]);
         }
-        if (d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
+        if (d && d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
             const dates = d.split(',');
             this._map.DATESLIDER.setDates(dates[0], dates[1]);
+            setTimeout(() => {
+                this._map.DATESLIDER.applyDateFiltering();  // bug workaround, during initial change from no hash at all to a hash
+            }, 500);
         }
     }
 
