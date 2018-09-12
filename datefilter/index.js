@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,15 +73,17 @@
 "use strict";
 
 
-var _mapconstants = __webpack_require__(8);
+var _mapconstants = __webpack_require__(9);
 
-var _mbglControlUrlhash = __webpack_require__(7);
+var _mbglControlUrlhash = __webpack_require__(8);
 
-var _mbglControlMousehovers = __webpack_require__(6);
+var _mbglControlMousehovers = __webpack_require__(7);
 
-var _mbglControlMouseclicks = __webpack_require__(5);
+var _mbglControlMouseclicks = __webpack_require__(6);
 
 var _mbglControlDateslider = __webpack_require__(4);
+
+var _mbglControlInstructionpanel = __webpack_require__(5);
 
 var MIN_ZOOM = 2;
 var MAX_ZOOM = 16;
@@ -373,35 +375,54 @@ $(document).ready(function () {
     });
     MAP.addControl(MAP.CLICKS);
 
-    MAP.DATESLIDER = new _mbglControlDateslider.MapDateFilterControl({
-        // which layers get a date filter prepended to whatever filters are already in place?
-        // for us, all of them
-        // NOTE that this will change the filters on the layers, prepending a "all" and the start_date/end_date filter
-        // and wrapping your other filters into a list starting as element 3
-        // e.g. "all", [ "<=", "start_date", "XXXX" ], [ ">=" "end_date", "XXXX" ], [ your other filters here ]
-        layers: ["landcover-glacier", "landuse-residential", "landuse-commercial", "landuse-industrial", "park", "park-outline", "landuse-cemetery", "landuse-hospital", "landuse-school", "landuse-railway", "landcover-wood", "landcover-grass", "landcover-grass-park", "waterway_tunnel", "waterway-other", "waterway-stream-canal", "waterway-river", "water-offset", "water", "water-pattern", "landcover-ice-shelf", "building", "building-top", "tunnel-service-track-casing", "tunnel-minor-casing", "tunnel-secondary-tertiary-casing", "tunnel-trunk-primary-casing", "tunnel-motorway-casing", "tunnel-path", "tunnel-service-track", "tunnel-minor", "tunnel-secondary-tertiary", "tunnel-trunk-primary", "tunnel-motorway", "tunnel-railway", "ferry", "aeroway-taxiway-casing", "aeroway-runway-casing", "aeroway-area", "aeroway-taxiway", "aeroway-runway", "highway-area", "highway-motorway-link-casing", "highway-link-casing", "highway-minor-casing", "highway-secondary-tertiary-casing", "highway-primary-casing", "highway-trunk-casing", "highway-motorway-casing", "highway-path", "highway-motorway-link", "highway-link", "highway-minor", "highway-secondary-tertiary", "highway-primary", "highway-trunk", "highway-motorway", "railway-transit", "railway-transit-hatching", "railway-service", "railway-service-hatching", "railway", "railway-hatching", "bridge-motorway-link-casing", "bridge-link-casing", "bridge-secondary-tertiary-casing", "bridge-trunk-primary-casing", "bridge-motorway-casing", "bridge-path-casing", "bridge-path", "bridge-motorway-link", "bridge-link", "bridge-secondary-tertiary", "bridge-trunk-primary", "bridge-motorway", "bridge-railway", "bridge-railway-hatching", "cablecar", "cablecar-dash", "boundary-land-level-4", "boundary-land-level-2", "boundary-land-disputed", "boundary-water", "waterway-name", "water-name-lakeline", "water-name-ocean", "water-name-other", "poi-level-3", "poi-level-2", "poi-level-1", "poi-railway", "road_oneway", "road_oneway_opposite", "highway-name-path", "highway-name-minor", "highway-name-major", "highway-shield", "highway-shield-us-interstate", "highway-shield-us-other", "airport-label-major", "place-other", "place-village", "place-town", "place-city", "place-city-capital", "place-country-other", "place-country-3", "place-country-2", "place-country-1", "place-continent"],
-
-        // the default dates for the boxes
-        // this won't be enforced (yet), so the names "min" and "max" are kind of a misnomer... for the moment
-        mindate: "2008-01-01",
-        maxdate: "2010-12-31",
-
-        // a few custom hooks whenever the dates change
-        onChange: function onChange() {
-            MAP.HASHWATCHER.updateUrlHashFromMap();
-        }
-    });
-
     //  
     // startup and initial state, once the GL Map has loaded
     //
     MAP.on('load', function () {
         // the date slider does involve mutating the filters, and that's most safely done after the layers are clearly loaded onto the map
+        MAP.DATESLIDER = new _mbglControlDateslider.MapDateFilterControl({
+            // which layers get a date filter prepended to whatever filters are already in place?
+            // for us, all of them
+            // NOTE that this will change the filters on the layers, prepending a "all" and the start_date/end_date filter
+            // and wrapping your other filters into a list starting as element 3
+            // e.g. "all", [ "<=", "start_date", "XXXX" ], [ ">=" "end_date", "XXXX" ], [ your other filters here ]
+            layers: ["landcover-glacier", "landuse-residential", "landuse-commercial", "landuse-industrial", "park", "park-outline", "landuse-cemetery", "landuse-hospital", "landuse-school", "landuse-railway", "landcover-wood", "landcover-grass", "landcover-grass-park", "waterway_tunnel", "waterway-other", "waterway-stream-canal", "waterway-river", "water-offset", "water", "water-pattern", "landcover-ice-shelf", "building", "building-top", "tunnel-service-track-casing", "tunnel-minor-casing", "tunnel-secondary-tertiary-casing", "tunnel-trunk-primary-casing", "tunnel-motorway-casing", "tunnel-path", "tunnel-service-track", "tunnel-minor", "tunnel-secondary-tertiary", "tunnel-trunk-primary", "tunnel-motorway", "tunnel-railway", "ferry", "aeroway-taxiway-casing", "aeroway-runway-casing", "aeroway-area", "aeroway-taxiway", "aeroway-runway", "highway-area", "highway-motorway-link-casing", "highway-link-casing", "highway-minor-casing", "highway-secondary-tertiary-casing", "highway-primary-casing", "highway-trunk-casing", "highway-motorway-casing", "highway-path", "highway-motorway-link", "highway-link", "highway-minor", "highway-secondary-tertiary", "highway-primary", "highway-trunk", "highway-motorway", "railway-transit", "railway-transit-hatching", "railway-service", "railway-service-hatching", "railway", "railway-hatching", "bridge-motorway-link-casing", "bridge-link-casing", "bridge-secondary-tertiary-casing", "bridge-trunk-primary-casing", "bridge-motorway-casing", "bridge-path-casing", "bridge-path", "bridge-motorway-link", "bridge-link", "bridge-secondary-tertiary", "bridge-trunk-primary", "bridge-motorway", "bridge-railway", "bridge-railway-hatching", "cablecar", "cablecar-dash", "boundary-land-level-4", "boundary-land-level-2", "boundary-land-disputed", "boundary-water", "waterway-name", "water-name-lakeline", "water-name-ocean", "water-name-other", "poi-level-3", "poi-level-2", "poi-level-1", "poi-railway", "road_oneway", "road_oneway_opposite", "highway-name-path", "highway-name-minor", "highway-name-major", "highway-shield", "highway-shield-us-interstate", "highway-shield-us-other", "airport-label-major", "place-other", "place-village", "place-town", "place-city", "place-city-capital", "place-country-other", "place-country-3", "place-country-2", "place-country-1", "place-continent"],
+
+            // the default dates for the boxes
+            // this won't be enforced (yet), so the names "min" and "max" are kind of a misnomer... for the moment
+            mindate: "2008-01-01",
+            maxdate: "2010-12-31",
+
+            // a few custom hooks whenever the dates change
+            onChange: function onChange() {
+                MAP.HASHWATCHER.updateUrlHashFromMap();
+            }
+        });
         MAP.addControl(MAP.DATESLIDER);
 
         // now that we're ready, apply the hash which will in turn trigger the dateslider control
         MAP.HASHWATCHER = new _mbglControlUrlhash.UrlHashControl(); // hacked to include MapDateFilterControl as a param
         MAP.addControl(MAP.HASHWATCHER);
+
+        // this hack shouldn't be necessary, but MBGL is buggy so here it is...
+        setTimeout(function () {
+            MAP.DATESLIDER.applyDateFiltering();
+        }, 1000);
+
+        // while it would be safe to add this control before 'load'
+        // we want this control to come after the datefilter
+        MAP.HELPPANEL = new _mbglControlInstructionpanel.InstructionsPanelControl({
+            places: [{
+                title: "Black Rock Desert 2008",
+                hashstring: "#14.00/40.77159/-119.21816/2008-08-15,2008-09-15/",
+                description: "Toggle between 2008 and 2009."
+            }, {
+                title: "Black Rock Desert 2009",
+                hashstring: "#14.00/40.77159/-119.21816/2009-08-15,2009-09-15/",
+                description: "Toggle between 2008 and 2009."
+            }]
+        });
+        MAP.addControl(MAP.HELPPANEL);
     });
 });
 
@@ -439,7 +460,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _flatpickr = __webpack_require__(11);
+var _flatpickr = __webpack_require__(13);
 
 var _flatpickr2 = _interopRequireDefault(_flatpickr);
 
@@ -449,9 +470,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(9);
-
 __webpack_require__(10);
+
+__webpack_require__(11);
 
 var MapDateFilterControl = exports.MapDateFilterControl = function () {
     function MapDateFilterControl() {
@@ -493,9 +514,10 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
                 _this.addFilteringOptionToSublayer(layerid);
             });
 
-            // apply our filter to whatever is the initial state
-            // and re-filter every time the map is moved
-            this.applyDateFiltering();
+            // go ahead and apply our starting filters, but do so in our own thread
+            setTimeout(function () {
+                _this.applyDateFiltering();
+            }, 1);
 
             // done; hand back our UI element as expected by the framework
             return this._container;
@@ -513,25 +535,11 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
             this._input_startdate.type = "text";
             this._input_startdate.value = this.options.mindate;
             this._container.appendChild(this._input_startdate);
-            this._input_startdate.addEventListener('change', function () {
-                if (!_this2.validateDateFormat(_this2._input_startdate.value)) {
-                    return alert("Invalid start date.");
-                }
-                _this2.applyDateFiltering();
-                _this2.options.onChange();
-            });
 
             this._input_enddate = document.createElement('input');
             this._input_enddate.type = "text";
             this._input_enddate.value = this.options.maxdate;
             this._container.appendChild(this._input_enddate);
-            this._input_enddate.addEventListener('change', function () {
-                if (!_this2.validateDateFormat(_this2._input_enddate.value)) {
-                    return alert("Invalid end date.");
-                }
-                _this2.applyDateFiltering();
-                _this2.options.onChange();
-            });
 
             var datepickerconfig = {
                 allowInput: true
@@ -539,10 +547,53 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
             (0, _flatpickr2.default)(this._input_startdate, datepickerconfig);
             (0, _flatpickr2.default)(this._input_enddate, datepickerconfig);
 
-            this._gobutton = document.createElement('input'); // doesn't really DO anything except prompt the user to blur the text inputs
+            this._gobutton = document.createElement('input');
             this._gobutton.type = "button";
             this._gobutton.value = 'Apply';
+            this._gobutton.addEventListener('click', function () {
+                if (!_this2.validateDateFormat(_this2._input_startdate.value)) return alert("Invalid start date.");
+                if (!_this2.validateDateFormat(_this2._input_enddate.value)) return alert("Invalid start date.");
+
+                _this2.applyDateFiltering();
+                _this2.options.onChange();
+            });
             this._container.appendChild(this._gobutton);
+
+            this._buttonbar = document.createElement('div');
+            this._buttonbar.className = "buttonbar";
+            this._container.appendChild(this._buttonbar);
+
+            this._timebackmore = document.createElement('i');
+            this._timebackmore.className = "glyphicons glyphicons-fast-backward";
+            this._timebackmore.title = "Back 10 years";
+            this._buttonbar.appendChild(this._timebackmore);
+            this._timebackmore.addEventListener('click', function () {
+                _this2.shiftDateWindowByYears(-10);
+            });
+
+            this._timebacksome = document.createElement('i');
+            this._timebacksome.className = "glyphicons glyphicons-step-backward";
+            this._timebacksome.title = "Back 1 year";
+            this._buttonbar.appendChild(this._timebacksome);
+            this._timebacksome.addEventListener('click', function () {
+                _this2.shiftDateWindowByYears(-1);
+            });
+
+            this._timeaheadsome = document.createElement('i');
+            this._timeaheadsome.className = "glyphicons glyphicons-step-forward";
+            this._timeaheadsome.title = "Forward 1 year";
+            this._buttonbar.appendChild(this._timeaheadsome);
+            this._timeaheadsome.addEventListener('click', function () {
+                _this2.shiftDateWindowByYears(1);
+            });
+
+            this._timeaheadmore = document.createElement('i');
+            this._timeaheadmore.className = "glyphicons glyphicons-fast-forward";
+            this._timeaheadmore.title = "Forward 10 years";
+            this._buttonbar.appendChild(this._timeaheadmore);
+            this._timeaheadmore.addEventListener('click', function () {
+                _this2.shiftDateWindowByYears(10);
+            });
         }
     }, {
         key: 'getDefaultPosition',
@@ -715,6 +766,13 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
             this.applyDateFiltering();
             this.options.onChange();
         }
+    }, {
+        key: 'shiftDateWindowByYears',
+        value: function shiftDateWindowByYears(yearshift) {
+            var newstart = parseInt(this._input_startdate.value.substr(0, 4)) + yearshift + this._input_startdate.value.substr(4);
+            var newend = parseInt(this._input_enddate.value.substr(0, 4)) + yearshift + this._input_enddate.value.substr(4);
+            this.setDates(newstart, newend);
+        }
     }]);
 
     return MapDateFilterControl;
@@ -722,6 +780,78 @@ var MapDateFilterControl = exports.MapDateFilterControl = function () {
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(12);
+
+var InstructionsPanelControl = exports.InstructionsPanelControl = function () {
+    function InstructionsPanelControl() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        _classCallCheck(this, InstructionsPanelControl);
+
+        // merge suppplied options with these defaults
+        this.options = Object.assign({
+            places: [] // the list of interesting places; objects with title + hashstring + description
+        }, options);
+    }
+
+    _createClass(InstructionsPanelControl, [{
+        key: "onAdd",
+        value: function onAdd(map) {
+            var _this = this;
+
+            this._map = map;
+
+            this._container = document.createElement("div");
+            this._container.className = "mapboxgl-ctrl mbgl-control-instructionpanel";
+
+            var title = document.createElement("h1");
+            title.innerHTML = "Places and Times Of Interest";
+            this._container.appendChild(title);
+
+            // add each option: title, hashstring, description
+            this.options.places.forEach(function (placeinfo) {
+                var thisblock = document.createElement("div");
+
+                var link = document.createElement("a");
+                link.innerHTML = placeinfo.title;
+                link.href = placeinfo.hashstring;
+                thisblock.appendChild(link);
+
+                var text = document.createElement("p");
+                text.innerHTML = placeinfo.description;
+                thisblock.appendChild(text);
+
+                _this._container.appendChild(thisblock);
+            });
+
+            // done; hand back our UI element as expected by the framework
+            return this._container;
+        }
+    }, {
+        key: "getDefaultPosition",
+        value: function getDefaultPosition() {
+            return 'top-left';
+        }
+    }]);
+
+    return InstructionsPanelControl;
+}();
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -897,7 +1027,7 @@ var MapClicksControl = exports.MapClicksControl = function () {
 }();
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -999,7 +1129,7 @@ var MapHoversControl = exports.MapHoversControl = function () {
 }();
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1010,6 +1140,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1080,24 +1212,22 @@ var UrlHashControl = exports.UrlHashControl = function () {
     }, {
         key: "applyUrlHashToMap",
         value: function applyUrlHashToMap(hashstring) {
-            var _this2 = this;
+            var params = hashstring.replace(/^#/, '').split('/');
 
-            var params_regex = /^\#(\d+\.?\d*)\/(\-?\d+\.\d+)\/(\-\d+\.\d+)\/(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)/;
-            var zxy = hashstring.match(params_regex);
-            if (!zxy) return; // not a match, maybe blank, maybe malformed?
+            var _ref = [].concat(_toConsumableArray(params)),
+                z = _ref[0],
+                x = _ref[1],
+                y = _ref[2],
+                d = _ref[3];
 
-            var z = zxy[1];
-            var lat = zxy[2];
-            var lng = zxy[3];
-            var date1 = zxy[4];
-            var date2 = zxy[5];
-
-            this._map.setZoom(z);
-            this._map.setCenter([lng, lat]);
-
-            setTimeout(function () {
-                _this2._map.DATESLIDER.setDates(date1, date2);
-            }, 1000);
+            if (z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
+                this._map.setZoom(parseFloat(z));
+                this._map.setCenter([parseFloat(y), parseFloat(x)]);
+            }
+            if (d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
+                var dates = d.split(',');
+                this._map.DATESLIDER.setDates(dates[0], dates[1]);
+            }
         }
     }, {
         key: "updateUrlHashFromMap",
@@ -1116,7 +1246,7 @@ var UrlHashControl = exports.UrlHashControl = function () {
 }();
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3125,12 +3255,6 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
 };
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
@@ -3138,6 +3262,18 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* flatpickr v4.5.2, @license MIT */
@@ -5317,7 +5453,7 @@ var GLMAP_STYLE = exports.GLMAP_STYLE = {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
