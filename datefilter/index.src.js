@@ -63,7 +63,7 @@ $(document).ready(function () {
             // buildings; no name, but a type
             //
             'building': function (feature) {
-                return toTitleCase(feature.properties.building.replace(/_/g, ' '));
+                return feature.properties.name;
             },
             //
             // water (bodies); has a proper name field
@@ -260,6 +260,9 @@ $(document).ready(function () {
                             infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
                         }
 
+                        // add the layer ID where this was found, to aid in debugging what's what
+                        infohtml += `<br/>Layer: ${feature.layer.id}`;
+
                         return infohtml;
                     },
                 },
@@ -293,6 +296,9 @@ $(document).ready(function () {
                             infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
                         }
 
+                        // add the layer ID where this was found, to aid in debugging what's what
+                        infohtml += `<br/>Layer: ${feature.layer.id}`;
+
                         return infohtml;
                     },
                 },
@@ -308,15 +314,7 @@ $(document).ready(function () {
                         ],
                     }),
                     template: function (feature) {
-                        let infohtml = "";
-                        switch (feature.layer.id) {
-                            case 'building':
-                                infohtml = toTitleCase(feature.properties.building.replace(/_/g, ' '));
-                                break;
-                            default:
-                                infohtml = `${feature.properties.name}`;
-                                break;
-                        }
+                        let infohtml = `${feature.properties.name}`;
 
                         // add date info, if we have any
                         if (feature.properties.start_date && feature.properties.end_date) {
@@ -333,6 +331,9 @@ $(document).ready(function () {
                         if (feature.properties.osm_id) {
                             infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
                         }
+
+                        // add the layer ID where this was found, to aid in debugging what's what
+                        infohtml += `<br/>Layer: ${feature.layer.id}`;
 
                         return infohtml;
                     },

@@ -143,7 +143,7 @@ $(document).ready(function () {
             // buildings; no name, but a type
             //
             'building': function building(feature) {
-                return toTitleCase(feature.properties.building.replace(/_/g, ' '));
+                return feature.properties.name;
             },
             //
             // water (bodies); has a proper name field
@@ -309,6 +309,9 @@ $(document).ready(function () {
                         infohtml += '<br/>OSM ID: ' + feature.properties.osm_id;
                     }
 
+                    // add the layer ID where this was found, to aid in debugging what's what
+                    infohtml += '<br/>Layer: ' + feature.layer.id;
+
                     return infohtml;
                 }
             }, {
@@ -333,6 +336,9 @@ $(document).ready(function () {
                         infohtml += '<br/>OSM ID: ' + feature.properties.osm_id;
                     }
 
+                    // add the layer ID where this was found, to aid in debugging what's what
+                    infohtml += '<br/>Layer: ' + feature.layer.id;
+
                     return infohtml;
                 }
             }, {
@@ -341,15 +347,7 @@ $(document).ready(function () {
                     layers: ['poi-level-3', 'poi-level-2', 'poi-level-1', 'poi-railway', 'building']
                 }),
                 template: function template(feature) {
-                    var infohtml = "";
-                    switch (feature.layer.id) {
-                        case 'building':
-                            infohtml = toTitleCase(feature.properties.building.replace(/_/g, ' '));
-                            break;
-                        default:
-                            infohtml = '' + feature.properties.name;
-                            break;
-                    }
+                    var infohtml = '' + feature.properties.name;
 
                     // add date info, if we have any
                     if (feature.properties.start_date && feature.properties.end_date) {
@@ -364,6 +362,9 @@ $(document).ready(function () {
                     if (feature.properties.osm_id) {
                         infohtml += '<br/>OSM ID: ' + feature.properties.osm_id;
                     }
+
+                    // add the layer ID where this was found, to aid in debugging what's what
+                    infohtml += '<br/>Layer: ' + feature.layer.id;
 
                     return infohtml;
                 }
@@ -1078,7 +1079,8 @@ var MapHoversControl = exports.MapHoversControl = function () {
                         var feature = mouseevent.features[0];
                         console.log(['MapHoversControl', layerid, feature]);
 
-                        var tooltip = callback(feature);
+                        var text = callback(feature);
+                        var tooltip = feature.layer.id + ' :: ' + text;
                         _this.setMapToolTip(tooltip);
                     });
                     _this._map.on("mouseleave", layerid, function () {

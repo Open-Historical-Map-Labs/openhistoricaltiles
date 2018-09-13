@@ -17,7 +17,8 @@ export class MapHoversControl {
                     const feature = mouseevent.features[0];
                     console.log(['MapHoversControl', layerid, feature ]);
 
-                    const tooltip = callback(feature);
+                    const text = callback(feature);
+                    const tooltip = `${feature.layer.id} :: ${text}`;
                     this.setMapToolTip(tooltip);
                 });
                 this._map.on("mouseleave", layerid, () => {
