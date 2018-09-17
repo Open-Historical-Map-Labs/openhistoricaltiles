@@ -1,3 +1,7 @@
 # the original and complete tileset.sql file
 # we don't want this in VC; we provide the individual postprocessing patches instead
 tileset.sql
+
+# lock files and temp files
+LOCKFILE
+nohup.out

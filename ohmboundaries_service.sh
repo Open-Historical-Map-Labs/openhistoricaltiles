@@ -30,10 +30,10 @@ case "$1" in
         cd $HOMEDIR
 
         echo "`date` starting makecsv-osmborder task" >> $LOGFILE
-        # /usr/local/bin/docker-compose run --rm makecsv-osmborder >> $LOGFILE
+        /usr/local/bin/docker-compose run --rm makecsv-osmborder >> $LOGFILE
 
         echo "`date` starting import-osmborder task" >> $LOGFILE
-        # /usr/local/bin/docker-compose run --rm import-osmborder >> $LOGFILE
+        /usr/local/bin/docker-compose run --rm import-osmborder >> $LOGFILE
 
         echo "`date` re-creating boundary_zX views" >> $LOGFILE
         psql -h 127.0.0.1 -U openmaptiles -f $SQLPOSTFILE

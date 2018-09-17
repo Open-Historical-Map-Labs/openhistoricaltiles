@@ -193,7 +193,7 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, render_height, render_min_height, building
+      SELECT osm_id, geometry, start_date, end_date, height, min_height, name, building
       FROM layer_building(!bbox!, z(!scale_denominator!))
       ) AS t
   id: building
