@@ -6,6 +6,7 @@ import { MapHoversControl } from './js/mbgl-control-mousehovers';
 import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 import { MapDateFilterControl } from './js/mbgl-control-dateslider';
 import { WelcomePanelControl } from './js/mbgl-control-welcomepanel';
+import { LayerSwitcherControl } from './js/mbgl-control-layerswitcher';
 
 window.MAP = undefined; // this will be THE map
 
@@ -368,6 +369,17 @@ function initSetup1 () {
         `,
     });
     MAP.addControl(MAP.CONTROLS.WELCOMEPANEL);
+
+    MAP.CONTROLS.LAYERSWITCHER = new LayerSwitcherControl({
+        bases: [
+            { layerid: 'reference-osm', label: "OSM Basemap" },
+            { layerid: 'reference-satellite', label: "Satellite Basemap" },
+        ],
+        labels: [
+            { layerid: 'reference-labels', label: "Streets and Labels" },
+        ],
+    });
+    MAP.addControl(MAP.CONTROLS.LAYERSWITCHER);
 }
 
 

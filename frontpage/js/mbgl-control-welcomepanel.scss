@@ -4,9 +4,7 @@ div.mapboxgl-ctrl.mbgl-control-welcomepanel {
     border-radius: 5px;
     box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);
 
-    /* hack: we want this one to be the same width as that other control, cuz it looks good */
-    width: 199px;
-    max-width: 199px;
+    max-width: 300px;
 
     h1 {
         font-size: 14px;

@@ -34,10 +34,65 @@ export const GLMAP_STYLE = {
         OHM_URL
       ]
     },
+    "osm-tiles": {
+      "type": "raster",
+      "tiles": [
+        "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256
+    },
+    "esri-satellite": {
+      "type": "raster",
+      "tiles": [
+        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      ],
+      "tileSize": 256,
+    },
+    "positron-labels": {
+      "type": "raster",
+      "tiles": [
+        "http://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
+        "http://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
+        "http://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
+        "http://d.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
+      ],
+      "tileSize": 256,
+    },
   },
   "sprite": SPRITE_URL_ROOT,
   "glyphs": FONT_URL_STRING,
   "layers": [
+    /*
+     * BASEMAPS, cuz we will need reference points; see also LABELS section
+     */
+    {
+      "id": "reference-osm",
+      "type": "raster",
+      "source": "osm-tiles",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none",
+      },
+      "paint": {
+        "raster-opacity": 0.2,
+      },
+    },
+    {
+      "id": "reference-satellite",
+      "type": "raster",
+      "source": "esri-satellite",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none",
+      },
+      "paint": {
+        "raster-opacity": 0.2,
+      },
+    },
+
     /*
      * THE OHM LAYER, the real meat of the matter
      * Layer list of of July 12 2018:
@@ -4698,5 +4753,24 @@ export const GLMAP_STYLE = {
         "text-halo-color": "rgba(255,255,255,0.8)"
       }
     },
+
+    /*
+     * LABELS, cuz we will need reference points; see also BASEMAPS section
+     */
+    {
+      "id": "reference-labels",
+      "type": "raster",
+      "source": "positron-labels",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "none",
+      },
+      "paint": {
+        "raster-opacity": 0.2,
+      },
+    },
+
+   // end of layers list
   ]
 };
