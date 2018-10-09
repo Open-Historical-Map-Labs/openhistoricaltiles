@@ -18,10 +18,10 @@ export class MapDateFilterControl {
 
         // some preliminary checks on config, worth panicking to death here and now
         if (! this.validateDateFormat(this.options.mindate)) {
-            throw `MapDateFilterControl mindate now in YYYY-M-DD format: ${this.options.mindate}`;
+            throw `MapDateFilterControl mindate must be in YYYY-M-DD format: ${this.options.mindate}`;
         }
         if (! this.validateDateFormat(this.options.maxdate)) {
-            throw `MapDateFilterControl maxdate now in YYYY-M-DD format: ${this.options.maxdate}`;
+            throw `MapDateFilterControl maxdate must be in YYYY-M-DD format: ${this.options.maxdate}`;
         }
     }
 
@@ -37,10 +37,16 @@ export class MapDateFilterControl {
             this.addFilteringOptionToSublayer(layerid);
         });
 
-        // go ahead and apply our starting filters, but do so in our own thread
+        // add a handler, so we re-filter on startup
+        this._map.on('load', () => {
+            this.applyDateFiltering();
+        });
+        this._map.on('moveend', () => {
+            this.applyDateFiltering();
+        });
         setTimeout(() => {
             this.applyDateFiltering();
-        }, 1);
+        }, 0.25 * 1000);
 
         // done; hand back our UI element as expected by the framework
         return this._container;
@@ -140,7 +146,7 @@ export class MapDateFilterControl {
         {
             const sourcelayers_seen = {};
             this.options.layers.forEach((layerid) => {
-                const layer = MAP.getLayer(layerid);
+                const layer = this._map.getLayer(layerid);
 
                 const key = `${layer.source} ${layer.sourceLayer}`;
                 if (sourcelayers_seen[key]) return;
@@ -156,9 +162,9 @@ export class MapDateFilterControl {
         // and must not let it be zero-length, so make it [ -1 ] if 0 matches
         let collected_osm_ids = [];
         sourcelayers.forEach(([sourcename, sourcelayer]) => {
-            const idsfromthislayer = MAP.querySourceFeatures(sourcename, {
+            const idsfromthislayer = this._map.querySourceFeatures(sourcename, {
                 sourceLayer: sourcelayer,
-                filter: ['has', 'osm_id']
+                filter: ['has', 'osm_id'],
             })
             .filter((feature) => {
                 // if the feature has no OSM ID then it's "eternal" stuff from Natural Earth of non-date-tracked stuff like Coastlines
@@ -188,15 +194,15 @@ export class MapDateFilterControl {
         // apply the osm_id filter
         // since we prepended these in addFilteringOptionToSublayer() we know that this is filters[1]
         // and the osm_id values would be filters[1][2]
-        this.options.layers.forEach(function (layerid) {
-            const oldfilters = MAP.getFilter(layerid);
+        this.options.layers.forEach((layerid) => {
+            const oldfilters = this._map.getFilter(layerid);
 
             const newfilters = oldfilters.slice();
-            newfilters[1] = [ 'in', 'osm_id', ...collected_osm_ids ];
+            newfilters[1] = ['any', [ 'in', 'osm_id', ...collected_osm_ids ], [ '!has', 'osm_id'] ];
 
             // console.debug([ `MapDateFilterControl applyDateFiltering() layer ${layerid} before/after filters are:`, oldfilters, newfilters ]);
 
-            MAP.setFilter(layerid, newfilters);
+            this._map.setFilter(layerid, newfilters);
         });
     }
 
