@@ -9,6 +9,23 @@ import { InstructionsPanelControl } from './js/mbgl-control-instructionpanel';
 
 window.MAP = undefined; // this will be THE map
 
+window.makeOHMUrl = function (feature) {
+    // if it's a line or polygon w/ a positive osm_id, it's a way
+    // if it's a point w/ a positive osm_id, it's a node
+    // if it's a line or polygon w/ a negative osm_id, it's a relation
+
+    let osmtype = 'way';
+    if (feature.geometry.type  == 'Point') {
+        osmtype = 'node';
+    }
+    else if (feature.properties.osm_id < 0) {
+        osmtype = 'relation';
+    }
+
+    const url = `http://www.openhistoricalmap.org/${osmtype}/${feature.properties.osm_id}`;
+    return url;
+};
+
 window.onload = function() {
     //
     // basic map
@@ -236,7 +253,8 @@ window.onload = function() {
 
                         // add OSM ID, if it has one
                         if (feature.properties.osm_id) {
-                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
+                            const ohmlink = makeOHMUrl(feature);
+                            infohtml += `<br/>OSM ID: <a target="_blank" href="${ohmlink}">${feature.properties.osm_id}</a>`;
                         }
 
                         // add the layer ID where this was found, to aid in debugging what's what
@@ -272,7 +290,8 @@ window.onload = function() {
 
                         // add OSM ID, if it has one
                         if (feature.properties.osm_id) {
-                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
+                            const ohmlink = makeOHMUrl(feature);
+                            infohtml += `<br/>OSM ID: <a target="_blank" href="${ohmlink}">${feature.properties.osm_id}</a>`;
                         }
 
                         // add the layer ID where this was found, to aid in debugging what's what
@@ -308,7 +327,8 @@ window.onload = function() {
 
                         // add OSM ID, if it has one
                         if (feature.properties.osm_id) {
-                            infohtml += `<br/>OSM ID: ${feature.properties.osm_id}`;
+                            const ohmlink = makeOHMUrl(feature);
+                            infohtml += `<br/>OSM ID: <a target="_blank" href="${ohmlink}">${feature.properties.osm_id}</a>`;
                         }
 
                         // add the layer ID where this was found, to aid in debugging what's what
