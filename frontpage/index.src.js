@@ -5,7 +5,7 @@ import { UrlHashControl } from './js/mbgl-control-urlhash';
 import { MapHoversControl } from './js/mbgl-control-mousehovers';
 import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 import { MapDateFilterControl } from './js/mbgl-control-dateslider';
-import { InstructionsPanelControl } from './js/mbgl-control-instructionpanel';
+import { WelcomePanelControl } from './js/mbgl-control-welcomepanel';
 
 window.MAP = undefined; // this will be THE map
 
@@ -344,4 +344,19 @@ window.onload = function() {
         },
     });
     MAP.addControl(MAP.CONTROLS.CLICKS);
+
+    MAP.CONTROLS.WELCOMEPANEL = new WelcomePanelControl({
+        htmltext: `
+            <h1>Welcome to OpenHistoricalMap!</h1>
+
+            <p>OpenHistoricalMap is a project designed to store and display map data throughout the history of the world. This is a work in progress, we'll be playing around with many new features as we time-enable the site. We encourage you to start playing around and editing data, too.</p>
+
+            <div class="center bold" style="margin-top: 1em;">
+                <a href="http://www.openhistoricalmap.org/about">Learn More</a>
+                &bull;
+                <a href="http://www.openhistoricalmap.org/user/new">Start Mapping</a>
+            </div>
+        `,
+    });
+    MAP.addControl(MAP.CONTROLS.WELCOMEPANEL);
 };

@@ -19,6 +19,8 @@
  *     });
  */
 
+require('./mbgl-control-mouseclicks.scss');
+
 export class MapClicksControl {
     constructor (options={}) {
         // merge suppplied options with these defaults

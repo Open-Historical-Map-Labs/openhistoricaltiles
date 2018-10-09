@@ -1,4 +1,4 @@
-div.mapboxgl-ctrl.mbgl-control-instructionpanel {
+div.mapboxgl-ctrl.mbgl-control-welcomepanel {
     background-color: white;
     padding: 10px;
     border-radius: 5px;
@@ -10,6 +10,10 @@ div.mapboxgl-ctrl.mbgl-control-instructionpanel {
 
     h1 {
         font-size: 14px;
+        margin-top: 0;
+    }
+    i.mbgl-control-welcomepanel-closebutton {
+        float: right;
     }
     div {
         margin-bottom: 1em;

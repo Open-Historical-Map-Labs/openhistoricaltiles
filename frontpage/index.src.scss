@@ -10,9 +10,29 @@ body, html {
     border: 0px solid black;
 }
 
+/*
+ * MISCELLANEOUS UTILITY CLASSES
+ */
+
 .small {
     font-size: 80%;
     line-height: 1.5;
+}
+
+.right {
+    text-align: right;
+}
+.left {
+    text-align: left;
+}
+.center {
+    text-align: center;
+}
+.bold {
+    font-weight: bold;
+}
+.italic {
+    font-stle: italic;
 }
 
 .pointercursor {
@@ -34,10 +54,3 @@ body, html {
 .flatpickr-current-month input.cur-year {
     border: 1px inset silver;
 }
-
-
-/*
- * Additional stylesheets from custom controls
- */
-
-@import 'js/mbgl-control-mouseclicks';
