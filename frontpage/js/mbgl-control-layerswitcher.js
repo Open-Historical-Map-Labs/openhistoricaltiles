@@ -30,7 +30,7 @@ export class LayerSwitcherControl {
         this._thepanel.appendChild(this._closebutton);
 
         this._maintext = document.createElement("div");
-        this._maintext.innerHTML = '<h1>Reference Options</h1>';
+        this._maintext.innerHTML = '<h1>Map Options</h1>';
         this._thepanel.appendChild(this._maintext);
 
         this._picker_basemap = document.createElement("div");
@@ -108,6 +108,44 @@ export class LayerSwitcherControl {
             this._picker_labels.appendChild(section);
         });
 
+        // layer picker: a synthetic "layer option" for the invalid/missing layers
+        this._picker_invalidandmissing = document.createElement("div");
+        this._picker_invalidandmissing.innerHTML = '<h2>Date Errors</h2>';
+        this._maintext.appendChild(this._picker_invalidandmissing);
+
+        const invalidandmissingoptions = [
+            { layerid: '', label: 'Hide' },
+            { layerid: 'invalidandmissing', label: 'Show' },
+        ];
+
+        invalidandmissingoptions.forEach((option) => {
+            const section = document.createElement("div");
+            section.className = "mbgl-control-layerswitcher-layer";
+            section.setAttribute('data-layerid', option.layerid);
+
+            const selected = option.layerid ? '' : 'checked'; // by default, select the None option
+            const checkbox = document.createElement("label");
+            checkbox.innerHTML = `<input type="radio" name="mbgl-control-layerswitcher-invalidandmissing" value="${option.layerid}" ${selected}> ${option.label}`;
+            section.appendChild(checkbox);
+            checkbox.addEventListener('click', (event) => {
+                if (event.target.tagName != 'INPUT') return; // accept clicks on the label, which DO propagate to the proper checkbox
+                const layerid = event.target.getAttribute('value');
+                this.selectInvalidAndMissing(layerid);
+
+                if (option.layerid) { // for the Show option, a custom-crafted legend
+                    const legend = document.createElement("div");
+                    legend.className = "mbgl-control-layerswitcher-legend";
+                    legend.innerHTML = `
+                    <div class="mbgl-control-layerswitcher-legend-icon" style="background-color: red;"></div> Start/End Date Missing<br/>
+                    <div class="mbgl-control-layerswitcher-legend-icon" style="background-color: orange;"></div> Start/End Date Invalid Format<br/>
+                    `;
+                    section.appendChild(legend);
+                }
+            });
+
+            this._picker_invalidandmissing.appendChild(section);
+        });
+
         // done; hand back our UI element as expected by the framework
         this._container.appendChild(this._showbutton);
         this._container.appendChild(this._thepanel);
@@ -168,6 +206,38 @@ export class LayerSwitcherControl {
 
         // expand this one section and collapse others; and also check the radiobox
         const legendsections = this._picker_labels.querySelectorAll(`div.mbgl-control-layerswitcher-layer`);
+        legendsections.forEach((thissection) => {
+            const thislayerid = thissection.getAttribute('data-layerid');
+            if (layerid == thislayerid) {
+                thissection.querySelector('input[type="radio"]').checked = true;
+                thissection.classList.add('mbgl-control-layerswitcher-layer-expanded');
+            }
+            else {
+                thissection.classList.remove('mbgl-control-layerswitcher-layer-expanded');
+            }
+        });
+    }
+
+    selectInvalidAndMissing (layerid) { // only 2 options here: on and off, setting in this case a "group" of layers
+        // map layers: toggle the other options off, toggle this one on
+        const layers_invalid = listInvalidDateMapLayers();
+        const layers_missing = listMissingDateMapLayers();
+        const layers_to_toggle = [ ...layers_invalid, ...layers_missing ];
+
+
+        if (layerid) {
+            layers_to_toggle.forEach((layerid) => {
+                this._map.setLayoutProperty(layerid, 'visibility', 'visible');
+            });
+        }
+        else {
+            layers_to_toggle.forEach((layerid) => {
+                this._map.setLayoutProperty(layerid, 'visibility', 'none');
+            });
+        }
+
+        // expand this one section and collapse others; and also check the radiobox
+        const legendsections = this._picker_invalidandmissing.querySelectorAll(`div.mbgl-control-layerswitcher-layer`);
         legendsections.forEach((thissection) => {
             const thislayerid = thissection.getAttribute('data-layerid');
             if (layerid == thislayerid) {

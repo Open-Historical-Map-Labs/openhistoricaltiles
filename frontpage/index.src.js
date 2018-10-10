@@ -43,6 +43,28 @@ window.onload = function() {
     });
 };
 
+window.listRealMapLayers = function () {
+    return GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == -1 && layerinfo.id.indexOf('dateinvalid-') == -1 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+};
+window.listInvalidDateMapLayers = function () {
+    return GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('dateinvalid-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+};
+window.listMissingDateMapLayers = function () {
+    return GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+};
+
 function highlightBadDatesOnMap () {
     // see also the setup in initBadDateLayerCopies() where we created second copies of these layers, same data different style
 
@@ -50,23 +72,9 @@ function highlightBadDatesOnMap () {
     // make lists of layer IDs: the real map layers, the copied layers for drawing missing/invalid dates
     const re_iso8601 = /^\d\d\d\d\-\d\d\-\d\d$/;
 
-    const realmaplayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
-        return layerinfo.id.indexOf('datemissing-') == -1 && layerinfo.id.indexOf('dateinvalid-') == -1 && layerinfo.source == 'ohm-data';
-    }).map(function (layerinfo) {
-        return layerinfo.id;
-    });
-
-    const invalidlayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
-        return layerinfo.id.indexOf('dateinvalid-') == 0 && layerinfo.source == 'ohm-data';
-    }).map(function (layerinfo) {
-        return layerinfo.id;
-    });
-
-    const missinglayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
-        return layerinfo.id.indexOf('datemissing-') == 0 && layerinfo.source == 'ohm-data';
-    }).map(function (layerinfo) {
-        return layerinfo.id;
-    });
+    const realmaplayers = listRealMapLayers();
+    const invalidlayers = listInvalidDateMapLayers();
+    const missinglayers = listMissingDateMapLayers();
     // console.log([ 'Map layers to check for bad dates', realmaplayers ]);
 
     // step 1
@@ -147,6 +155,9 @@ function initBadDateLayerCopies () {
                 "paint": {
                     "fill-color": "red"
                 },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
+                },
                 "filter": [
                     'all',
                     [ '==', ['geometry-type'], "Polygon" ],
@@ -160,6 +171,9 @@ function initBadDateLayerCopies () {
                 "type": "line",
                 "paint": {
                     "line-color": "red"
+                },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
                 },
                 "filter": [
                     'all',
@@ -176,6 +190,9 @@ function initBadDateLayerCopies () {
                     "circle-color": "red",
                     "circle-radius": 5,
                 },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
+                },
                 "filter": [
                     'all',
                     [ '==', ['geometry-type'], "Point" ],
@@ -189,6 +206,9 @@ function initBadDateLayerCopies () {
                 "type": "fill",
                 "paint": {
                     "fill-color": "orange"
+                },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
                 },
                 "filter": [
                     'all',
@@ -204,6 +224,9 @@ function initBadDateLayerCopies () {
                 "paint": {
                     "line-color": "orange"
                 },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
+                },
                 "filter": [
                     'all',
                     [ '==', ['geometry-type'], "LineString" ],
@@ -218,6 +241,9 @@ function initBadDateLayerCopies () {
                 "paint": {
                     "circle-color": "orange",
                     "circle-radius": 5,
+                },
+                "layout": {
+                    "visibility": "none", // layers are turned off by default, see layerswitcher control for toggling these
                 },
                 "filter": [
                     'all',
@@ -564,6 +590,12 @@ function initMap1 () {
     });
     MAP.addControl(MAP.CONTROLS.WELCOMEPANEL);
 
+    MAP.CONTROLS.GEOLOCATE = new GeolocationControl();
+    MAP.addControl(MAP.CONTROLS.GEOLOCATE);
+
+    MAP.CONTROLS.GEOCODER = new GeocoderControl();
+    MAP.addControl(MAP.CONTROLS.GEOCODER);
+
     MAP.CONTROLS.LAYERSWITCHER = new LayerSwitcherControl({
         bases: [
             { layerid: 'reference-osm', label: "OSM Basemap", opacity: 0.2 },
@@ -574,12 +606,6 @@ function initMap1 () {
         ],
     });
     MAP.addControl(MAP.CONTROLS.LAYERSWITCHER);
-
-    MAP.CONTROLS.GEOCODER = new GeocoderControl();
-    MAP.addControl(MAP.CONTROLS.GEOCODER);
-
-    MAP.CONTROLS.GEOLOCATE = new GeolocationControl();
-    MAP.addControl(MAP.CONTROLS.GEOLOCATE);
 }
 
 

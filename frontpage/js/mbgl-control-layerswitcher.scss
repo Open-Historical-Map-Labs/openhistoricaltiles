@@ -48,6 +48,17 @@ div.mapboxgl-ctrl.mbgl-control-layerswitcher {
             }
         }
 
+        .mbgl-control-layerswitcher-legend {
+            .mbgl-control-layerswitcher-legend-entry {
+                white-space: nowrap;
+            }
+
+            .mbgl-control-layerswitcher-legend-icon {
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+            }
+        }
     }
 
     .mbgl-control-layerswitcher-closebutton {
