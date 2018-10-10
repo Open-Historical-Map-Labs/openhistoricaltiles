@@ -29,6 +29,25 @@ div.mapboxgl-ctrl.mbgl-control-layerswitcher {
         h2 {
             font-size: 13px;
         }
+
+        .mbgl-control-layerswitcher-layer {  /*  a layer legend/toggle*/
+            margin-bottom: 10px;
+
+            > div { /* a DIV within the layer's section */
+                display: none; /* by default, checkbox toggles this */
+
+                margin-left: 20px;
+
+                &.noUi-target {
+                    margin-right: 15px;
+                }
+            }
+
+            &.mbgl-control-layerswitcher-layer-expanded > div {
+                display: block;
+            }
+        }
+
     }
 
     .mbgl-control-layerswitcher-closebutton {
@@ -46,4 +65,13 @@ div.mapboxgl-ctrl.mbgl-control-layerswitcher {
     .mbgl-control-layerswitcher-panel {
         display: block !important;
     }
+}
+
+/* slider handles */
+.noUi-horizontal .noUi-handle {
+    height: 20px;
+    width: 20px;
+}
+.noUi-horizontal {
+    height: 11px;
 }

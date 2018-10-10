@@ -76,7 +76,7 @@ export const GLMAP_STYLE = {
         "visibility": "none",
       },
       "paint": {
-        "raster-opacity": 0.2,
+        "raster-opacity": 0.2,  // an opacity slider exists, match this value to the initial value in the LayerSwitcherControl constructor
       },
     },
     {
@@ -89,7 +89,7 @@ export const GLMAP_STYLE = {
         "visibility": "none",
       },
       "paint": {
-        "raster-opacity": 0.2,
+        "raster-opacity": 0.2,  // an opacity slider exists, match this value to the initial value in the LayerSwitcherControl constructor
       },
     },
 
@@ -4767,7 +4767,7 @@ export const GLMAP_STYLE = {
         "visibility": "none",
       },
       "paint": {
-        "raster-opacity": 0.2,
+        "raster-opacity": 0.7,  // an opacity slider exists, match this value to the initial value in the LayerSwitcherControl constructor
       },
     },
 

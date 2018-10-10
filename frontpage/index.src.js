@@ -372,11 +372,11 @@ function initSetup1 () {
 
     MAP.CONTROLS.LAYERSWITCHER = new LayerSwitcherControl({
         bases: [
-            { layerid: 'reference-osm', label: "OSM Basemap" },
-            { layerid: 'reference-satellite', label: "Satellite Basemap" },
+            { layerid: 'reference-osm', label: "OSM Basemap", opacity: 0.2 },
+            { layerid: 'reference-satellite', label: "Satellite Basemap", opacity: 0.2 },
         ],
         labels: [
-            { layerid: 'reference-labels', label: "Streets and Labels" },
+            { layerid: 'reference-labels', label: "Streets and Labels", opacity: 0.7 },
         ],
     });
     MAP.addControl(MAP.CONTROLS.LAYERSWITCHER);
