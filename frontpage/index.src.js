@@ -7,6 +7,8 @@ import { MapClicksControl } from './js/mbgl-control-mouseclicks';
 import { MapDateFilterControl } from './js/mbgl-control-dateslider';
 import { WelcomePanelControl } from './js/mbgl-control-welcomepanel';
 import { LayerSwitcherControl } from './js/mbgl-control-layerswitcher';
+import { GeocoderControl } from './js/mbgl-control-geocoder';
+import { GeolocationControl } from './js/mbgl-control-geolocate';
 
 window.MAP = undefined; // this will be THE map
 
@@ -380,6 +382,12 @@ function initSetup1 () {
         ],
     });
     MAP.addControl(MAP.CONTROLS.LAYERSWITCHER);
+
+    MAP.CONTROLS.GEOCODER = new GeocoderControl();
+    MAP.addControl(MAP.CONTROLS.GEOCODER);
+
+    MAP.CONTROLS.GEOLOCATE = new GeolocationControl();
+    MAP.addControl(MAP.CONTROLS.GEOLOCATE);
 }
 
 
