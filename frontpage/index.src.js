@@ -30,15 +30,207 @@ window.makeOHMUrl = function (feature) {
 };
 
 window.onload = function() {
-    initSetup1();
+    initBadDateLayerCopies();
+    initMap1();
+
+    MAP.on('moveend', function() {
+        highlightBadDatesOnMap();
+    });
 
     MAP.on('load', function () {
-        initSetup2();
+        initMap2();
         initLoadUrlState();
     });
 };
 
-function initSetup1 () {
+function highlightBadDatesOnMap () {
+    // see also the setup in initBadDateLayerCopies() where we created second copies of these layers, same data different style
+
+    // step 0
+    // make lists of layer IDs: the real map layers, the copied layers for drawing missing/invalid dates
+    const re_iso8601 = /^\d\d\d\d\-\d\d\-\d\d$/;
+
+    const realmaplayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == -1 && layerinfo.id.indexOf('dateinvalid-') == -1 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+
+    const invalidlayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('dateinvalid-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+
+    const missinglayers = GLMAP_STYLE.layers.filter(function (layerinfo) {
+        return layerinfo.id.indexOf('datemissing-') == 0 && layerinfo.source == 'ohm-data';
+    }).map(function (layerinfo) {
+        return layerinfo.id;
+    });
+    // console.log([ 'Map layers to check for bad dates', realmaplayers ]);
+
+    // step 1
+    // query all features in the viewport (rendered or not),
+    // and generate lists of OHM IDs for features with invalid dates and missing dates
+    // lists must be unique-ified, and cannot be empty
+    let osmids_invalid = [];
+    let osmids_missing = [];
+    let osmids_looksok = [];
+
+    realmaplayers.forEach((layerid) => {
+        const mapfeatures = MAP.querySourceFeatures('ohm-data', {
+            sourceLayer: layerid,
+            filter: ['has', 'osm_id'],
+        });
+
+        mapfeatures.forEach((feature) => {
+            const startdate = feature.properties.start_date;
+            const enddate = feature.properties.end_date;
+            const osmid = feature.properties.osm_id;
+
+            if (! startdate || ! enddate) {
+                osmids_missing.push(osmid);
+            }
+            else if (! startdate.match(re_iso8601) || ! enddate.match(re_iso8601)) {
+                osmids_invalid.push(osmid);
+            }
+            else {
+                osmids_looksok.push(osmid);
+            }
+        });
+    });
+
+    osmids_invalid = osmids_invalid.unique();
+    osmids_missing = osmids_missing.unique();
+    osmids_looksok = osmids_looksok.unique();
+
+    osmids_invalid.sort();
+    osmids_missing.sort();
+    osmids_looksok.sort();
+
+    // console.log([ 'OSM IDs Missing dates', osmids_missing ]);
+    // console.log([ 'OSM IDs Invalid dates', osmids_invalid ]);
+    // console.log([ 'OSM IDs Good dates', osmids_looksok ]);
+
+    if (! osmids_invalid.length) osmids_invalid.push(-1);
+    if (! osmids_missing.length) osmids_missing.push(-1);
+    if (! osmids_looksok.length) osmids_looksok.push(-1);
+
+    // step 2
+    // update those datemissing-X and dateinvalid-X map layers, asserting a new filter to those OSM IDs
+    // per initBadDateLayerCopies() filter [3] is the match against osm_id being on a list
+    invalidlayers.forEach(function (layerid) {
+        const thesefilters = MAP.getFilter(layerid);
+        thesefilters[3] = [ 'match', ['get', 'osm_id'], osmids_invalid, true, false ];
+        MAP.setFilter(layerid, thesefilters);
+    });
+    missinglayers.forEach(function (layerid) {
+        const thesefilters = MAP.getFilter(layerid);
+        thesefilters[3] = [ 'match', ['get', 'osm_id'], osmids_missing, true, false ];
+        MAP.setFilter(layerid, thesefilters);
+    });
+}
+
+function initBadDateLayerCopies () {
+    // add to the map style, the new layers datemissing-X and dateinvalid-X
+    // where X is every distinct "source-layer" found in the "ohm-date" source
+    // do point, line, and polygon versions for all, even if it sounds silly (a water point, a POI polygon)
+    // the hover & click behaviors will look over the layer list for datemissing-X and dateinvalid-X entries and configure itself to them,
+    // and the moveend handler which performs filtering, also looks over the layer list for these new layers
+    const dateissue_layers = GLMAP_STYLE.layers.map(function (layerinfo) { return layerinfo['source-layer']; }).filter(function (lid) { return lid; }).unique();
+    dateissue_layers.forEach(function (sourcelayername) {
+        GLMAP_STYLE.layers.push(...[
+            {
+                "id": `datemissing-${sourcelayername}-polygon`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "fill",
+                "paint": {
+                    "fill-color": "red"
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "Polygon" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+            {
+                "id": `datemissing-${sourcelayername}-line`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "line",
+                "paint": {
+                    "line-color": "red"
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "LineString" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+            {
+                "id": `datemissing-${sourcelayername}-point`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "circle",
+                "paint": {
+                    "circle-color": "red",
+                    "circle-radius": 5,
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "Point" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+            {
+                "id": `dateinvalid-${sourcelayername}-polygon`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "fill",
+                "paint": {
+                    "fill-color": "orange"
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "Polygon" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+            {
+                "id": `dateinvalid-${sourcelayername}-line`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "line",
+                "paint": {
+                    "line-color": "orange"
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "LineString" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+            {
+                "id": `dateinvalid-${sourcelayername}-point`,
+                "source": "ohm-data", "source-layer": sourcelayername,
+                "type": "circle",
+                "paint": {
+                    "circle-color": "orange",
+                    "circle-radius": 5,
+                },
+                "filter": [
+                    'all',
+                    [ '==', ['geometry-type'], "Point" ],
+                    [ 'has', 'osm_id' ],
+                    [ 'match', ['get', 'osm_id'], [ -1 ], true, false ],
+                ],
+            },
+        ]);
+    });
+}
+
+function initMap1 () {
     //
     // basic map
     // and a container for those custom controls, which we may need to refer to later
@@ -391,7 +583,7 @@ function initSetup1 () {
 }
 
 
-function initSetup2() {
+function initMap2() {
     MAP.CONTROLS.DATESLIDER = new MapDateFilterControl({
         // which layers get a date filter prepended to whatever filters are already in place?
         // for us, all of them
