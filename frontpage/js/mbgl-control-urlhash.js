@@ -20,16 +20,8 @@ export class UrlHashControl {
     onAdd (map) {
         this._map = map;
 
-        // effectively on load: read existing hash and apply it
-        if (window.location.hash) {
-            this.readUrlHashAndApply();
-        }
-
-        // start listening for changes to the hash, and to the map
-        this._map2hash = () => { this.updateUrlHashFromMap(); };
-        this._hash2map = () => { this.readUrlHashAndApply(); };
-        window.addEventListener("hashchange", this._hash2map, false);
-        this._map.on("moveend", this._map2hash);
+        // rather than listen for various events, which quickly turns into infinite loops, just run on an interval
+        this._timer = setInterval(() => { this.updateUrlHashFromMap(); }, 1000);
 
         // return some dummy container we won't use
         this._container = document.createElement('span');
@@ -38,42 +30,43 @@ export class UrlHashControl {
 
     onRemove () {
         // detach the event handlers
-        window.removeEventListener("hashchange", this._hash2map);
-        this._map.off("moveend", this._map2hash);
+        if (this._timer) {
+            clearInterval(this._timer);
+        }
 
         // detach the map
         this._map = undefined;
-    }
-
-    readUrlHashAndApply () {
-        const hashstring = window.location.hash || "";
-        this.applyUrlHashToMap(hashstring);
-    }
-
-    applyUrlHashToMap (hashstring) {
-        const params = hashstring.replace(/^#/, '').split('/');
-        const [ z, x, y, d ] = [  ...params ];
-
-        if (z && x && y && z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) {
-            this._map.setZoom( parseFloat(z) );
-            this._map.setCenter([ parseFloat(y), parseFloat(x) ]);
-        }
-        if (d && d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) {
-            const dates = d.split(',');
-            this._map.DATESLIDER.setDates(dates[0], dates[1]);
-            setTimeout(() => {
-                this._map.DATESLIDER.applyDateFiltering();  // bug workaround, during initial change from no hash at all to a hash
-            }, 500);
-        }
     }
 
     updateUrlHashFromMap () {
         const z = this._map.getZoom().toFixed(2);
         const lat = this._map.getCenter().lat.toFixed(5);
         const lng = this._map.getCenter().lng.toFixed(5);
-        const dates = this._map.DATESLIDER.getDates().join(',');
+        const dates = this._map.CONTROLS.DATESLIDER.getDates().join(',');
 
         const hashstring = `${z}/${lat}/${lng}/${dates}/`;
         window.location.hash = hashstring;
+    }
+
+    applyStateFromAddressBar () {
+        const hashstring = window.location.hash || "";
+        if (! hashstring) return;
+
+        const params = hashstring.replace(/^#/, '').split('/');
+        const [ z, x, y, d ] = [  ...params ];
+
+        if (z && x && y && z.match(/^\d+\.?\d*$/) && x.match(/^\-?\d+\.\d+$/) && y.match(/^\-?\d+\.\d+$/)) { // just X/Y/Z params
+            this._map.setZoom( parseFloat(z) );
+            this._map.setCenter([ parseFloat(y), parseFloat(x) ]);
+            this._map.fire('moveend');
+        }
+        if (d && d.match(/^(\d\d\d\d\-\d\d\-\d\d),(\d\d\d\d\-\d\d\-\d\d)$/)) { // X/Y/Z params plus startdate,enddate
+            const dates = d.split(',');
+            this._map.CONTROLS.DATESLIDER.setDates(dates[0], dates[1]);
+            setTimeout(() => {
+                this._map.CONTROLS.DATESLIDER.applyDateFiltering();  // bug workaround, during initial change from no hash at all to a hash
+                this._map.fire('moveend');
+            }, 500);
+        }
     }
 }

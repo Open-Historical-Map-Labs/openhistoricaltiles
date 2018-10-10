@@ -509,8 +509,12 @@ function initSetup2() {
         maxdate: "2029-12-31",
     });
     MAP.addControl(MAP.CONTROLS.DATESLIDER);
+
+    MAP.CONTROLS.HASHWATCHER = new UrlHashControl(); // hacked to support MAP.CONTROLS.DATESLIDER
+    MAP.addControl(MAP.CONTROLS.HASHWATCHER);
 }
 
 
 function initLoadUrlState() {
+    MAP.CONTROLS.HASHWATCHER.applyStateFromAddressBar();
 }

@@ -37,7 +37,8 @@ export class MapDateFilterControl {
             this.addFilteringOptionToSublayer(layerid);
         });
 
-        // add a handler, so we re-filter on startup
+        // add a handler, so we re-filter when the map view changes
+        // and do so at start
         this._map.on('load', () => {
             this.applyDateFiltering();
         });
