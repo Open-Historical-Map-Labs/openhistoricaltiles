@@ -306,6 +306,8 @@ function initMap1 () {
 
     MAP.CONTROLS.CLICKS = new MapClicksControl({
         click: (clickevent) => {
+            // the tool supports grouping layers into sections, e.g. Rails and Roads as a heading
+            // we just use one group: Where You Clicked
             // collect a set of resultssets by drilling down through the stated layers in the stated sequence
             // each resultset is:
             // - "title" for that set, e.g. Water Features
@@ -314,112 +316,8 @@ function initMap1 () {
             //    tip: return a empty string to effectively skip this feature
             const collected_feature_groups = [
                 {
-                    title: "Roads, Rails, and Routes",
-                    features: MAP.queryRenderedFeatures(clickevent.point, {
-                        layers: [
-                            'highway-primary',
-                            'highway-trunk',
-                            'highway-secondary-tertiary',
-                            'highway-motorway',
-                            'highway-minor',
-                            'highway-motorway-link',
-                            'highway-link',
-                            'bridge-motorway-link',
-                            'bridge-link',
-                            'bridge-secondary-tertiary',
-                            'bridge-trunk-primary',
-                            'bridge-motorway',
-                            'railway-transit',
-                            'railway-service',
-                            'railway',
-                            'bridge-railway',
-                            'tunnel-path',
-                            'tunnel-service-track',
-                            'tunnel-minor',
-                            'tunnel-secondary-tertiary',
-                            'tunnel-trunk-primary',
-                            'tunnel-motorway',
-                            'tunnel-railway',
-                            'ferry',
-                            'cablecar',
-                            'road_oneway',
-                            'road_oneway_opposite',
-                        ],
-                    }),
-                    template: function (feature) {
-                        let infohtml = `${feature.properties.name}`;
-
-                        // add date info, if we have any
-                        if (feature.properties.start_date && feature.properties.end_date) {
-                            infohtml += `<br/>From ${feature.properties.start_date} to ${feature.properties.end_date}`;
-                        }
-                        else if (feature.properties.start_date) {
-                            infohtml += `<br/>Starting ${feature.properties.start_date}`;
-                        }
-                        else if (feature.properties.end_date) {
-                            infohtml += `<br/>Until ${feature.properties.end_date}`;
-                        }
-
-                        // add OSM ID, if it has one
-                        if (feature.properties.osm_id) {
-                            const ohmlink = makeOHMUrl(feature);
-                            infohtml += `<br/>OSM ID: <a target="_blank" href="${ohmlink}">${feature.properties.osm_id}</a>`;
-                        }
-
-                        // add the layer ID where this was found, to aid in debugging what's what
-                        infohtml += `<br/>Layer: ${feature.layer.id}`;
-
-                        return infohtml;
-                    },
-                },
-                {
-                    title: "Water Features",
-                    features: MAP.queryRenderedFeatures(clickevent.point, {
-                        layers: [
-                            'water',
-                            'waterway_tunnel',
-                            'waterway-other',
-                            'waterway-stream-canal',
-                            'waterway-river',
-                        ],
-                    }),
-                    template: function (feature) {
-                        let infohtml = `${feature.properties.name}`;
-
-                        // add date info, if we have any
-                        if (feature.properties.start_date && feature.properties.end_date) {
-                            infohtml += `<br/>From ${feature.properties.start_date} to ${feature.properties.end_date}`;
-                        }
-                        else if (feature.properties.start_date) {
-                            infohtml += `<br/>Starting ${feature.properties.start_date}`;
-                        }
-                        else if (feature.properties.end_date) {
-                            infohtml += `<br/>Until ${feature.properties.end_date}`;
-                        }
-
-                        // add OSM ID, if it has one
-                        if (feature.properties.osm_id) {
-                            const ohmlink = makeOHMUrl(feature);
-                            infohtml += `<br/>OSM ID: <a target="_blank" href="${ohmlink}">${feature.properties.osm_id}</a>`;
-                        }
-
-                        // add the layer ID where this was found, to aid in debugging what's what
-                        infohtml += `<br/>Layer: ${feature.layer.id}`;
-
-                        return infohtml;
-                    },
-                },
-                {
-                    title: "Points of Interest",
-                    features: MAP.queryRenderedFeatures(clickevent.point, {
-                        layers: [
-                            'poi-level-3',
-                            'poi-level-2',
-                            'poi-level-1',
-                            'poi-railway',
-                            'building',
-                        ],
-                    }),
+                    title: "Where You Clicked",
+                    features: MAP.queryRenderedFeatures(clickevent.point),
                     template: function (feature) {
                         let infohtml = `${feature.properties.name}`;
 
@@ -448,7 +346,6 @@ function initMap1 () {
                 },
             ];
 
-            // ready; hand off
             MAP.CONTROLS.CLICKS.displayFeatures(collected_feature_groups);
         },
     });
