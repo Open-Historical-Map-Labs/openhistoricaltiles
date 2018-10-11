@@ -2,29 +2,36 @@ export class MapHoversControl {
     constructor (options={}) {
         // merge suppplied options with these defaults
         this.options = Object.assign({
-            layers: {}, /// layerid => mouseevent callback
+            labeler: function (feature) { return ''; },
         }, options);
     }
 
     onAdd (map) {
         this._map = map;
 
-        // when the map comes ready, attach the given events to the given layers
+        // when the map comes ready, attach the given events to all layers
         // each layer is a callback, which will be passed a feature and should return the tooltip text
         this._map.on('load', () => {
-            Object.entries(this.options.layers).forEach( ([layerid, callback]) => {
-                this._map.on("mousemove", layerid, (mouseevent) => {
-                    const feature = mouseevent.features[0];
-                    console.log(['MapHoversControl', layerid, feature ]);
+                const layers1 = listRealMapLayers();
+                const layers2 = listInvalidDateMapLayers();
+                const layers3 = listMissingDateMapLayers();
+                const querylayers = [ ...layers1, ...layers2, ...layers3 ];
 
-                    const text = callback(feature);
-                    const tooltip = `${feature.layer.id} :: ${text}`;
-                    this.setMapToolTip(tooltip);
+                querylayers.forEach((layerid) => {
+                    this._map.on("mousemove", layerid, (mouseevent) => {
+                        const feature = mouseevent.features[0];
+                        if (! feature) return;
+
+                        const tooltip = this.options.labeler(feature);
+                        if (tooltip) {
+                            this.setMapToolTip(tooltip);
+                        }
+                    });
                 });
-                this._map.on("mouseleave", layerid, () => {
+
+                this._map.on("mouseleave", () => {
                     this.clearMapToolTip();
                 });
-            });
         });
 
         // return some dummy container we won't use
