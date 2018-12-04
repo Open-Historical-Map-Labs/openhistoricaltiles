@@ -510,6 +510,11 @@ $(document).ready(function () {
                     hashstring: "#13.00/50.36110/2.79070/1917-01-01,1920-12-31/",
                     description: "An airbase in France during World War I",
                 },
+                {
+                    title: "South Bronx",
+                    hashstring: "#14.64/40.80623/-73.91894/1880-01-01,1900-12-31/",
+                    description: "Watch the South Bronx develop from 1890 to today.",
+                },
             ],
         });
         MAP.addControl(MAP.HELPPANEL);
