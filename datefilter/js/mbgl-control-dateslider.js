@@ -161,9 +161,6 @@ export class MapDateFilterControl {
                 filter: ['has', 'osm_id']
             })
             .filter((feature) => {
-                // if the feature has no OSM ID then it's "eternal" stuff from Natural Earth of non-date-tracked stuff like Coastlines
-                if (! feature.properties.osm_id) return true;
-
                 // if start date and/or end date are invalid, then hide it because it's invalid
                 if (! this.validateDateFormat(feature.properties.start_date) || ! this.validateDateFormat(feature.properties.end_date)) return false;
 
@@ -185,14 +182,13 @@ export class MapDateFilterControl {
 
         if (! collected_osm_ids.length) collected_osm_ids = [ -1 ];
 
-        // apply the osm_id filter
-        // since we prepended these in addFilteringOptionToSublayer() we know that this is filters[1]
-        // and the osm_id values would be filters[1][2]
+        // apply the osm_id filter (is on the list, or else is blank so not a dated OHM feature)
+        // the clause was added in addFilteringOptionToSublayer() so the osm_id values would be filters[1][2]
         this.options.layers.forEach(function (layerid) {
             const oldfilters = MAP.getFilter(layerid);
 
             const newfilters = oldfilters.slice();
-            newfilters[1] = [ 'in', 'osm_id', ...collected_osm_ids ];
+            newfilters[1] = [ 'any', [ 'in', 'osm_id', ...collected_osm_ids ], ['!has', 'osm_id'] ];
 
             // console.debug([ `MapDateFilterControl applyDateFiltering() layer ${layerid} before/after filters are:`, oldfilters, newfilters ]);
 
@@ -207,15 +203,12 @@ export class MapDateFilterControl {
     }
 
     addFilteringOptionToSublayer (layerid) {
-        // what we need is for every layer to have a "all" clause against a new filter by its osm_id
-        // the list of osm_id values which match filters, is best done in the helper function applyDateFiltering()
-        // as that can be smarter than MBGL's own <= >= filtering capabilities
+        // what we need is for every layer to have a new filter by "OSM ID was matched, OR it has no OSM ID and so is eternal"
+        // osm_id values matching filters, is done in applyDateFiltering()
 
-        // the filtering on this layer could be a variety of structures...
-        // how to add ALL + two date filters, is different for every one
         const oldfilters = this._map.getFilter(layerid);
 
-        const addthisclause = [ '!in', 'osm_id', -1 ];  // Sep 2018, deprecated "in" syntax, but new "match" expression is an unknown syntax today? works on other maps!
+        const addthisclause = [ 'any', [ '!in', 'osm_id', -1 ], ['!has', 'osm_id'] ];  // Sep 2018, deprecated "in" syntax, but new "match" expression is an unknown syntax today? works on other maps!
 
         if (oldfilters === undefined) {
             // no filter at all, so create one
@@ -224,8 +217,7 @@ export class MapDateFilterControl {
                 addthisclause,
             ];
 
-            const filtername = "NoFilter";
-            // console.debug([ `MapDateFilterControl ${filtername} ${layerid}`, oldfilters, newfilters ]);
+            // console.debug([ `MapDateFilterControl NoFilter ${layerid}`, oldfilters, newfilters ]);
             this._map.setFilter(layerid, newfilters);
         }
         else if (oldfilters[0] === 'all') {
@@ -234,8 +226,7 @@ export class MapDateFilterControl {
             const newfilters = oldfilters.slice();
             newfilters.splice(1, 0, addthisclause);
 
-            const filtername = "AllArray";
-            // console.debug([ `MapDateFilterControl ${filtername} ${layerid}`, oldfilters, newfilters ]);
+            // console.debug([ `MapDateFilterControl AllArray ${layerid}`, oldfilters, newfilters ]);
             this._map.setFilter(layerid, newfilters);
         }
         else if (oldfilters[0] === 'any') {
@@ -248,8 +239,7 @@ export class MapDateFilterControl {
                 [ oldfilters ],
             ];
 
-            const filtername = "AnyArray";
-            // console.debug([ `MapDateFilterControl ${filtername} ${layerid}`, oldfilters, newfilters ]);
+            // console.debug([ `MapDateFilterControl AnyArray ${layerid}`, oldfilters, newfilters ]);
             this._map.setFilter(layerid, newfilters);
         }
         else if (Array.isArray(oldfilters)) {
@@ -261,8 +251,7 @@ export class MapDateFilterControl {
                 oldfilters
             ];
 
-            const filtername = "SingleClauseArray";
-            // console.debug([ `MapDateFilterControl ${filtername} ${layerid}`, oldfilters, newfilters ]);
+            // console.debug([ `MapDateFilterControl SingleClauseArray ${layerid}`, oldfilters, newfilters ]);
             this._map.setFilter(layerid, newfilters);
         }
         else {
