@@ -1,20 +1,16 @@
-// Webpack configuration
-// index.js6 is the entry point, and should require() the JS libs, .src.html template, and .src.scss stylesheet, as well as defining executable JS code
-// SCSS files are compiled with SASS
-// JS files run through Babel and JSHint
-// HTML files have a [hash] replaced for cache-busting
-
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-var StringReplacePlugin = require("string-replace-webpack-plugin");
+const StringReplacePlugin = require("string-replace-webpack-plugin");
 
 module.exports = {
     entry: {
-        index: './mbgl-control-timeslider-entrypoint.js',
+        index: './mbgl-control-timeslider-control.js',
     },
     output: {
         path: __dirname + '/dist/',
-        filename: 'mbgl-control-timeslider.js'
+        filename: 'mbgl-control-timeslider.js',
+        // allow the export (which itself is a namespace object) into the global namespace
+        libraryTarget: 'var',
+        library: 'TimeSlider'
     },
 
     module: {
