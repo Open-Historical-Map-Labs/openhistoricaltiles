@@ -310,7 +310,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._applyDateFilterToLayers();
 
             // call the onDateSelect callback
-            //GDA
+            this.options.onDateSelect.call(this, this.getDate());
 
             // done, return ourself for method chaining
             return this;
@@ -356,7 +356,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._sliderbar.max = this._current_range[1];
 
             // call the onRangeChange callback
-            //GDA
+            this.options.onRangeChange.call(this, this.getRange());
 
             // done, return ourself for method chaining
             return this;
