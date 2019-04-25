@@ -53,7 +53,7 @@ export class TimeSliderControl {
         </div>
         <div class="mbgl-control-timeslider-section-cnt">
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />
-            <div class="mbgl-control-timeslider-sliderbar"></div>
+            <input type="range" min="" max="" value="" step="1" class="mbgl-control-timeslider-sliderbar" />
         </div>
         <div class="mbgl-control-timeslider-section-rhs">
             <div class="mbgl-control-timeslider-buttonset">
@@ -69,7 +69,7 @@ export class TimeSliderControl {
         this._mindateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-min');
         this._maxdateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-max');
         this._datereadout   = this._container.querySelector('input.mbgl-control-timeslider-dateinput-current');
-        this._sliderbar     = this._container.querySelector('div.mbgl-control-timeslider-sliderbar');
+        this._sliderbar     = this._container.querySelector('input.mbgl-control-timeslider-sliderbar');
 
         // add titles
         // could do this in HTML above, but kind of nice to have all the text in one area
@@ -78,17 +78,27 @@ export class TimeSliderControl {
         this._homebutton.title      = `Reset the time slider to ${this.options.date}`;
         this._mindateinput.title    = `Set the range and resolution of the slider, as far back as ${this.options.datelimit[0]}`;
         this._maxdateinput.title    = `Set the range and resolution of the slider, as far forward as ${this.options.datelimit[1]}`;
-        this._datereadout.title     = `Manually change what year is currently showing`;
+        this._datereadout.title     = `Manually enter a year to set the date filtering`;
+        this._sliderbar.title       = `Adjust the slider to set the date filtering`;
 
         // add event handlers: + - buttons, home, text inputs, ...
-        this._forwardbutton.addEventListener('click', () => {
+        this._forwardbutton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
             this.yearForward();
         });
-        this._backbutton.addEventListener('click', () => {
+        this._backbutton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
             this.yearBack();
         });
-        this._homebutton.addEventListener('click', () => {
+        this._homebutton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            event.preventDefault();
             this.setDate(this.options.date);
+        });
+        this._sliderbar.addEventListener('input', () => {
+            this.setDate(this._sliderbar.value);
         });
         this._datereadout.addEventListener('change', () => {
             this.setDate(this._datereadout.value);
@@ -108,10 +118,14 @@ export class TimeSliderControl {
         this._current_year = this.options.date;
         this._current_range = this.options.datespan;
 
-        this._mindateinput.min = this.options.datelimit[0];
-        this._mindateinput.max = this.options.datelimit[1];
-        this._maxdateinput.min = this.options.datelimit[0];
-        this._maxdateinput.max = this.options.datelimit[1];
+        this._sliderbar.min = this._range_limit[0];
+        this._sliderbar.max = this._range_limit[1];
+        this._sliderbar.value = this._current_year;
+
+        this._mindateinput.min = this._range_limit[0];
+        this._maxdateinput.min = this._range_limit[0];
+        this._mindateinput.max = this._range_limit[1];
+        this._maxdateinput.max = this._range_limit[1];
 
         setTimeout(() => {
             this._setupDateFiltersForLayers();
@@ -172,9 +186,8 @@ export class TimeSliderControl {
         if      (this._current_date > this._current_range[1]) this.setRangeUpper(year);
         else if (this._current_date < this._current_range[0]) this.setRangeLower(year);
 
-        // recalculate the position of the current-date marker and redraw it
-//GDA
-console.log(this._current_date);
+        // adjust the slider to show the new date
+        this._sliderbar.value = this._current_date;
 
         // oh yeah, we should filter the MBGL features
         this._applyDateFilterToLayers();
@@ -221,9 +234,9 @@ console.log(this._current_date);
         this._mindateinput.value = this._current_range[0];
         this._maxdateinput.value = this._current_range[1];
 
-        // recalculate the position of the current-date marker and redraw it
-// GDA
-console.log([ this._current_range[0], this._current_range[1], this._current_date ]);
+        // adjust the slider to show the new range
+        this._sliderbar.min = this._current_range[0];
+        this._sliderbar.max = this._current_range[1];
 
         // call the onRangeChange callback
 //GDA

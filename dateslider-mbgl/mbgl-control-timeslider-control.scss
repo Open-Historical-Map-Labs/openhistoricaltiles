@@ -1,12 +1,17 @@
-$defaulticoncolor: #333333;
-$defaulttextcolor: #333333;
-$bordercolor: silver;
+$defaulticoncolor: #656565;
+$defaulttextcolor: #656565;
+$bordercolor: #AAAAAA;
 $lighttextcolor: #666666;
 
-$defaultbgcolor: white;
+$defaultbgcolor: #dfe2e2;
 $borderradius: 4px;
 $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 
+$sliderbgcolor: white;
+$slidehandlecolor: $defaulticoncolor;
+$sliderheight: 22px;
+
+$numberbgcolor: white;
 
 .mbgl-control-timeslider {
     /*
@@ -44,12 +49,17 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 
     .mbgl-control-timeslider-section-rhs {
         width: 80px;
+        height: 50px;
+        text-align: center;
     }
     .mbgl-control-timeslider-section-lhs {
         width: 80px;
+        height: 50px;
+        text-align: center;
     }
     .mbgl-control-timeslider-section-cnt {
         width: calc(100% - 170px);
+        height: 50px;
         text-align: center;
     }
 
@@ -81,13 +91,13 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
     .mbgl-control-timeslider-dateinput {
-        display: block;
-
         width: 70px;
 
         font-size: 16px;
         color: $defaulttextcolor;
         text-align: center;
+
+        margin-top: 5px;
 
         &::-webkit-inner-spin-button, 
         &::-webkit-outer-spin-button { 
@@ -95,10 +105,13 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
             margin: 0; 
         }
 
-        cursor: text;
         border: 1px solid transparent;
+        background: transparent;
+
+        cursor: text;
         &:hover, &:focus {
             border-color: $bordercolor;
+            background-color: $numberbgcolor;
         }
 
         &.mbgl-control-timeslider-dateinput-min {
@@ -108,17 +121,42 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
         &.mbgl-control-timeslider-dateinput-current {
             color: $lighttextcolor;
             font-size: 13px;
-            display: inline-block;
+
+            margin-top: 2px;
         }
     }
 
     /*
      * THE SLIDER BAR
+     * strip the usual range input styles, apply our own
      */
 
-    .mbgl-control-timeslider-sliderbar {
+    input.mbgl-control-timeslider-sliderbar {
         width: 100%;
-        height: 2em;
-        background-color: yellow;
+        height: $sliderheight;
+
+        -webkit-appearance: none;
+        appearance: none;
+        background: $sliderbgcolor;
+        outline: none;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: $sliderheight;
+            height: $sliderheight;
+            background: $slidehandlecolor;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        &::-moz-range-thumb {
+            width: $sliderheight;
+            height: $sliderheight;
+            background: $slidehandlecolor;
+            border-radius: 50%;
+            cursor: pointer;
+        }
     }
 }
