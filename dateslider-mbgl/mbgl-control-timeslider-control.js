@@ -100,7 +100,7 @@ export class TimeSliderControl {
         this._sliderbar.addEventListener('input', () => {
             this.setDate(this._sliderbar.value);
         });
-        this._datereadout.addEventListener('change', () => {
+        this._datereadout.addEventListener('input', () => {
             this.setDate(this._datereadout.value);
         });
         this._mindateinput.addEventListener('change', () => {

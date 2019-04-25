@@ -207,7 +207,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._sliderbar.addEventListener('input', function () {
                 _this.setDate(_this._sliderbar.value);
             });
-            this._datereadout.addEventListener('change', function () {
+            this._datereadout.addEventListener('input', function () {
                 _this.setDate(_this._datereadout.value);
             });
             this._mindateinput.addEventListener('change', function () {
