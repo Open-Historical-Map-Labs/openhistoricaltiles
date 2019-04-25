@@ -50,6 +50,7 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
     }
     .mbgl-control-timeslider-section-cnt {
         width: calc(100% - 170px);
+        text-align: center;
     }
 
     /*
@@ -104,20 +105,20 @@ $boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
         }
         &.mbgl-control-timeslider-dateinput-max {
         }
+        &.mbgl-control-timeslider-dateinput-current {
+            color: $lighttextcolor;
+            font-size: 13px;
+            display: inline-block;
+        }
     }
 
     /*
-     * THE SLIDER AND TEXT READOUT
+     * THE SLIDER BAR
      */
 
     .mbgl-control-timeslider-sliderbar {
         width: 100%;
         height: 2em;
         background-color: yellow;
-    }
-    .mbgl-control-timeslider-currentdatereadout {
-        text-align: center;
-        color: $lighttextcolor;
-        font-size: 13px;
     }
 }

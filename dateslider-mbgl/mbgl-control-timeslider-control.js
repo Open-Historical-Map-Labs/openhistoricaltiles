@@ -52,7 +52,7 @@ export class TimeSliderControl {
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />
         </div>
         <div class="mbgl-control-timeslider-section-cnt">
-            <div class="mbgl-control-timeslider-currentdatereadout"></div>
+            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />
             <div class="mbgl-control-timeslider-sliderbar"></div>
         </div>
         <div class="mbgl-control-timeslider-section-rhs">
@@ -68,7 +68,7 @@ export class TimeSliderControl {
         this._homebutton    = this._container.querySelector('i.mbgl-control-timeslider-homebutton');
         this._mindateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-min');
         this._maxdateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-max');
-        this._datereadout   = this._container.querySelector('div.mbgl-control-timeslider-currentdatereadout');
+        this._datereadout   = this._container.querySelector('input.mbgl-control-timeslider-dateinput-current');
         this._sliderbar     = this._container.querySelector('div.mbgl-control-timeslider-sliderbar');
 
         // add titles
@@ -76,8 +76,9 @@ export class TimeSliderControl {
         this._forwardbutton.title   = `Shift time forward by one year`;
         this._backbutton.title      = `Shift time backward by one year`;
         this._homebutton.title      = `Reset the time slider to ${this.options.date}`;
-        this._mindateinput.title    = `Set the time range indicated by the slider, as far back as ${this.options.datelimit[0]}`;
-        this._maxdateinput.title    = `Set the time range indicated by the slider, as far forward as ${this.options.datelimit[1]}`;
+        this._mindateinput.title    = `Set the range and resolution of the slider, as far back as ${this.options.datelimit[0]}`;
+        this._maxdateinput.title    = `Set the range and resolution of the slider, as far forward as ${this.options.datelimit[1]}`;
+        this._datereadout.title     = `Manually change what year is currently showing`;
 
         // add event handlers: + - buttons, home, text inputs, ...
         this._forwardbutton.addEventListener('click', () => {
@@ -88,6 +89,9 @@ export class TimeSliderControl {
         });
         this._homebutton.addEventListener('click', () => {
             this.setDate(this.options.date);
+        });
+        this._datereadout.addEventListener('change', () => {
+            this.setDate(this._datereadout.value);
         });
         this._mindateinput.addEventListener('change', () => {
             this.setRangeLower(this._mindateinput.value);
@@ -162,7 +166,7 @@ export class TimeSliderControl {
 
         // set the newly-selected date and our readout
         this._current_date = year;
-        this._datereadout.textContent = year;
+        this._datereadout.value = year;
 
         // if our new date is out of range, extend our range
         if      (this._current_date > this._current_range[1]) this.setRangeUpper(year);

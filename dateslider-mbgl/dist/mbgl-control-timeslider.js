@@ -168,14 +168,14 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._container.className = "mapboxgl-ctrl mbgl-control-timeslider";
 
             // set up the UI buttons as raw HTML, then fetch references to them via querySelector()
-            this._container.innerHTML = '\n        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />\n        <div class="mbgl-control-timeslider-section-lhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                <i class="mbgl-control-timeslider-forwardbutton fa fa-plus"></i>\n                <i class="mbgl-control-timeslider-backbutton fa fa-minus"></i>\n                <i class="mbgl-control-timeslider-homebutton fa fa-home"></i>\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />\n        </div>\n        <div class="mbgl-control-timeslider-section-cnt">\n            <div class="mbgl-control-timeslider-currentdatereadout"></div>\n            <div class="mbgl-control-timeslider-sliderbar"></div>\n        </div>\n        <div class="mbgl-control-timeslider-section-rhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                &nbsp;\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />\n        </div>\n        ';
+            this._container.innerHTML = '\n        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />\n        <div class="mbgl-control-timeslider-section-lhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                <i class="mbgl-control-timeslider-forwardbutton fa fa-plus"></i>\n                <i class="mbgl-control-timeslider-backbutton fa fa-minus"></i>\n                <i class="mbgl-control-timeslider-homebutton fa fa-home"></i>\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />\n        </div>\n        <div class="mbgl-control-timeslider-section-cnt">\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />\n            <div class="mbgl-control-timeslider-sliderbar"></div>\n        </div>\n        <div class="mbgl-control-timeslider-section-rhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                &nbsp;\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />\n        </div>\n        ';
 
             this._forwardbutton = this._container.querySelector('i.mbgl-control-timeslider-forwardbutton');
             this._backbutton = this._container.querySelector('i.mbgl-control-timeslider-backbutton');
             this._homebutton = this._container.querySelector('i.mbgl-control-timeslider-homebutton');
             this._mindateinput = this._container.querySelector('input.mbgl-control-timeslider-dateinput-min');
             this._maxdateinput = this._container.querySelector('input.mbgl-control-timeslider-dateinput-max');
-            this._datereadout = this._container.querySelector('div.mbgl-control-timeslider-currentdatereadout');
+            this._datereadout = this._container.querySelector('input.mbgl-control-timeslider-dateinput-current');
             this._sliderbar = this._container.querySelector('div.mbgl-control-timeslider-sliderbar');
 
             // add titles
@@ -183,8 +183,9 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._forwardbutton.title = 'Shift time forward by one year';
             this._backbutton.title = 'Shift time backward by one year';
             this._homebutton.title = 'Reset the time slider to ' + this.options.date;
-            this._mindateinput.title = 'Set the time range indicated by the slider, as far back as ' + this.options.datelimit[0];
-            this._maxdateinput.title = 'Set the time range indicated by the slider, as far forward as ' + this.options.datelimit[1];
+            this._mindateinput.title = 'Set the range and resolution of the slider, as far back as ' + this.options.datelimit[0];
+            this._maxdateinput.title = 'Set the range and resolution of the slider, as far forward as ' + this.options.datelimit[1];
+            this._datereadout.title = 'Manually change what year is currently showing';
 
             // add event handlers: + - buttons, home, text inputs, ...
             this._forwardbutton.addEventListener('click', function () {
@@ -195,6 +196,9 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             });
             this._homebutton.addEventListener('click', function () {
                 _this.setDate(_this.options.date);
+            });
+            this._datereadout.addEventListener('change', function () {
+                _this.setDate(_this._datereadout.value);
             });
             this._mindateinput.addEventListener('change', function () {
                 _this.setRangeLower(_this._mindateinput.value);
@@ -280,7 +284,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
             // set the newly-selected date and our readout
             this._current_date = year;
-            this._datereadout.textContent = year;
+            this._datereadout.value = year;
 
             // if our new date is out of range, extend our range
             if (this._current_date > this._current_range[1]) this.setRangeUpper(year);else if (this._current_date < this._current_range[0]) this.setRangeLower(year);
