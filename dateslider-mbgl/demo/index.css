@@ -18,3 +18,21 @@ body, html {
     top: 0;
     right: 40px;
 }
+
+.mbgl-control-timeslider {
+    background-color: #dfe2e2;
+    color: #656565;
+}
+
+.mbgl-control-timeslider .mbgl-control-timeslider-buttonset i {
+    color: #656565;
+}
+
+.mbgl-control-timeslider .mbgl-control-timeslider-sliderbar {
+    background-color: white !important;
+}
+
+.mbgl-control-timeslider .mbgl-control-timeslider-sliderbar::-webkit-slider-thumb,
+.mbgl-control-timeslider .mbgl-control-timeslider-sliderbar::-moz-range-thumb {
+    background-color: #656565 !important;
+}
