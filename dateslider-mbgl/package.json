@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "webpack-dev-server --config webpack.config.js --open",
+    "watch": "webpack --config webpack.config.js --hide-modules=true --display-origins=false --display-provided-exports=false --colors --progress --watch",
     "build": "webpack --config webpack.config.js --hide-modules=true --display-origins=false --display-provided-exports=false --colors --progress"
   },
   "author": "",

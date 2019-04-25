@@ -86,7 +86,8 @@ Most edits would be made to these files:
 
 Commands of note:
 * `nvm install && nvm use && yarn install` -- first-time project setup to set up the proper version of Node and the dependencies; you probably only need to do this the first time you set up, after you `git clone` the repo
-* `nvm use && npm run serve` -- select the right Node, then start up the Webpack dev server and open a new browser window; use this for your day-to-day work
+* `nvm use && npm run serve` -- select the right Node, then start up a web server and a new browser window; use this in conjunction with `npm run watch` for your day-to-day work
 * `npm run build` -- compile the control for distribution and use in other browsers and sites; output goes into the `dist/` folder
+* `npm run watch` -- watches for changes to the files listed above, automagically running `npm run build` for you when they are changed
 
 The `dist/` folder is kept in version control, so the ready-to-use control will be readily available on Github.
