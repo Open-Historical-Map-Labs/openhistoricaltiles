@@ -19,7 +19,7 @@ The `demo/` folder contains a working demo of a OpenHistoricalMap basemap workin
 var dateslider;
 
 MAP.on('load', function () {
-    dateslider = new TimeSlider({
+    dateslider = new TimeSlider.TimeSliderControl({
         sourcename: "ohm-data",     // required
         date: 1850,
         datespan: [1800, 2000],
@@ -40,11 +40,11 @@ MAP.on('load', function () {
 
 `sourcename` -- **Required.** The name of the data source, as defined in your map style's `sources`, which should have its layers filtered by this timeslider. All layers from this source will be presumed to be OpenHistoricalMap (or to be compatible, by virtue of all features having `start_date` and `end_date` properties) and will be filtered.)
 
-`date` -- The initially-selected date when the timeslider UI first appears. This should probably be within the range specified by `datespan`.
+`date` -- The initially-selected date when the timeslider UI first appears. This should be within the range specified by `datespan`. If omitted, this will be set to the first year of the `datespan`.
 
 `datespan` -- The initial span of dates offered by the timeslider UI when it first appears. This is provides as an array of two numbers, e.g. `[1800, 2000]` If omitted, the range will be set to the last 100 years from the current date (that is, `[ currentyear-100, currentyear]`).
 
-`datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `datespan` so changing the span is effectively disabled. The `datespan` really should fall wholly within this `datelimit`.
+`datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `datespan`. If a `datespan` is also supplied, it should fall wholly within this `datelimit`.
 
 `onDateSelect` -- A callback function which will be called when the date selection changes. The newly-selected date will be passed as a param. Within the callback function, `this` will refer to the timeslider control.
 
@@ -60,11 +60,13 @@ MAP.on('load', function () {
 
 * `getRange()` -- Get the currently visible date range in the UI. Returns a two-item array of dates, e.g. `[1850, 1950]`
 
-* `setRange([ year, year ])` -- Set the slider's new range. This will respect the `datelimit` limitations.
+* `setRange([ year, year ])` -- Set the slider's new range. This will respect the `datelimit` limitations. If the new date range would not include the currently-selected date (`getDate()`) then the range will be extended to include the currently-selected date before it is applied, so the currently-selected date will still be within range. If you want to set the range to one which does not contain the currently-selected date, you should use `setDate()` first and then use `setRange()`.
 
 * `setRangeUpper(year)` -- A convenience function, to call `setRange()` specifying only the upper end of the new range. The lower end will be kept at the current setting.
 
 * `setRangeLower(year)` -- A convenience function, to call `setRange()` specifying only the lower end of the new range. The lower end will be kept at the current setting.
+
+* `getLimit()` -- Return the date range limit specified by `datelimit`. Returns a two-item array of dates, e.g. `[1800, 2000]`
 
 * `isDateWithinRange(year)` -- Return true or false, indicating whether the given date is within the currently offered range in the UI.
 

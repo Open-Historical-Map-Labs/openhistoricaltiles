@@ -1,0 +1,123 @@
+$defaulticoncolor: #333333;
+$defaulttextcolor: #333333;
+$bordercolor: silver;
+$lighttextcolor: #666666;
+
+$defaultbgcolor: white;
+$borderradius: 4px;
+$boxshadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+
+
+.mbgl-control-timeslider {
+    /*
+     * WIDTH
+     */
+
+    width: 50vw;
+    @media screen and (max-width: 500px) {
+        width: 100%;
+    }
+
+    /*
+     * BROAD STYLE FOR CONTROL
+     * background and box-shadow to match stock MBGL controls
+     */
+
+    background-color: $defaultbgcolor;
+
+    border-radius: $borderradius;
+
+    -moz-box-shadow: $boxshadow;
+    -webkit-box-shadow: $boxshadow;
+    box-shadow: $boxshadow;
+
+    padding: 5px 5px 5px 5px;
+
+    /*
+     * LEFT / BAR / RIGHT
+     */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .mbgl-control-timeslider-section-rhs {
+        width: 80px;
+    }
+    .mbgl-control-timeslider-section-lhs {
+        width: 80px;
+    }
+    .mbgl-control-timeslider-section-cnt {
+        width: calc(100% - 170px);
+    }
+
+    /*
+     * BUTTONS AND CONTROLS
+     */
+
+    .mbgl-control-timeslider-buttonset {
+        text-align: center;
+        display: block;
+
+        > i {
+            cursor: pointer;
+            font-size: 16px;
+            color: $defaulticoncolor;
+
+            margin-right: 5px;
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &.mbgl-control-timeslider-forwardbutton {
+            }
+            &.mbgl-control-timeslider-backwardbutton {
+            }
+            &.mbgl-control-timeslider-homebutton {
+            }
+        }
+    }
+
+    .mbgl-control-timeslider-dateinput {
+        display: block;
+
+        width: 70px;
+
+        font-size: 16px;
+        color: $defaulttextcolor;
+        text-align: center;
+
+        &::-webkit-inner-spin-button, 
+        &::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        cursor: text;
+        border: 1px solid transparent;
+        &:hover, &:focus {
+            border-color: $bordercolor;
+        }
+
+        &.mbgl-control-timeslider-dateinput-min {
+        }
+        &.mbgl-control-timeslider-dateinput-max {
+        }
+    }
+
+    /*
+     * THE SLIDER AND TEXT READOUT
+     */
+
+    .mbgl-control-timeslider-sliderbar {
+        width: 100%;
+        height: 2em;
+        background-color: yellow;
+    }
+    .mbgl-control-timeslider-currentdatereadout {
+        text-align: center;
+        color: $lighttextcolor;
+        font-size: 13px;
+    }
+}
