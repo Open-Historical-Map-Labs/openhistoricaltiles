@@ -98,17 +98,22 @@ export class TimeSliderControl {
 
         // get started!
         // apply our settings to the date boxes, filling them in
-        // do this both internally (non-API) so we always have values, then using our own API methods so we do UI updates
+        // do this internally so we don't have to work around undefined conditons during startup
+        // then call our API methods once we're ready, to do UI updates and apply filtering
+        this._range_limit = this.options.datelimit;
+        this._current_year = this.options.date;
+        this._current_range = this.options.datespan;
+
         this._mindateinput.min = this.options.datelimit[0];
         this._mindateinput.max = this.options.datelimit[1];
         this._maxdateinput.min = this.options.datelimit[0];
         this._maxdateinput.max = this.options.datelimit[1];
 
-        this._range_limit = this.options.datelimit;
-        this._current_year = this.options.date;
-        this._current_range = this.options.datespan;
-        this.setDate(this.options.date);
-        this.setRange(this.options.datespan);
+        setTimeout(() => {
+            this._setupDateFiltersForLayers();
+            this.setDate(this.options.date);
+            this.setRange(this.options.datespan);
+        }, 0.25 * 1000);
 
         // done; hand back our UI element as expected by the framework
         return this._container;
@@ -118,15 +123,15 @@ export class TimeSliderControl {
         return 'top-right';
     }
 
-    getDate() {
+    getDate () {
         return this._current_date;
     }
 
-    getRange() {
+    getRange () {
         return this._current_range;
     }
 
-    getLimit() {
+    getLimit () {
         return this._range_limit;
     }
 
@@ -148,7 +153,7 @@ export class TimeSliderControl {
         this.setDate(newyear);
     }
 
-    setDate(year) {
+    setDate (year) {
         // coerce strings, e.g. from input fields or whatever
         year = parseInt(year);
 
@@ -167,11 +172,17 @@ export class TimeSliderControl {
 //GDA
 console.log(this._current_date);
 
+        // oh yeah, we should filter the MBGL features
+        this._applyDateFilterToLayers();
+
+        // call the onDateSelect callback
+//GDA
+
         // done, return ourself for method chaining
         return this;
     }
 
-    setRange(newrange) {
+    setRange (newrange) {
         // coerce strings, e.g. from input fields or whatever
         newrange[0] = parseInt(newrange[0]);
         newrange[1] = parseInt(newrange[1]);
@@ -210,29 +221,144 @@ console.log(this._current_date);
 // GDA
 console.log([ this._current_range[0], this._current_range[1], this._current_date ]);
 
+        // call the onRangeChange callback
+//GDA
+
         // done, return ourself for method chaining
         return this;
     }
 
-    setRangeUpper(newyear) {
+    setRangeUpper (newyear) {
         this.setRange([ this._current_range[0], newyear ]);
 
         // done, return ourself for method chaining
         return this;
     }
 
-    setRangeLower(newyear) {
+    setRangeLower (newyear) {
         this.setRange([ newyear, this._current_range[1] ]);
 
         // done, return ourself for method chaining
         return this;
     }
 
-    isDateWithinRange(year) {
+    isDateWithinRange (year) {
         return year >= this._current_range[0] && year <= this._current_range[1];
     }
 
-    isDateWithinLimit(year) {
+    isDateWithinLimit (year) {
         return year >= this._range_limit[0] && year <= this._range_limit[1];
+    }
+
+    _getFilteredMapLayers () {
+        const mapstyle = this._map.getStyle();
+        if (! mapstyle.sources[this.options.sourcename]) {
+            console.debug(`TimeSliderControl map has no source named ${this.options.sourcename}`);
+            return;
+        }
+
+        const filterlayers = mapstyle.layers.filter((layer) => layer.source == this.options.sourcename);
+        return filterlayers;
+    }
+
+    _setupDateFiltersForLayers () {
+        // filtering by date has two parts:
+        // OHM features which lack a OSM ID are "eternal" such as coastlines and mountain ranges; they will lack dates but should always match all date filters
+        // OHM features which have a OSM ID, should be on the list of OSM IDs which _applyDateFilterToLayers() will figure out when the time comes
+        //
+        // strategy here:
+        // we inject the osmfilteringclause, ensuring it falls into sequence as filters[1]
+        // this osmfilteringclause will be rewritten by _applyDateFilterToLayers() to accmmodate both date-filtered features and eternal features
+        //
+        // warning: we are mutating someone else's map style in-place, and they may not be expecting that
+        // if they go and apply their own filters later, it could get weird
+
+        const layers = this._getFilteredMapLayers();
+
+        layers.forEach((layer) => {
+            // the OSM ID filter which we will prepend to the layer's own filters
+            // the filter here is that OSM ID is missing, indicating features lacking a OSM ID, meaning "eternal" features such as coastline
+            //
+            // TODO: Sep 2018, deprecated "in" syntax; see about new "match" expression type
+            const osmfilteringclause = [ 'any', ['!has', 'osm_id'] ];
+
+            const oldfilters = this._map.getFilter(layer.id);
+
+            let newfilters;
+            if (oldfilters === undefined) {  // no filter at all, so create one
+                newfilters = [
+                    "all",
+                    osmfilteringclause,
+                ];
+                // console.debug([ `TimeSliderControl _setupDateFiltersForLayers() NoFilter ${layer.id}`, oldfilters, newfilters ]);
+            }
+            else if (oldfilters[0] === 'all') {  // all clause; we can just insert our clause into position as filters[1]
+                newfilters = oldfilters.slice();
+                newfilters.splice(1, 0, osmfilteringclause);
+                // console.debug([ `TimeSliderControl _setupDateFiltersForLayers() AllFilter ${layer.id}`, oldfilters, newfilters ]);
+            }
+            else if (oldfilters[0] === 'any') {  // any clause; wrap theirs into a giant clause, prepend ours with an all
+                newfilters = [
+                    "all",
+                    osmfilteringclause,
+                    [ oldfilters ],
+                ];
+                // console.debug([ `TimeSliderControl _setupDateFiltersForLayers() AnyFilter ${layer.id}`, oldfilters, newfilters ]);
+            }
+            else if (Array.isArray(oldfilters)) {  // an array forming a single, simple-style filtering clause; rewrap as an "all"
+                newfilters = [
+                    "all",
+                    osmfilteringclause,
+                    oldfilters
+                ];
+                // console.debug([ `TimeSliderControl _setupDateFiltersForLayers() ArrayFilter ${layer.id}`, oldfilters, newfilters ]);
+            }
+            else {
+                // some other condition I had not expected and need to figure out
+                console.error(oldfilters);
+                throw `TimeSliderControl _setupDateFiltersForLayers() got unexpected filtering condition on layer ${layerid} for the developer to figure out`;
+            }
+
+            // apply the new filter, with the placeholder "eternal features" filter now prepended
+            this._map.setFilter(layer.id, newfilters);
+        });
+    }
+
+    _applyDateFilterToLayers () {
+        // sadly, we can't just use a function callback as a filter; that would be powerful and easy; instead we have to collect OSM IDs and tweak our filter clauses
+        // back in _setupDateFiltersForLayers() we prepended a filtering clause as filters[1]
+        // with the expctation that here in _applyDateFilterToLayers() we will collect OSM IDs matching a date filter, and add them to the "any" collection
+        // thus, we change the sub-query for dated features, and leave the sub-query for eternal features alone
+
+        const layers = this._getFilteredMapLayers();
+
+        layers.forEach((layer) => {
+            // filter to all features which have a OSM ID and a start_date and end_date
+            // then filter them here to collect OSM IDs of features matching our date filter
+            // ideally we would be simple >= and <= filters, but fact is the filter system isn't very bright and misses details eg. dates with invalid format
+            const matchosmids = this._map.querySourceFeatures(layer.source, {
+                sourceLayer: layer.id,
+                filter: [
+                    'all',
+                    ['has', 'osm_id'],
+                    ['has', 'start_date'], ['!=', 'start_date', ''],
+                    ['has', 'end_date'], ['!=', 'end_date', ''],
+                ]
+            })
+            .filter((feature) => {
+                const starts = parseInt(feature.properties.start_date.substr(0, 4));
+                const ending = parseInt(feature.properties.end_date.substr(0, 4));
+                return this._current_date >= starts && this._current_date <= ending;
+            })
+            .map((feature) => {
+                return feature.properties.osm_id;
+            });
+
+            // apply the filter, by replacing/appending the "or OSM ID is in..." sub-clause in filters[1][2]
+            const newfilters = this._map.getFilter(layer.id).slice();
+            newfilters[1][2] = [ 'in', 'osm_id', ...matchosmids ];
+            // console.debug([ `TimeSliderControl _applyDateFilterToLayers() ${layer.id} filters is now:`, newfilters ]);
+            this._map.setFilter(layer.id, newfilters);
+        });
     }
 }
