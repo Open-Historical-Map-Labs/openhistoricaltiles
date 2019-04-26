@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
     })
     .setView(START_CENTER, START_ZOOM);
 
+    L.control.scale().addTo(MAP);
+
     ohmlayer = L.mapboxGL({
         style: GLMAP_STYLE,
         accessToken: 'not necessary',

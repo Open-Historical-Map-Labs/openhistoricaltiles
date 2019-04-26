@@ -64,6 +64,7 @@ dateslider = new L.Control.MBGLTimeSlider({
 
 `timeSliderOptions` -- A set of options to be passed to the Mapbox GL `TimeSlider.TimeSliderControl` These are passed as-is. See the [documentation for the TimeSliderControl](https://github.com/OpenHistoricalMap/openhistoricaltiles/tree/gh-pages/mbgl-control-timeslider) for details.
 
+`position` -- Set the Leaflet Control Position for the control, e.g. `bottomright`. Use this instead of `timeSliderOptions.position`
 
 
 ## Methods

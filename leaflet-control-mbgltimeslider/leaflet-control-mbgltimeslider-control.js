@@ -2,7 +2,7 @@ require('./leaflet-control-mbgltimeslider-control.scss');
 
 L.Control.MBGLTimeSlider = L.Control.extend({
     options: {
-        position: 'bottomright',
+        position: 'topright',
         mbgllayer: undefined,
         timeSliderOptions: {},
     },
@@ -16,23 +16,10 @@ L.Control.MBGLTimeSlider = L.Control.extend({
         this._map = map;
         this._glmaplayer = this.options.mbgllayer;
 
-        // create our container, and set the background image
-        const container = L.DomUtil.create('div', 'leaflet-control-mbgltimeslider');
-
-        // control position may have been given to this L.Control instead of in timeSliderOptions
-        // if do, convert from Leaflet control positions to MBGL control positions and apply it
-        if (! this.options.timeSliderOptions.position) {
-            const lpos2mbpos = {
-                'topleft': 'top-left',
-                'topright': 'top-right',
-                'bottomleft': 'bottom-left',
-                'bottomright': 'bottom-right',
-            };
-            const mbpos = lpos2mbpos[this.options.position];
-            if (mbpos) {
-                this.options.timeSliderOptions.position = mbpos;
-            }
-        }
+        // create our container
+        // no UI of our own, but we do move the MBGL TimeSlider container DIV into our own, so it properly falls into div.leaflet-control-container
+        // for positioning reasons, and layer-stackig reasons (the control being inside the MBGL map, means it is in the display panes!)
+        this._container = L.DomUtil.create('div', 'leaflet-control-mbgltimeslider');
 
         // wait for the MBGL layer to "load" (note that the layer is in fact a whole MBGL.Map)
         // then add the TimeSlider control to it
@@ -43,7 +30,7 @@ L.Control.MBGLTimeSlider = L.Control.extend({
         });
 
         // all done
-        return container;
+        return this._container;
     },
     onRemove: function () {
         this._removeTimeSliderControlFromMap();
@@ -56,6 +43,10 @@ L.Control.MBGLTimeSlider = L.Control.extend({
         // stop mouse event propagation from the TimeSlider's DIV
         // so using the control won't also pan the map, zoom in if they double-click, etc.
         L.DomEvent.disableClickPropagation(this._timeslider._container);
+
+        // move the MBGL slider's UI container into our own container,
+        // so it will be properly positioned, and also stacked above the map content
+        this._container.appendChild(this._timeslider._container);
     },
     _removeTimeSliderControlFromMap: function () {
         // remove the TimeSlider from the MBGL map
