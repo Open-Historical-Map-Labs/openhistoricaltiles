@@ -68,6 +68,10 @@ MAP.on('load', function () {
 
 * `setDate(year)` -- Set the slider to the given date and perform filtering. If the date is outside of the current range, the range will be extended
 
+* `yearForward(howmany=1)` -- A convenience function, to move the time slider forward by a number of years (if not given, default is 1).
+
+* `yearBack(howmany=1)` -- A convenience function, to move the time slider backward by a number of years (if not given, default is 1).
+
 * `getRange()` -- Get the currently visible date range in the UI. Returns a two-item array of dates, e.g. `[1850, 1950]`
 
 * `setRange([ year, year ])` -- Set the slider's new range. This will respect the `datelimit` limitations. If the new date range would not include the currently-selected date (`getDate()`) then the range will be extended to include the currently-selected date before it is applied, so the currently-selected date will still be within range. If you want to set the range to one which does not contain the currently-selected date, you should use `setDate()` first and then use `setRange()`.
