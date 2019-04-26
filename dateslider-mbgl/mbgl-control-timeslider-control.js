@@ -1,4 +1,3 @@
-require('./mbgl-control-timeslider-polyfills.js');
 require('./mbgl-control-timeslider-control.scss');
 
 
