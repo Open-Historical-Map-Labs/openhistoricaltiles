@@ -89,10 +89,8 @@ MAP.on('load', function () {
 Babel, SASS/SCSS, Webpack.
 
 Most edits would be made to these files:
-* `mbgl-control-timeslider-control.js` -- the widget's JavaScript source code3
+* `mbgl-control-timeslider-control.js` -- the widget's JavaScript source code
 * `mbgl-control-timeslider-control.scss` -- the widget's SASS stylesheet
-* `mbgl-control-timeslider-polyfills.js` -- some additional JavaScript polyfills to add missing functionality
-* `mbgl-control-timeslider-entrypoint.js` -- Webpack's entry point which tells it to load the files mentioned above
 
 Commands of note:
 * `nvm install && nvm use && yarn install` -- first-time project setup to set up the proper version of Node and the dependencies; you probably only need to do this the first time you set up, after you `git clone` the repo

@@ -7,8 +7,8 @@ var STARTING_DATE = 1920;
 var STARTING_RANGE = [ 1890, 1970 ];
 var MAX_DATES = [ 1870, 2020 ];
 
-// when the dateslider comes up, let's keep a reference to it so we can fetch/set it externally
-var dateslider;
+// when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
+var MAP, timeslider;
 
 document.addEventListener('DOMContentLoaded', function(event) {
     //
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     //
 
     MAP.on('load', function () {
-        dateslider = new TimeSlider.TimeSliderControl({
+        timeslider = new TimeSlider.TimeSliderControl({
             // set the data source to define which layers will be filtered
             sourcename: OHM_SOURCE,
             // set the initial slider range and date filter, and the maximum range of dates the slider may be adjusted
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
                 console.log([ 'range changed', newrange[0], newrange[1] ]);
             }
         });
-        MAP.addControl(dateslider);
+        MAP.addControl(timeslider);
     });
 
     //
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         var min = year - 10;
         var max = year + 10;
 
-        dateslider.setDate(year).setRange([ min, max ]);
+        timeslider.setDate(year).setRange([ min, max ]);
     }
 
     document.querySelector('#whenami button').addEventListener('click', applyExternalYear);
