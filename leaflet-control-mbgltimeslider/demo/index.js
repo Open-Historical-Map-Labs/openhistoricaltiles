@@ -7,8 +7,8 @@ var STARTING_DATE = 1920;
 var STARTING_RANGE = [ 1890, 1970 ];
 var MAX_DATES = [ 1870, 2020 ];
 
-// when the dateslider comes up, let's keep a reference to it so we can fetch/set it externally
-var MAP, ohmlayer, dateslider;
+// when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
+var MAP, ohmlayer, timeslider;
 
 document.addEventListener('DOMContentLoaded', function(event) {
     //
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     //
     // add the TimeSliderControl to the "ohmlayer"
     //
-    dateslider = new L.Control.MBGLTimeSlider({
+    timeslider = new L.Control.MBGLTimeSlider({
         mbgllayer: ohmlayer,  // specify the L.mapboxGL layer to filter
         timeSliderOptions: {  // these are passed directly to the Mapbox GL TimeSlider.TimeSliderControl as-given
             sourcename: OHM_SOURCE,

@@ -63,17 +63,23 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(1);
+__webpack_require__(0);
 
 L.Control.MBGLTimeSlider = L.Control.extend({
     options: {
@@ -128,14 +134,68 @@ L.Control.MBGLTimeSlider = L.Control.extend({
     _removeTimeSliderControlFromMap: function _removeTimeSliderControlFromMap() {
         // remove the TimeSlider from the MBGL map
         this._glmaplayer._glMap.removeControl(this._timeslider);
+    },
+
+    //
+    // MBGL TimeSlider API methods
+    // the rest of these simply "pass through" to the real control, passing params as-given, so Leaflet consumers can use getDate() setRange() et al
+    //
+    getDate: function getDate() {
+        var _timeslider;
+
+        return (_timeslider = this._timeslider).getDate.apply(_timeslider, arguments);
+    },
+    getRange: function getRange() {
+        var _timeslider2;
+
+        return (_timeslider2 = this._timeslider).getRange.apply(_timeslider2, arguments);
+    },
+    getLimit: function getLimit() {
+        var _timeslider3;
+
+        return (_timeslider3 = this._timeslider).getLimit.apply(_timeslider3, arguments);
+    },
+    yearForward: function yearForward() {
+        var _timeslider4;
+
+        return (_timeslider4 = this._timeslider).yearForward.apply(_timeslider4, arguments);
+    },
+    yearBack: function yearBack() {
+        var _timeslider5;
+
+        return (_timeslider5 = this._timeslider).yearBack.apply(_timeslider5, arguments);
+    },
+    setDate: function setDate() {
+        var _timeslider6;
+
+        return (_timeslider6 = this._timeslider).setDate.apply(_timeslider6, arguments);
+    },
+    setRange: function setRange() {
+        var _timeslider7;
+
+        return (_timeslider7 = this._timeslider).setRange.apply(_timeslider7, arguments);
+    },
+    setRangeUpper: function setRangeUpper() {
+        var _timeslider8;
+
+        return (_timeslider8 = this._timeslider).setRangeUpper.apply(_timeslider8, arguments);
+    },
+    setRangeLower: function setRangeLower() {
+        var _timeslider9;
+
+        return (_timeslider9 = this._timeslider).setRangeLower.apply(_timeslider9, arguments);
+    },
+    isDateWithinRange: function isDateWithinRange() {
+        var _timeslider10;
+
+        return (_timeslider10 = this._timeslider).isDateWithinRange.apply(_timeslider10, arguments);
+    },
+    isDateWithinLimit: function isDateWithinLimit() {
+        var _timeslider11;
+
+        return (_timeslider11 = this._timeslider).isDateWithinLimit.apply(_timeslider11, arguments);
     }
 });
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

@@ -51,5 +51,43 @@ L.Control.MBGLTimeSlider = L.Control.extend({
     _removeTimeSliderControlFromMap: function () {
         // remove the TimeSlider from the MBGL map
         this._glmaplayer._glMap.removeControl(this._timeslider);
-    }
+    },
+
+    //
+    // MBGL TimeSlider API methods
+    // the rest of these simply "pass through" to the real control, passing params as-given, so Leaflet consumers can use getDate() setRange() et al
+    //
+    getDate: function () {
+        return this._timeslider.getDate(...arguments);
+    },
+    getRange: function () {
+        return this._timeslider.getRange(...arguments);
+    },
+    getLimit: function () {
+        return this._timeslider.getLimit(...arguments);
+    },
+    yearForward: function () {
+        return this._timeslider.yearForward(...arguments);
+    },
+    yearBack: function () {
+        return this._timeslider.yearBack(...arguments);
+    },
+    setDate: function () {
+        return this._timeslider.setDate(...arguments);
+    },
+    setRange: function () {
+        return this._timeslider.setRange(...arguments);
+    },
+    setRangeUpper: function () {
+        return this._timeslider.setRangeUpper(...arguments);
+    },
+    setRangeLower: function () {
+        return this._timeslider.setRangeLower(...arguments);
+    },
+    isDateWithinRange: function () {
+        return this._timeslider.isDateWithinRange(...arguments);
+    },
+    isDateWithinLimit: function () {
+        return this._timeslider.isDateWithinLimit(...arguments);
+    },
 });
