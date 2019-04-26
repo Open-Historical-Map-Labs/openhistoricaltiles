@@ -1,4 +1,4 @@
-# Open Historical Map: Time Slider Control for Mabox GL JS API
+# Open Historical Map: Time Slider Control for Mapbox GL JS API
 
 The `demo/` folder contains a working demo of a OpenHistoricalMap basemap working with this timeslider control.
 
