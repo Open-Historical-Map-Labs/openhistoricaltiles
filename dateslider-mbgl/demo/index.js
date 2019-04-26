@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
             date: STARTING_DATE,
             datespan: STARTING_RANGE,
             datelimit: MAX_DATES,
+            autoExpandRange: true,
             onDateSelect: function (newdate) {
                 console.log([ 'date changed', newdate ]);
             },

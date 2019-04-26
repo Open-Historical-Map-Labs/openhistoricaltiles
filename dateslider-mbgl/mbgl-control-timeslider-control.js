@@ -10,6 +10,7 @@ export class TimeSliderControl {
         this.options = Object.assign({
             sourcename: undefined,
             datespan: [ current_year - 100, current_year],
+            autoExpandRange: true,
             // date derieved from datespan
             // datelimit derived from datespan
             onDateSelect: function () {},
@@ -155,19 +156,33 @@ export class TimeSliderControl {
 
     yearForward (years=1) {
         const newyear = this._current_date + years;
+
         if (! this.isDateWithinLimit(newyear)) {
-            console.debug(`TimeSliderControl yearBack() new date ${newyear} outside datelimit, ignoring`);
+            console.debug(`TimeSliderControl yearForward() new date ${newyear} outside datelimit, ignoring`);
             return this;
         }
+
+        if (! this.options.autoExpandRange && ! this.isDateWithinRange(newyear)) {
+            console.debug(`TimeSliderControl yearForward() new date ${newyear} outside range and autoExpandRange is false, ignoring`);
+            return this;
+        }
+
         this.setDate(newyear);
     }
 
     yearBack (years=1) {
         const newyear = this._current_date - years;
+
         if (! this.isDateWithinLimit(newyear)) {
             console.debug(`TimeSliderControl yearBack() new date ${newyear} outside datelimit, ignoring`);
             return this;
         }
+
+        if (! this.options.autoExpandRange && ! this.isDateWithinRange(newyear)) {
+            console.debug(`TimeSliderControl yearBack() new date ${newyear} outside range and autoExpandRange is false, ignoring`);
+            return this;
+        }
+
         this.setDate(newyear);
     }
 
@@ -175,16 +190,23 @@ export class TimeSliderControl {
         // coerce strings, e.g. from input fields or whatever
         year = parseInt(year);
 
-        // if the date is out of range, do nothing; return ourself for method chaining
+        // if the date is out of limit, do nothing; return ourself for method chaining
         if (year < this._range_limit[0] || year > this._range_limit[1]) return this;
 
+        // if our new date is out of range, extend our range... or else force the date to be within range
+        if (this.options.autoExpandRange) {
+            if      (year > this._current_range[1]) this.setRangeUpper(year);
+            else if (year < this._current_range[0]) this.setRangeLower(year);
+        }
+        else if (! this.isDateWithinRange(year)) {
+            if      (year > this._current_range[1]) year = this._current_range[1];
+            else if (year < this._current_range[0]) year = this._current_range[0];
+        }
+
+        // go ahead
         // set the newly-selected date and our readout
         this._current_date = year;
         this._datereadout.value = year;
-
-        // if our new date is out of range, extend our range
-        if      (this._current_date > this._current_range[1]) this.setRangeUpper(year);
-        else if (this._current_date < this._current_range[0]) this.setRangeLower(year);
 
         // adjust the slider to show the new date
         this._sliderbar.value = this._current_date;
@@ -219,7 +241,7 @@ export class TimeSliderControl {
             console.debug(`TimeSliderControl setRange() max date must be greater than min date`);
         }
 
-        // sanity: if the range would no longer include our currently-selected date, extend their range for them before we apply it
+        // if the range would no longer include our currently-selected date, extend their range for them so the current date is still valid, before we apply it
         if (this._current_date < newrange[0]) {
             newrange[0] = this._current_date;
             console.debug(`TimeSliderControl setRange() extending range to include current date ${this._current_date}`);
@@ -230,9 +252,16 @@ export class TimeSliderControl {
         }
 
         // set the internal range, and the visible values in the box
+        // if we disallow auto-expanding of the range, then also set these min/max in some input widgets
         this._current_range = newrange;
+
         this._mindateinput.value = this._current_range[0];
         this._maxdateinput.value = this._current_range[1];
+
+        if (! this.options.autoExpandRange) {
+            this._datereadout.min = this._current_range[0];
+            this._datereadout.max = this._current_range[1];
+        }
 
         // adjust the slider to show the new range
         this._sliderbar.min = this._current_range[0];

@@ -46,6 +46,8 @@ MAP.on('load', function () {
 
 `datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `datespan`. If a `datespan` is also supplied, it should fall wholly within this `datelimit`.
 
+`autoExpandRange` -- By default `autoExpandRange` is true, so that the + and - buttons will automagically expand the current date range to accommodate the new year. Set this to false, to lock the + and - buttons to the currently-selected range, so the user would need to explicitly change the range in order to +/- past it.
+
 `onDateSelect` -- A callback function which will be called when the date selection changes. The newly-selected date will be passed as a param. Within the callback function, `this` will refer to the timeslider control.
 
 `onRangeChange` -- A callback function which will be called when the date range changes. The newly-available range will be passed as a param. Within the callback function, `this` will refer to the timeslider control.
