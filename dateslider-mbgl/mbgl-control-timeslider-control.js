@@ -13,7 +13,11 @@ export class TimeSliderControl {
             // date derieved from datespan
             // datelimit derived from datespan
             onDateSelect: function () {},
-            onRangeChange: function () {}
+            onRangeChange: function () {},
+            loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
+            iconClassForward: 'fa fa-plus',
+            iconClassBack: 'fa fa-minus',
+            iconClassHome: 'fa fa-home',
         }, options);
 
         if (! this.options.date) {
@@ -41,13 +45,15 @@ export class TimeSliderControl {
         this._container.className = "mapboxgl-ctrl mbgl-control-timeslider";
 
         // set up the UI buttons as raw HTML, then fetch references to them via querySelector()
+        const stylesheetloader = this.options.loadIconStyleSheet ? `<link rel="stylesheet" href="${this.options.loadIconStyleSheet}" />` : '';
+
         this._container.innerHTML = `
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+        ${stylesheetloader}
         <div class="mbgl-control-timeslider-section-lhs">
             <div class="mbgl-control-timeslider-buttonset">
-                <i class="mbgl-control-timeslider-forwardbutton fa fa-plus"></i>
-                <i class="mbgl-control-timeslider-backbutton fa fa-minus"></i>
-                <i class="mbgl-control-timeslider-homebutton fa fa-home"></i>
+                <i class="mbgl-control-timeslider-forwardbutton ${this.options.iconClassForward}"></i>
+                <i class="mbgl-control-timeslider-backbutton ${this.options.iconClassBack}"></i>
+                <i class="mbgl-control-timeslider-homebutton ${this.options.iconClassHome}"></i>
             </div>
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />
         </div>

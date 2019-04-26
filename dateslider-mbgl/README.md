@@ -52,6 +52,14 @@ MAP.on('load', function () {
 
 `onRangeChange` -- A callback function which will be called when the date range changes. The newly-available range will be passed as a param. Within the callback function, `this` will refer to the timeslider control.
 
+`loadIconStyleSheet` -- The URL of a stylesheet which provides CSS classes for making icons. If not set, then by default a recent FontAwesome Free release is used. Use this in conjunction with `iconClassForward`, `iconClassBack`, `iconClassHome`, etc. If you set this to an empty value or null, then no stylesheet will be loaded and you will need to provide relevant CSS or icon classes elsewhere.
+
+`iconClassForward` -- For the UI buttons, the CSS class to apply to the Forward button which advances to the next date. By default this is `fa fa-plus` to make a plus sign using FontAwesome.
+
+`iconClassBack` -- For the UI buttons, the CSS class to apply to the Back button which advances to the previous date. By default this is `fa fa-minus` to make a minus sign using FontAwesome.
+
+`iconClassHome` -- For the UI buttons, the CSS class to apply to the Home button which returns the slider to the original starting date. By default this is `fa fa-home` to make a home/house using FontAwesome.
+
 
 
 ## Methods

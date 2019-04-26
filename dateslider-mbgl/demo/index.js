@@ -40,11 +40,18 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     MAP.on('load', function () {
         dateslider = new TimeSlider.TimeSliderControl({
+            // set the data source to define which layers will be filtered
             sourcename: OHM_SOURCE,
+            // set the initial slider range and date filter, and the maximum range of dates the slider may be adjusted
             date: STARTING_DATE,
             datespan: STARTING_RANGE,
             datelimit: MAX_DATES,
-            autoExpandRange: true,
+            // load an alternative CSS stylesheet and icons for the buttons
+            //loadIconStyleSheet: "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css",
+            //iconClassForward: "glyphicon glyphicon-chevron-right",
+            //iconClassBack: "glyphicon glyphicon-chevron-left",
+            //iconClassHome: "glyphicon glyphicon-repeat",
+            // this calling page can also take actions when the date or range are changed
             onDateSelect: function (newdate) {
                 console.log([ 'date changed', newdate ]);
             },

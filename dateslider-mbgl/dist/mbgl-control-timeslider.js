@@ -64,17 +64,11 @@ var TimeSlider =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88,7 +82,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(0);
+__webpack_require__(1);
 
 var TimeSliderControl = exports.TimeSliderControl = function () {
     function TimeSliderControl() {
@@ -106,7 +100,11 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // date derieved from datespan
             // datelimit derived from datespan
             onDateSelect: function onDateSelect() {},
-            onRangeChange: function onRangeChange() {}
+            onRangeChange: function onRangeChange() {},
+            loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
+            iconClassForward: 'fa fa-plus',
+            iconClassBack: 'fa fa-minus',
+            iconClassHome: 'fa fa-home'
         }, options);
 
         if (!this.options.date) {
@@ -117,18 +115,18 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
         }
 
         // preliminary sanity checks
-        if (!this.options.sourcename) throw "TimeSliderControl missing required option: sourcename";
-        if (!Number.isInteger(this.options.date)) throw "TimeSliderControl option date is not an integer";
-        if (!Number.isInteger(this.options.datespan[0])) throw "TimeSliderControl option datespan is not two integers";
-        if (!Number.isInteger(this.options.datespan[1])) throw "TimeSliderControl option datespan is not two integers";
-        if (!Number.isInteger(this.options.datelimit[0])) throw "TimeSliderControl option datelimit is not two integers";
-        if (!Number.isInteger(this.options.datelimit[1])) throw "TimeSliderControl option datelimit is not two integers";
-        if (this.options.datelimit[0] >= this.options.datelimit[1]) throw "TimeSliderControl option datelimit max year must be greater than min year";
-        if (this.options.datespan[0] >= this.options.datespan[1]) throw "TimeSliderControl option datespan max year must be greater than min year";
+        if (!this.options.sourcename) throw 'TimeSliderControl missing required option: sourcename';
+        if (!Number.isInteger(this.options.date)) throw 'TimeSliderControl option date is not an integer';
+        if (!Number.isInteger(this.options.datespan[0])) throw 'TimeSliderControl option datespan is not two integers';
+        if (!Number.isInteger(this.options.datespan[1])) throw 'TimeSliderControl option datespan is not two integers';
+        if (!Number.isInteger(this.options.datelimit[0])) throw 'TimeSliderControl option datelimit is not two integers';
+        if (!Number.isInteger(this.options.datelimit[1])) throw 'TimeSliderControl option datelimit is not two integers';
+        if (this.options.datelimit[0] >= this.options.datelimit[1]) throw 'TimeSliderControl option datelimit max year must be greater than min year';
+        if (this.options.datespan[0] >= this.options.datespan[1]) throw 'TimeSliderControl option datespan max year must be greater than min year';
     }
 
     _createClass(TimeSliderControl, [{
-        key: "onAdd",
+        key: 'onAdd',
         value: function onAdd(map) {
             var _this = this;
 
@@ -138,7 +136,9 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             this._container.className = "mapboxgl-ctrl mbgl-control-timeslider";
 
             // set up the UI buttons as raw HTML, then fetch references to them via querySelector()
-            this._container.innerHTML = "\n        <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.8.1/css/all.css\" integrity=\"sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf\" crossorigin=\"anonymous\" />\n        <div class=\"mbgl-control-timeslider-section-lhs\">\n            <div class=\"mbgl-control-timeslider-buttonset\">\n                <i class=\"mbgl-control-timeslider-forwardbutton fa fa-plus\"></i>\n                <i class=\"mbgl-control-timeslider-backbutton fa fa-minus\"></i>\n                <i class=\"mbgl-control-timeslider-homebutton fa fa-home\"></i>\n            </div>\n            <input type=\"number\" step=\"1\" min=\"\" max=\"\" class=\"mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min\" />\n        </div>\n        <div class=\"mbgl-control-timeslider-section-cnt\">\n            <input type=\"number\" step=\"1\" min=\"\" max=\"\" class=\"mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current\" />\n            <input type=\"range\" min=\"\" max=\"\" value=\"\" step=\"1\" class=\"mbgl-control-timeslider-sliderbar\" />\n        </div>\n        <div class=\"mbgl-control-timeslider-section-rhs\">\n            <div class=\"mbgl-control-timeslider-buttonset\">\n                &nbsp;\n            </div>\n            <input type=\"number\" step=\"1\" min=\"\" max=\"\" class=\"mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max\" />\n        </div>\n        ";
+            var stylesheetloader = this.options.loadIconStyleSheet ? '<link rel="stylesheet" href="' + this.options.loadIconStyleSheet + '" />' : '';
+
+            this._container.innerHTML = '\n        ' + stylesheetloader + '\n        <div class="mbgl-control-timeslider-section-lhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                <i class="mbgl-control-timeslider-forwardbutton ' + this.options.iconClassForward + '"></i>\n                <i class="mbgl-control-timeslider-backbutton ' + this.options.iconClassBack + '"></i>\n                <i class="mbgl-control-timeslider-homebutton ' + this.options.iconClassHome + '"></i>\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />\n        </div>\n        <div class="mbgl-control-timeslider-section-cnt">\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />\n            <input type="range" min="" max="" value="" step="1" class="mbgl-control-timeslider-sliderbar" />\n        </div>\n        <div class="mbgl-control-timeslider-section-rhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                &nbsp;\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />\n        </div>\n        ';
 
             this._forwardbutton = this._container.querySelector('i.mbgl-control-timeslider-forwardbutton');
             this._backbutton = this._container.querySelector('i.mbgl-control-timeslider-backbutton');
@@ -150,13 +150,13 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
             // add titles
             // could do this in HTML above, but kind of nice to have all the text in one area
-            this._forwardbutton.title = "Shift time forward by one year";
-            this._backbutton.title = "Shift time backward by one year";
-            this._homebutton.title = "Reset the time slider to " + this.options.date;
-            this._mindateinput.title = "Set the range and resolution of the slider, as far back as " + this.options.datelimit[0];
-            this._maxdateinput.title = "Set the range and resolution of the slider, as far forward as " + this.options.datelimit[1];
-            this._datereadout.title = "Manually enter a year to set the date filtering";
-            this._sliderbar.title = "Adjust the slider to set the date filtering";
+            this._forwardbutton.title = 'Shift time forward by one year';
+            this._backbutton.title = 'Shift time backward by one year';
+            this._homebutton.title = 'Reset the time slider to ' + this.options.date;
+            this._mindateinput.title = 'Set the range and resolution of the slider, as far back as ' + this.options.datelimit[0];
+            this._maxdateinput.title = 'Set the range and resolution of the slider, as far forward as ' + this.options.datelimit[1];
+            this._datereadout.title = 'Manually enter a year to set the date filtering';
+            this._sliderbar.title = 'Adjust the slider to set the date filtering';
 
             // add event handlers: + - buttons, home, text inputs, ...
             this._forwardbutton.addEventListener('click', function (event) {
@@ -214,65 +214,65 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this._container;
         }
     }, {
-        key: "getDefaultPosition",
+        key: 'getDefaultPosition',
         value: function getDefaultPosition() {
             return 'top-right';
         }
     }, {
-        key: "getDate",
+        key: 'getDate',
         value: function getDate() {
             return this._current_date;
         }
     }, {
-        key: "getRange",
+        key: 'getRange',
         value: function getRange() {
             return this._current_range;
         }
     }, {
-        key: "getLimit",
+        key: 'getLimit',
         value: function getLimit() {
             return this._range_limit;
         }
     }, {
-        key: "yearForward",
+        key: 'yearForward',
         value: function yearForward() {
             var years = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
             var newyear = this._current_date + years;
 
             if (!this.isDateWithinLimit(newyear)) {
-                console.debug("TimeSliderControl yearForward() new date " + newyear + " outside datelimit, ignoring");
+                console.debug('TimeSliderControl yearForward() new date ' + newyear + ' outside datelimit, ignoring');
                 return this;
             }
 
             if (!this.options.autoExpandRange && !this.isDateWithinRange(newyear)) {
-                console.debug("TimeSliderControl yearForward() new date " + newyear + " outside range and autoExpandRange is false, ignoring");
+                console.debug('TimeSliderControl yearForward() new date ' + newyear + ' outside range and autoExpandRange is false, ignoring');
                 return this;
             }
 
             this.setDate(newyear);
         }
     }, {
-        key: "yearBack",
+        key: 'yearBack',
         value: function yearBack() {
             var years = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
             var newyear = this._current_date - years;
 
             if (!this.isDateWithinLimit(newyear)) {
-                console.debug("TimeSliderControl yearBack() new date " + newyear + " outside datelimit, ignoring");
+                console.debug('TimeSliderControl yearBack() new date ' + newyear + ' outside datelimit, ignoring');
                 return this;
             }
 
             if (!this.options.autoExpandRange && !this.isDateWithinRange(newyear)) {
-                console.debug("TimeSliderControl yearBack() new date " + newyear + " outside range and autoExpandRange is false, ignoring");
+                console.debug('TimeSliderControl yearBack() new date ' + newyear + ' outside range and autoExpandRange is false, ignoring');
                 return this;
             }
 
             this.setDate(newyear);
         }
     }, {
-        key: "setDate",
+        key: 'setDate',
         value: function setDate(year) {
             // coerce strings, e.g. from input fields or whatever
             year = parseInt(year);
@@ -305,7 +305,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this;
         }
     }, {
-        key: "setRange",
+        key: 'setRange',
         value: function setRange(newrange) {
             // coerce strings, e.g. from input fields or whatever
             newrange[0] = parseInt(newrange[0]);
@@ -314,25 +314,25 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // clip the range to fit the range limit, if necessary
             if (newrange[0] < this._range_limit[0]) {
                 newrange[0] = this._range_limit[0];
-                console.debug("TimeSliderControl setRange() range exceeds datelimit setting, adjusting min date");
+                console.debug('TimeSliderControl setRange() range exceeds datelimit setting, adjusting min date');
             }
             if (newrange[1] > this._range_limit[1]) {
                 newrange[1] = this._range_limit[1];
-                console.debug("TimeSliderControl setRange() range exceeds datelimit setting, adjusting max date");
+                console.debug('TimeSliderControl setRange() range exceeds datelimit setting, adjusting max date');
             }
 
             // sanity: min must <= max, or else ignore it
             if (newrange[1] <= newrange[0]) {
-                console.debug("TimeSliderControl setRange() max date must be greater than min date");
+                console.debug('TimeSliderControl setRange() max date must be greater than min date');
             }
 
             // if the range would no longer include our currently-selected date, extend their range for them so the current date is still valid, before we apply it
             if (this._current_date < newrange[0]) {
                 newrange[0] = this._current_date;
-                console.debug("TimeSliderControl setRange() extending range to include current date " + this._current_date);
+                console.debug('TimeSliderControl setRange() extending range to include current date ' + this._current_date);
             } else if (this._current_date > newrange[1]) {
                 newrange[1] = this._current_date;
-                console.debug("TimeSliderControl setRange() extending range to include current date " + this._current_date);
+                console.debug('TimeSliderControl setRange() extending range to include current date ' + this._current_date);
             }
 
             // set the internal range, and the visible values in the box
@@ -358,7 +358,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this;
         }
     }, {
-        key: "setRangeUpper",
+        key: 'setRangeUpper',
         value: function setRangeUpper(newyear) {
             this.setRange([this._current_range[0], newyear]);
 
@@ -366,7 +366,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this;
         }
     }, {
-        key: "setRangeLower",
+        key: 'setRangeLower',
         value: function setRangeLower(newyear) {
             this.setRange([newyear, this._current_range[1]]);
 
@@ -374,23 +374,23 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this;
         }
     }, {
-        key: "isDateWithinRange",
+        key: 'isDateWithinRange',
         value: function isDateWithinRange(year) {
             return year >= this._current_range[0] && year <= this._current_range[1];
         }
     }, {
-        key: "isDateWithinLimit",
+        key: 'isDateWithinLimit',
         value: function isDateWithinLimit(year) {
             return year >= this._range_limit[0] && year <= this._range_limit[1];
         }
     }, {
-        key: "_getFilteredMapLayers",
+        key: '_getFilteredMapLayers',
         value: function _getFilteredMapLayers() {
             var _this2 = this;
 
             var mapstyle = this._map.getStyle();
             if (!mapstyle.sources[this.options.sourcename]) {
-                console.debug("TimeSliderControl map has no source named " + this.options.sourcename);
+                console.debug('TimeSliderControl map has no source named ' + this.options.sourcename);
                 return;
             }
 
@@ -400,7 +400,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return filterlayers;
         }
     }, {
-        key: "_setupDateFiltersForLayers",
+        key: '_setupDateFiltersForLayers',
         value: function _setupDateFiltersForLayers() {
             var _this3 = this;
 
@@ -447,7 +447,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
                 } else {
                     // some other condition I had not expected and need to figure out
                     console.error(oldfilters);
-                    throw "TimeSliderControl _setupDateFiltersForLayers() got unexpected filtering condition on layer " + layerid + " for the developer to figure out";
+                    throw 'TimeSliderControl _setupDateFiltersForLayers() got unexpected filtering condition on layer ' + layerid + ' for the developer to figure out';
                 }
 
                 // apply the new filter, with the placeholder "eternal features" filter now prepended
@@ -455,7 +455,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             });
         }
     }, {
-        key: "_applyDateFilterToLayers",
+        key: '_applyDateFilterToLayers',
         value: function _applyDateFilterToLayers() {
             var _this4 = this;
 
@@ -464,8 +464,8 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
             var layers = this._getFilteredMapLayers();
 
-            var date1 = this._current_date + "-01-01";
-            var date2 = this._current_date + "-12-31";
+            var date1 = this._current_date + '-01-01';
+            var date2 = this._current_date + '-12-31';
 
             var datesubfilter = ['all', ['has', 'osm_id'], ['has', 'start_date'], ['!=', 'start_date', ''], ['<=', 'start_date', date1], ['has', 'end_date'], ['!=', 'end_date', ''], ['>=', 'end_date', date2]];
 
@@ -480,6 +480,12 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
     return TimeSliderControl;
 }();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
