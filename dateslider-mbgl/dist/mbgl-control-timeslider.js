@@ -114,8 +114,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(0);
@@ -490,33 +488,21 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
         value: function _applyDateFilterToLayers() {
             var _this4 = this;
 
-            // sadly, we can't just use a function callback as a filter; that would be powerful and easy; instead we have to collect OSM IDs and tweak our filter clauses
-            // back in _setupDateFiltersForLayers() we prepended a filtering clause as filters[1]
-            // with the expctation that here in _applyDateFilterToLayers() we will collect OSM IDs matching a date filter, and add them to the "any" collection
-            // thus, we change the sub-query for dated features, and leave the sub-query for eternal features alone
+            // back in _setupDateFiltersForLayers() we prepended a filtering clause as filters[1] which filters for "eternal" features lacking a OSM ID
+            // here in _applyDateFilterToLayers() we add a second part to that, for features with a start_date and end_date fitting our date
 
             var layers = this._getFilteredMapLayers();
 
-            layers.forEach(function (layer) {
-                // filter to all features which have a OSM ID and a start_date and end_date
-                // then filter them here to collect OSM IDs of features matching our date filter
-                // ideally we would be simple >= and <= filters, but fact is the filter system isn't very bright and misses details eg. dates with invalid format
-                var matchosmids = _this4._map.querySourceFeatures(layer.source, {
-                    sourceLayer: layer.id,
-                    filter: ['all', ['has', 'osm_id'], ['has', 'start_date'], ['!=', 'start_date', ''], ['has', 'end_date'], ['!=', 'end_date', '']]
-                }).filter(function (feature) {
-                    var starts = parseInt(feature.properties.start_date.substr(0, 4));
-                    var ending = parseInt(feature.properties.end_date.substr(0, 4));
-                    return _this4._current_date >= starts && _this4._current_date <= ending;
-                }).map(function (feature) {
-                    return feature.properties.osm_id;
-                });
+            var date1 = this._current_date + '-01-01';
+            var date2 = this._current_date + '-12-31';
 
-                // apply the filter, by replacing/appending the "or OSM ID is in..." sub-clause in filters[1][2]
+            var datesubfilter = ['all', ['has', 'osm_id'], ['has', 'start_date'], ['!=', 'start_date', ''], ['<=', 'start_date', date1], ['has', 'end_date'], ['!=', 'end_date', ''], ['>=', 'end_date', date2]];
+
+            layers.forEach(function (layer) {
                 var newfilters = _this4._map.getFilter(layer.id).slice();
-                newfilters[1][2] = ['in', 'osm_id'].concat(_toConsumableArray(matchosmids));
-                // console.debug([ `TimeSliderControl _applyDateFilterToLayers() ${layer.id} filters is now:`, newfilters ]);
+                newfilters[1][2] = datesubfilter.slice();
                 _this4._map.setFilter(layer.id, newfilters);
+                // console.debug([ `TimeSliderControl _applyDateFilterToLayers() ${layer.id} filters is now:`, newfilters ]);
             });
         }
     }]);
