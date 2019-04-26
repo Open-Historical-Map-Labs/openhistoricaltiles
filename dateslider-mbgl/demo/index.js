@@ -11,8 +11,11 @@ var MAX_DATES = [ 1870, 2020 ];
 var dateslider;
 
 document.addEventListener('DOMContentLoaded', function(event) {
+    //
     // the basic map and controls
     // the map style is in mapstyle.js
+    //
+
     MAP = new mapboxgl.Map({
         container: "map",
         style: GLMAP_STYLE,
@@ -31,7 +34,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
         unit: 'metric'
     }));
 
+    //
     // add our date slider in the map's load event
+    //
+
     MAP.on('load', function () {
         dateslider = new TimeSlider.TimeSliderControl({
             sourcename: OHM_SOURCE,
@@ -48,4 +54,27 @@ document.addEventListener('DOMContentLoaded', function(event) {
         });
         MAP.addControl(dateslider);
     });
+
+    //
+    // example of a custom UI which can affect the TimeSliderControl
+    //
+
+    function applyExternalYear () {
+        var year = document.querySelector('#whenami input').value;
+        if (! year) return;
+
+        year = parseInt(year);
+        var min = year - 10;
+        var max = year + 10;
+
+        dateslider.setDate(year).setRange([ min, max ]);
+    }
+
+    document.querySelector('#whenami button').addEventListener('click', applyExternalYear);
+
+    document.querySelector('#whenami input').addEventListener('keydown', function (event) {
+        if (event.keyCode == 13) document.querySelector('#whenami button').click();
+    });
+
+    // that's it!
 });

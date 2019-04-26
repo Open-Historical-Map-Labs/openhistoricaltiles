@@ -10,6 +10,35 @@ body, html {
 }
 
 /*
+ * a When Am I panel illustrating the use of external controls to adjust the TimeSliderControl
+ */
+
+#whenami {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    border-radius: 4px;
+
+    background-color: white;
+
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+
+    width: 2in;
+
+    padding: 1em;
+}
+
+#whenami button {
+}
+
+#whenami input {
+    width: calc(100% - 50px);
+}
+
+/*
  * TimeSliderControl may be styled in the containing page via CSS
  * including individual components, or the positioning and style of the control as a whole
  */
