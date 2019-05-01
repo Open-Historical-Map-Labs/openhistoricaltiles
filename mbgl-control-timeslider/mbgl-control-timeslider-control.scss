@@ -13,6 +13,10 @@ $sliderheight: 22px;
 
 $numberbgcolor: white;
 
+/*
+ * THE TIME SLIDER CONTROL
+ */
+
 .mbgl-control-timeslider {
     /*
      * WIDTH
@@ -145,4 +149,18 @@ $numberbgcolor: white;
             cursor: pointer;
         }
     }
+}
+
+
+/*
+ * THE URL READER/WRITER CONTROLS
+ * have no visible UI at all, but are required to have a DIV
+ */
+
+.mbgl-control-timeslider-urlhashreader {
+    display: none !important;
+}
+
+.mbgl-control-timeslider-urlhashwriter {
+    display: none !important;
 }

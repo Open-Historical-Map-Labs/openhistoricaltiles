@@ -388,3 +388,130 @@ export class TimeSliderControl {
         });
     }
 }
+
+
+export class UrlHashReader {
+    constructor (options={}) {
+        // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
+        this.options = Object.assign({
+            timeslidercontrol: undefined,
+        }, options);
+
+        if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw `UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance`;
+    }
+
+    onAdd (map) {
+        // keep a reference to our map, and create our basic control DIV
+        // we have no visible UI (the DIV has a display:none style) but are required to supply a DIV
+        this._map = map;
+        this._container = document.createElement("DIV");
+        this._container.className = "mapboxgl-ctrl mbgl-control-timeslider-urlhashreader";
+
+        // do our one job, but do it in a new context so the caller doesn't block
+        setTimeout(() => {
+            this._readAndApplyUrlHashParams();
+        }, 1 * 1000);
+
+        // done
+        return this._container;
+    }
+
+    _readAndApplyUrlHashParams () {
+        // parse the URL hash
+        // example: #18/40.8217108/-73.9119449/1980,1970-2000
+        // zoom, lat, lng, date and range
+        const theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\d+),(\d+)\-(\d+)/;
+        const thematch = location.hash.match(theregex);
+        if (! thematch) return console.debug(`UrlHashReader found no URL params to apply`);
+
+        const zoom = parseFloat(thematch[1]);
+        const lat = parseFloat(thematch[2]);
+        const lng = parseFloat(thematch[3]);
+        const dateval = parseInt(thematch[4]);  // these will need changing if dates ever become something other than an integer year
+        const datemin = parseInt(thematch[5]);
+        const datemax = parseInt(thematch[6]);
+        console.debug(`UrlHashReader found URL params: Z=${zoom} LL=${lat},${lng} DRange=${datemin}-${datemax} DVal=${dateval}`);
+
+        // apply map zoom and center; note that MBGL uses [lng,lat] while Leaflet uses [lat,lng]
+        // then apply date to the control
+        this._map.setCenter([lng, lat]).setZoom(zoom);
+        this.options.timeslidercontrol.setDate(dateval).setRange([datemin, datemax]);
+    }
+
+    // we have no visible UI, but are required to implement this method
+    getDefaultPosition () {
+        return 'top-right';
+    }
+}
+
+
+export class UrlHashWriter {
+    constructor (options={}) {
+        // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
+        this.options = Object.assign({
+            timeslidercontrol: undefined,
+            secondsBetweenUpdates: 1,
+        }, options);
+
+        if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw `UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance`;
+    }
+
+    onAdd (map) {
+        // keep a reference to our map, and create our basic control DIV
+        // we have no visible UI (the DIV has a display:none style) but are required to supply a DIV
+        this._map = map;
+        this._container = document.createElement("DIV");
+        this._container.className = "mapboxgl-ctrl mbgl-control-timeslider-urlhashwriter";
+
+        // do our one job, but do it in a new context so the caller doesn't block
+        setTimeout(() => {
+            this._startTrackingHashParams();
+        }, 2 * 1000);
+
+        // done
+        return this._container;
+    }
+
+    onRemove () {
+        this._stopTrackingHashParams();
+        this._map = null;
+    }
+
+    _startTrackingHashParams () {
+        if (this._timer) return;  // we are already tracking; done
+
+        this._timer = setInterval(() => {
+            this._updateHashParams();
+        }, this.options.secondsBetweenUpdates * 1000);
+    }
+
+    _stopTrackingHashParams () {
+        if (! this._timer) return;  // we are not tracking; done
+
+        clearInterval(this._timer);
+        this._timer = null;
+    }
+
+    _updateHashParams () {
+        const cc = this._map.getCenter();
+        const z = this._map.getZoom();
+        const dr = this.options.timeslidercontrol.getRange();
+        const dv = this.options.timeslidercontrol.getDate();
+
+        // massage into our target values, e.g. rounding decimals and swapping sequences
+        const lat = cc.lat.toFixed(5);
+        const lng = cc.lng.toFixed(5);
+        const zoom = z.toFixed(3);
+        const dateval = dv;
+        const datemin = dr[0];
+        const datemax = dr[1];
+
+        const urlhash = `#${zoom}/${lat}/${lng}/${dateval},${datemin}-${datemax}`;
+        location.hash = urlhash;
+    }
+
+    // we have no visible UI, but are required to implement this method
+    getDefaultPosition () {
+        return 'top-right';
+    }
+}

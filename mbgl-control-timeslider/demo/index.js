@@ -60,6 +60,21 @@ document.addEventListener('DOMContentLoaded', function(event) {
             }
         });
         MAP.addControl(timeslider);
+
+        //
+        // and the controls which handle URL hashes
+        // one to read the URL hash and apply it to the map, and that's all it does
+        // one to keep reading the timeslider and the map, and update the URL hash
+        //
+
+        const urlreader = new TimeSlider.UrlHashReader({
+            timeslidercontrol: timeslider,
+        });
+        const urlwriter = new TimeSlider.UrlHashWriter({
+            timeslidercontrol: timeslider,
+        });
+        MAP.addControl(urlreader);
+        MAP.addControl(urlwriter);
     });
 
     //
