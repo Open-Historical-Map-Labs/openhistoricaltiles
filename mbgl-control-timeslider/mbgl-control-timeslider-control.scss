@@ -67,26 +67,13 @@ $numberbgcolor: white;
      * BUTTONS AND CONTROLS
      */
 
-    .mbgl-control-timeslider-buttonset {
-        text-align: center;
-        display: block;
+    .mbgl-control-timeslider-button {
+        cursor: pointer;
+        vertical-align: text-top;
 
-        > i {
-            cursor: pointer;
-            font-size: 16px;
-            color: $defaulticoncolor;
-
-            margin-right: 5px;
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &.mbgl-control-timeslider-forwardbutton {
-            }
-            &.mbgl-control-timeslider-backwardbutton {
-            }
-            &.mbgl-control-timeslider-homebutton {
-            }
+        .mbgl-control-timeslider-backbutton {
+        }
+        .mbgl-control-timeslider-forwardbutton {
         }
     }
 
@@ -107,11 +94,13 @@ $numberbgcolor: white;
 
         border: 1px solid transparent;
         background: transparent;
+        text-decoration: underline;
 
         cursor: text;
         &:hover, &:focus {
             border-color: $bordercolor;
             background-color: $numberbgcolor;
+            text-decoration: none;  /* undo the default underline above */
         }
 
         &.mbgl-control-timeslider-dateinput-min {
@@ -120,9 +109,6 @@ $numberbgcolor: white;
         }
         &.mbgl-control-timeslider-dateinput-current {
             color: $lighttextcolor;
-            font-size: 13px;
-
-            margin-top: 2px;
         }
     }
 

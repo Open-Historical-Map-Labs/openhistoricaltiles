@@ -64,11 +64,17 @@ var TimeSlider =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -82,7 +88,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(1);
+__webpack_require__(0);
 
 var TimeSliderControl = exports.TimeSliderControl = function () {
     function TimeSliderControl() {
@@ -103,8 +109,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             onRangeChange: function onRangeChange() {},
             loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
             iconClassForward: 'fa fa-plus',
-            iconClassBack: 'fa fa-minus',
-            iconClassHome: 'fa fa-home'
+            iconClassBack: 'fa fa-minus'
         }, options);
 
         if (!this.options.date) {
@@ -138,11 +143,10 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // set up the UI buttons as raw HTML, then fetch references to them via querySelector()
             var stylesheetloader = this.options.loadIconStyleSheet ? '<link rel="stylesheet" href="' + this.options.loadIconStyleSheet + '" />' : '';
 
-            this._container.innerHTML = '\n        ' + stylesheetloader + '\n        <div class="mbgl-control-timeslider-section-lhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                <i class="mbgl-control-timeslider-forwardbutton ' + this.options.iconClassForward + '"></i>\n                <i class="mbgl-control-timeslider-backbutton ' + this.options.iconClassBack + '"></i>\n                <i class="mbgl-control-timeslider-homebutton ' + this.options.iconClassHome + '"></i>\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />\n        </div>\n        <div class="mbgl-control-timeslider-section-cnt">\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />\n            <input type="range" min="" max="" value="" step="1" class="mbgl-control-timeslider-sliderbar" />\n        </div>\n        <div class="mbgl-control-timeslider-section-rhs">\n            <div class="mbgl-control-timeslider-buttonset">\n                &nbsp;\n            </div>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />\n        </div>\n        ';
+            this._container.innerHTML = '\n        ' + stylesheetloader + '\n        <div class="mbgl-control-timeslider-section-lhs">\n            <br/>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />\n        </div>\n        <div class="mbgl-control-timeslider-section-cnt">\n            <i class="mbgl-control-timeslider-button mbgl-control-timeslider-backbutton ' + this.options.iconClassBack + '"></i>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />\n            <i class="mbgl-control-timeslider-button mbgl-control-timeslider-forwardbutton ' + this.options.iconClassForward + '"></i>\n            <br/>\n            <input type="range" min="" max="" value="" step="1" class="mbgl-control-timeslider-sliderbar" />\n        </div>\n        <div class="mbgl-control-timeslider-section-rhs">\n            <br/>\n            <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />\n        </div>\n        ';
 
             this._forwardbutton = this._container.querySelector('i.mbgl-control-timeslider-forwardbutton');
             this._backbutton = this._container.querySelector('i.mbgl-control-timeslider-backbutton');
-            this._homebutton = this._container.querySelector('i.mbgl-control-timeslider-homebutton');
             this._mindateinput = this._container.querySelector('input.mbgl-control-timeslider-dateinput-min');
             this._maxdateinput = this._container.querySelector('input.mbgl-control-timeslider-dateinput-max');
             this._datereadout = this._container.querySelector('input.mbgl-control-timeslider-dateinput-current');
@@ -152,13 +156,12 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // could do this in HTML above, but kind of nice to have all the text in one area
             this._forwardbutton.title = 'Shift time forward by one year';
             this._backbutton.title = 'Shift time backward by one year';
-            this._homebutton.title = 'Reset the time slider to ' + this.options.date;
             this._mindateinput.title = 'Set the range and resolution of the slider, as far back as ' + this.options.datelimit[0];
             this._maxdateinput.title = 'Set the range and resolution of the slider, as far forward as ' + this.options.datelimit[1];
             this._datereadout.title = 'Manually enter a year to set the date filtering';
             this._sliderbar.title = 'Adjust the slider to set the date filtering';
 
-            // add event handlers: + - buttons, home, text inputs, ...
+            // add event handlers: + - buttons, text inputs, ...
             this._forwardbutton.addEventListener('click', function (event) {
                 event.stopPropagation();
                 event.preventDefault();
@@ -168,11 +171,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
                 event.stopPropagation();
                 event.preventDefault();
                 _this.yearBack();
-            });
-            this._homebutton.addEventListener('click', function (event) {
-                event.stopPropagation();
-                event.preventDefault();
-                _this.setDate(_this.options.date);
             });
             this._sliderbar.addEventListener('input', function () {
                 _this.setDate(_this._sliderbar.value);
@@ -480,12 +478,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
     return TimeSliderControl;
 }();
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

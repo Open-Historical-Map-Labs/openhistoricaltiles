@@ -17,7 +17,6 @@ export class TimeSliderControl {
             loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
             iconClassForward: 'fa fa-plus',
             iconClassBack: 'fa fa-minus',
-            iconClassHome: 'fa fa-home',
         }, options);
 
         if (! this.options.date) {
@@ -50,28 +49,24 @@ export class TimeSliderControl {
         this._container.innerHTML = `
         ${stylesheetloader}
         <div class="mbgl-control-timeslider-section-lhs">
-            <div class="mbgl-control-timeslider-buttonset">
-                <i class="mbgl-control-timeslider-forwardbutton ${this.options.iconClassForward}"></i>
-                <i class="mbgl-control-timeslider-backbutton ${this.options.iconClassBack}"></i>
-                <i class="mbgl-control-timeslider-homebutton ${this.options.iconClassHome}"></i>
-            </div>
+            <br/>
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-min" />
         </div>
         <div class="mbgl-control-timeslider-section-cnt">
+            <i class="mbgl-control-timeslider-button mbgl-control-timeslider-backbutton ${this.options.iconClassBack}"></i>
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-current" />
+            <i class="mbgl-control-timeslider-button mbgl-control-timeslider-forwardbutton ${this.options.iconClassForward}"></i>
+            <br/>
             <input type="range" min="" max="" value="" step="1" class="mbgl-control-timeslider-sliderbar" />
         </div>
         <div class="mbgl-control-timeslider-section-rhs">
-            <div class="mbgl-control-timeslider-buttonset">
-                &nbsp;
-            </div>
+            <br/>
             <input type="number" step="1" min="" max="" class="mbgl-control-timeslider-dateinput mbgl-control-timeslider-dateinput-max" />
         </div>
         `;
 
         this._forwardbutton = this._container.querySelector('i.mbgl-control-timeslider-forwardbutton');
         this._backbutton    = this._container.querySelector('i.mbgl-control-timeslider-backbutton');
-        this._homebutton    = this._container.querySelector('i.mbgl-control-timeslider-homebutton');
         this._mindateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-min');
         this._maxdateinput  = this._container.querySelector('input.mbgl-control-timeslider-dateinput-max');
         this._datereadout   = this._container.querySelector('input.mbgl-control-timeslider-dateinput-current');
@@ -81,13 +76,12 @@ export class TimeSliderControl {
         // could do this in HTML above, but kind of nice to have all the text in one area
         this._forwardbutton.title   = `Shift time forward by one year`;
         this._backbutton.title      = `Shift time backward by one year`;
-        this._homebutton.title      = `Reset the time slider to ${this.options.date}`;
         this._mindateinput.title    = `Set the range and resolution of the slider, as far back as ${this.options.datelimit[0]}`;
         this._maxdateinput.title    = `Set the range and resolution of the slider, as far forward as ${this.options.datelimit[1]}`;
         this._datereadout.title     = `Manually enter a year to set the date filtering`;
         this._sliderbar.title       = `Adjust the slider to set the date filtering`;
 
-        // add event handlers: + - buttons, home, text inputs, ...
+        // add event handlers: + - buttons, text inputs, ...
         this._forwardbutton.addEventListener('click', (event) => {
             event.stopPropagation();
             event.preventDefault();
@@ -97,11 +91,6 @@ export class TimeSliderControl {
             event.stopPropagation();
             event.preventDefault();
             this.yearBack();
-        });
-        this._homebutton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            this.setDate(this.options.date);
         });
         this._sliderbar.addEventListener('input', () => {
             this.setDate(this._sliderbar.value);
