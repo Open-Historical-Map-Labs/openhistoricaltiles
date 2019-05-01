@@ -88,11 +88,11 @@ MAP.on('load', function () {
 
 
 
-## Additional Tools: URLHashReader and URLHashWriter
+## Additional Tools: UrlHashReader and UrlHashWriter
 
 People have become accustomed to having the map state reflected in the URL hash as they change it, and for page loading to implicitly include loading the URL hash into the starting map view.
 
-To facilitate this behavior in your application, we provide `URLHashReader` and `URLHashWriter`
+To facilitate this behavior in your application, we provide `UrlHashReader` and `UrlHashWriter`
 
 ### UrlHashReader
 
