@@ -395,6 +395,7 @@ export class UrlHashReader {
         // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
         this.options = Object.assign({
             timeslidercontrol: undefined,
+            leafletZoomLevelHack: false,  // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw `UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance`;
@@ -424,13 +425,17 @@ export class UrlHashReader {
         const thematch = location.hash.match(theregex);
         if (! thematch) return console.debug(`UrlHashReader found no URL params to apply`);
 
-        const zoom = parseFloat(thematch[1]);
+        let zoom = parseFloat(thematch[1]);
         const lat = parseFloat(thematch[2]);
         const lng = parseFloat(thematch[3]);
         const dateval = parseInt(thematch[4]);  // these will need changing if dates ever become something other than an integer year
         const datemin = parseInt(thematch[5]);
         const datemax = parseInt(thematch[6]);
         console.debug(`UrlHashReader found URL params: Z=${zoom} LL=${lat},${lng} DRange=${datemin}-${datemax} DVal=${dateval}`);
+
+        if (this.options.leafletZoomLevelHack) {
+            zoom = zoom + 1;
+        }
 
         // apply map zoom and center; note that MBGL uses [lng,lat] while Leaflet uses [lat,lng]
         // then apply date to the control
@@ -450,7 +455,8 @@ export class UrlHashWriter {
         // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
         this.options = Object.assign({
             timeslidercontrol: undefined,
-            secondsBetweenUpdates: 1,
+            secondsBetweenUpdates: 1,  // undocumented, update URL every X seconds
+            leafletZoomLevelHack: false,  // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw `UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance`;
@@ -501,10 +507,14 @@ export class UrlHashWriter {
         // massage into our target values, e.g. rounding decimals and swapping sequences
         const lat = cc.lat.toFixed(5);
         const lng = cc.lng.toFixed(5);
-        const zoom = z.toFixed(3);
+        let zoom = z.toFixed(3);
         const dateval = dv;
         const datemin = dr[0];
         const datemax = dr[1];
+
+        if (this.options.leafletZoomLevelHack) {
+            zoom = zoom - 1;
+        }
 
         const urlhash = `#${zoom}/${lat}/${lng}/${dateval},${datemin}-${datemax}`;
         location.hash = urlhash;

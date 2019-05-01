@@ -487,7 +487,8 @@ var UrlHashReader = exports.UrlHashReader = function () {
 
         // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
         this.options = Object.assign({
-            timeslidercontrol: undefined
+            timeslidercontrol: undefined,
+            leafletZoomLevelHack: false // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw 'UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance';
@@ -530,6 +531,10 @@ var UrlHashReader = exports.UrlHashReader = function () {
             var datemax = parseInt(thematch[6]);
             console.debug('UrlHashReader found URL params: Z=' + zoom + ' LL=' + lat + ',' + lng + ' DRange=' + datemin + '-' + datemax + ' DVal=' + dateval);
 
+            if (this.options.leafletZoomLevelHack) {
+                zoom = zoom + 1;
+            }
+
             // apply map zoom and center; note that MBGL uses [lng,lat] while Leaflet uses [lat,lng]
             // then apply date to the control
             this._map.setCenter([lng, lat]).setZoom(zoom);
@@ -557,7 +562,8 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
         // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
         this.options = Object.assign({
             timeslidercontrol: undefined,
-            secondsBetweenUpdates: 1
+            secondsBetweenUpdates: 1, // undocumented, update URL every X seconds
+            leafletZoomLevelHack: false // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw 'UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance';
@@ -622,6 +628,10 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
             var dateval = dv;
             var datemin = dr[0];
             var datemax = dr[1];
+
+            if (this.options.leafletZoomLevelHack) {
+                zoom = zoom - 1;
+            }
 
             var urlhash = '#' + zoom + '/' + lat + '/' + lng + '/' + dateval + ',' + datemin + '-' + datemax;
             location.hash = urlhash;
