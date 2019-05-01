@@ -4,8 +4,7 @@ var START_ZOOM = 14.6;
 var START_CENTER = [-73.91894, 40.80623];
 var OHM_SOURCE = "ohm-data";
 var STARTING_DATE = 1920;
-var STARTING_RANGE = [ 1890, 1970 ];
-var MAX_DATES = [ 1870, 2020 ];
+var DATE_RANGE = [ 0, (new Date()).getFullYear() ];
 
 // when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
 var MAP, timeslider;
@@ -42,10 +41,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
         timeslider = new TimeSlider.TimeSliderControl({
             // set the data source to define which layers will be filtered
             sourcename: OHM_SOURCE,
-            // set the initial slider range and date filter, and the maximum range of dates the slider may be adjusted
+            // set the initial slider range and date selection
             date: STARTING_DATE,
-            datespan: STARTING_RANGE,
-            datelimit: MAX_DATES,
+            range: DATE_RANGE,
             // load an alternative CSS stylesheet and icons for the buttons
             //loadIconStyleSheet: "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css",
             //iconClassForward: "glyphicon glyphicon-chevron-right",

@@ -90,6 +90,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 __webpack_require__(0);
 
+__webpack_require__(6);
+
 var TimeSliderControl = exports.TimeSliderControl = function () {
     function TimeSliderControl() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -101,10 +103,10 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
         this.options = Object.assign({
             sourcename: undefined,
-            datespan: [current_year - 100, current_year],
+            range: [current_year - 100, current_year],
             autoExpandRange: true,
-            // date derieved from datespan
-            // datelimit derived from datespan
+            // date derieved from range
+            // datelimit derived from range
             onDateSelect: function onDateSelect() {},
             onRangeChange: function onRangeChange() {},
             loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
@@ -113,21 +115,21 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
         }, options);
 
         if (!this.options.date) {
-            this.options.date = this.options.datespan[0];
+            this.options.date = this.options.range[0];
         }
         if (!this.options.datelimit) {
-            this.options.datelimit = this.options.datespan.slice();
+            this.options.datelimit = this.options.range.slice(); // same as the given range
         }
 
         // preliminary sanity checks
         if (!this.options.sourcename) throw 'TimeSliderControl missing required option: sourcename';
         if (!Number.isInteger(this.options.date)) throw 'TimeSliderControl option date is not an integer';
-        if (!Number.isInteger(this.options.datespan[0])) throw 'TimeSliderControl option datespan is not two integers';
-        if (!Number.isInteger(this.options.datespan[1])) throw 'TimeSliderControl option datespan is not two integers';
+        if (!Number.isInteger(this.options.range[0])) throw 'TimeSliderControl option range is not two integers';
+        if (!Number.isInteger(this.options.range[1])) throw 'TimeSliderControl option range is not two integers';
         if (!Number.isInteger(this.options.datelimit[0])) throw 'TimeSliderControl option datelimit is not two integers';
         if (!Number.isInteger(this.options.datelimit[1])) throw 'TimeSliderControl option datelimit is not two integers';
         if (this.options.datelimit[0] >= this.options.datelimit[1]) throw 'TimeSliderControl option datelimit max year must be greater than min year';
-        if (this.options.datespan[0] >= this.options.datespan[1]) throw 'TimeSliderControl option datespan max year must be greater than min year';
+        if (this.options.range[0] >= this.options.range[1]) throw 'TimeSliderControl option range max year must be greater than min year';
     }
 
     _createClass(TimeSliderControl, [{
@@ -191,7 +193,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // then call our API methods once we're ready, to do UI updates and apply filtering
             this._range_limit = this.options.datelimit;
             this._current_year = this.options.date;
-            this._current_range = this.options.datespan;
+            this._current_range = this.options.range;
 
             this._sliderbar.min = this._range_limit[0];
             this._sliderbar.max = this._range_limit[1];
@@ -205,7 +207,7 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             setTimeout(function () {
                 _this._setupDateFiltersForLayers();
                 _this.setDate(_this.options.date);
-                _this.setRange(_this.options.datespan);
+                _this.setRange(_this.options.range);
             }, 0.25 * 1000);
 
             // done; hand back our UI element as expected by the framework
@@ -418,8 +420,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             layers.forEach(function (layer) {
                 // the OSM ID filter which we will prepend to the layer's own filters
                 // the filter here is that OSM ID is missing, indicating features lacking a OSM ID, meaning "eternal" features such as coastline
-                //
-                // TODO: Sep 2018, deprecated "in" syntax; see about new "match" expression type
                 var osmfilteringclause = ['any', ['!has', 'osm_id']];
 
                 var oldfilters = _this3._map.getFilter(layer.id);
@@ -462,8 +462,10 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
             var layers = this._getFilteredMapLayers();
 
-            var date1 = this._current_date + '-01-01';
-            var date2 = this._current_date + '-12-31';
+            var theyear = this._current_date.toString().padStart(4, '0');
+            var date1 = theyear + '-01-01';
+            var date2 = theyear + '-12-31';
+            // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${date1} - ${date2}]);
 
             var datesubfilter = ['all', ['has', 'osm_id'], ['has', 'start_date'], ['!=', 'start_date', ''], ['<=', 'start_date', date1], ['has', 'end_date'], ['!=', 'end_date', ''], ['>=', 'end_date', date2]];
 
@@ -648,6 +650,35 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
 
     return UrlHashWriter;
 }();
+
+/***/ }),
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength, padString) {
+        targetLength = targetLength >> 0; //truncate if number, or convert non-number to 0;
+        padString = String(typeof padString !== 'undefined' ? padString : ' ');
+        if (this.length >= targetLength) {
+            return String(this);
+        } else {
+            targetLength = targetLength - this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0, targetLength) + String(this);
+        }
+    };
+}
 
 /***/ })
 /******/ ]);

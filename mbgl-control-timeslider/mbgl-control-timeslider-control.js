@@ -1,5 +1,7 @@
 require('./mbgl-control-timeslider-control.scss');
 
+require('./mbgl-control-timeslider-polyfills.js');
+
 
 export class TimeSliderControl {
     constructor (options={}) {
@@ -8,10 +10,10 @@ export class TimeSliderControl {
 
         this.options = Object.assign({
             sourcename: undefined,
-            datespan: [ current_year - 100, current_year],
+            range: [ current_year - 100, current_year],
             autoExpandRange: true,
-            // date derieved from datespan
-            // datelimit derived from datespan
+            // date derieved from range
+            // datelimit derived from range
             onDateSelect: function () {},
             onRangeChange: function () {},
             loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
@@ -20,21 +22,21 @@ export class TimeSliderControl {
         }, options);
 
         if (! this.options.date) {
-            this.options.date = this.options.datespan[0];
+            this.options.date = this.options.range[0];
         }
         if (! this.options.datelimit) {
-            this.options.datelimit = this.options.datespan.slice();
+            this.options.datelimit = this.options.range.slice();  // same as the given range
         }
 
         // preliminary sanity checks
         if (! this.options.sourcename) throw `TimeSliderControl missing required option: sourcename`;
         if (! Number.isInteger(this.options.date)) throw `TimeSliderControl option date is not an integer`;
-        if (! Number.isInteger(this.options.datespan[0])) throw `TimeSliderControl option datespan is not two integers`;
-        if (! Number.isInteger(this.options.datespan[1])) throw `TimeSliderControl option datespan is not two integers`;
+        if (! Number.isInteger(this.options.range[0])) throw `TimeSliderControl option range is not two integers`;
+        if (! Number.isInteger(this.options.range[1])) throw `TimeSliderControl option range is not two integers`;
         if (! Number.isInteger(this.options.datelimit[0])) throw `TimeSliderControl option datelimit is not two integers`;
         if (! Number.isInteger(this.options.datelimit[1])) throw `TimeSliderControl option datelimit is not two integers`;
         if (this.options.datelimit[0] >= this.options.datelimit[1]) throw `TimeSliderControl option datelimit max year must be greater than min year`;
-        if (this.options.datespan[0] >= this.options.datespan[1]) throw `TimeSliderControl option datespan max year must be greater than min year`;
+        if (this.options.range[0] >= this.options.range[1]) throw `TimeSliderControl option range max year must be greater than min year`;
     }
 
     onAdd (map) {
@@ -111,7 +113,7 @@ export class TimeSliderControl {
         // then call our API methods once we're ready, to do UI updates and apply filtering
         this._range_limit = this.options.datelimit;
         this._current_year = this.options.date;
-        this._current_range = this.options.datespan;
+        this._current_range = this.options.range;
 
         this._sliderbar.min = this._range_limit[0];
         this._sliderbar.max = this._range_limit[1];
@@ -125,7 +127,7 @@ export class TimeSliderControl {
         setTimeout(() => {
             this._setupDateFiltersForLayers();
             this.setDate(this.options.date);
-            this.setRange(this.options.datespan);
+            this.setRange(this.options.range);
         }, 0.25 * 1000);
 
         // done; hand back our UI element as expected by the framework
@@ -318,8 +320,6 @@ export class TimeSliderControl {
         layers.forEach((layer) => {
             // the OSM ID filter which we will prepend to the layer's own filters
             // the filter here is that OSM ID is missing, indicating features lacking a OSM ID, meaning "eternal" features such as coastline
-            //
-            // TODO: Sep 2018, deprecated "in" syntax; see about new "match" expression type
             const osmfilteringclause = [ 'any', ['!has', 'osm_id'] ];
 
             const oldfilters = this._map.getFilter(layer.id);
@@ -370,8 +370,10 @@ export class TimeSliderControl {
 
         const layers = this._getFilteredMapLayers();
 
-        const date1 = `${this._current_date}-01-01`;
-        const date2 = `${this._current_date}-12-31`;
+        const theyear = this._current_date.toString().padStart(4, '0');
+        const date1 = `${theyear}-01-01`;
+        const date2 = `${theyear}-12-31`;
+        // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${date1} - ${date2}]);
 
         const datesubfilter = [
             'all',

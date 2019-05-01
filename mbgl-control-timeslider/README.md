@@ -42,7 +42,7 @@ MAP.on('load', function () {
 
 `date` -- The initially-selected date when the TimeSliderControl UI first appears. This should be within the range specified by `datespan`. If omitted, this will be set to the first year of the `datespan`.
 
-`datespan` -- The initial span of dates offered by the TimeSliderControl UI when it first appears. This is provides as an array of two numbers, e.g. `[1800, 2000]` If omitted, the range will be set to the last 100 years from the current date (that is, `[ currentyear-100, currentyear]`).
+`range` -- The initial range of dates offered by the TimeSliderControl UI when it first appears. This is provided as an array of two numbers, e.g. `[1800, 2000]` If omitted, the range will be set to the last 100 years from the current date (that is, `[ currentyear-100, currentyear]`).
 
 `datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `datespan`. If a `datespan` is also supplied, it should fall wholly within this `datelimit`.
 
