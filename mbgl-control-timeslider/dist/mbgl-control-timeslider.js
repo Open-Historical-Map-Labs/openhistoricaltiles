@@ -463,15 +463,15 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             var layers = this._getFilteredMapLayers();
 
             var theyear = this._current_date.toString().padStart(4, '0');
-            var date1 = theyear + '-01-01';
-            var date2 = theyear + '-12-31';
+            var mindate = theyear + '-01-01';
+            var maxdate = theyear + '-12-31';
             // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${date1} - ${date2}`]);
 
             var datesubfilter = ['all',
             // has OSM ID, and also a start and end date defined
             ['has', 'osm_id'], ['has', 'start_date'], ['has', 'end_date'],
             // start/end date either empty (beginning/end of time) or else within range
-            ['any', ['==', 'start_date', ''], ['<=', 'start_date', date1]], ['any', ['==', 'end_date', ''], ['>=', 'end_date', date2]]];
+            ['any', ['==', 'start_date', ''], ['<=', 'start_date', maxdate]], ['any', ['==', 'end_date', ''], ['>=', 'end_date', mindate]]];
 
             layers.forEach(function (layer) {
                 var newfilters = _this4._map.getFilter(layer.id).slice();

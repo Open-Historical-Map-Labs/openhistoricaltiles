@@ -371,8 +371,8 @@ export class TimeSliderControl {
         const layers = this._getFilteredMapLayers();
 
         const theyear = this._current_date.toString().padStart(4, '0');
-        const date1 = `${theyear}-01-01`;
-        const date2 = `${theyear}-12-31`;
+        const mindate = `${theyear}-01-01`;
+        const maxdate = `${theyear}-12-31`;
         // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${date1} - ${date2}`]);
 
         const datesubfilter = [
@@ -382,8 +382,8 @@ export class TimeSliderControl {
             ['has', 'start_date'],
             ['has', 'end_date'],
             // start/end date either empty (beginning/end of time) or else within range
-            [ 'any', ['==', 'start_date', ''], ['<=', 'start_date', date1] ],
-            [ 'any', ['==', 'end_date', ''], ['>=', 'end_date', date2] ],
+            [ 'any', ['==', 'start_date', ''], ['<=', 'start_date', maxdate] ],
+            [ 'any', ['==', 'end_date', ''], ['>=', 'end_date', mindate] ],
         ];
 
         layers.forEach((layer) => {
