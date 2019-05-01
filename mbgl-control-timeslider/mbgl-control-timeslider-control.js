@@ -434,7 +434,7 @@ export class UrlHashReader {
         console.debug(`UrlHashReader found URL params: Z=${zoom} LL=${lat},${lng} DRange=${datemin}-${datemax} DVal=${dateval}`);
 
         if (this.options.leafletZoomLevelHack) {
-            zoom = zoom + 1;
+            zoom = zoom - 1;
         }
 
         // apply map zoom and center; note that MBGL uses [lng,lat] while Leaflet uses [lat,lng]
@@ -513,7 +513,7 @@ export class UrlHashWriter {
         const datemax = dr[1];
 
         if (this.options.leafletZoomLevelHack) {
-            zoom = zoom - 1;
+            zoom = zoom + 1;
         }
 
         const urlhash = `#${zoom}/${lat}/${lng}/${dateval},${datemin}-${datemax}`;
