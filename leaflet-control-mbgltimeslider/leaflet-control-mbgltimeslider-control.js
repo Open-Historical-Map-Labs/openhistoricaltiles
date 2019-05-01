@@ -1,5 +1,9 @@
 require('./leaflet-control-mbgltimeslider-control.scss');
 
+/*
+ *
+ */
+
 L.Control.MBGLTimeSlider = L.Control.extend({
     options: {
         position: 'topright',
@@ -89,5 +93,88 @@ L.Control.MBGLTimeSlider = L.Control.extend({
     },
     isDateWithinLimit: function () {
         return this._timeslider.isDateWithinLimit(...arguments);
+    },
+});
+
+
+/*
+ * THE HASH READER AND WRITER
+ * again, a thin wrapper over the real controls TimeSlider.UrlHashReader and TimeSlider.UrlHashWriter
+ * rathr than duplicating their logic
+ */
+
+L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
+    options: {
+        position: 'topright',  // not really used, there is no visible UI
+        timeslidercontrol: undefined,
+    },
+    initialize: function (options) {
+        L.setOptions(this, options);
+
+        const isslider = this.options.timeslidercontrol instanceof L.Control.MBGLTimeSlider;
+        if (! isslider) throw `L.Control.MBGLTimeSliderUrlHashWriter timeslidercontrol must point to a  L.Control.MBGLTimeSlider instance`;
+    },
+    onAdd: function (map) {
+        this._map = map;
+
+        // wait until the Leaflet slider control's MBGL layer has load-ed
+        // create the real control (told you, this is but a thin wrapper) and add it to our real MBGL map
+        const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
+        theglmap.on('load', () => {
+            const therealslider = this.options.timeslidercontrol._timeslider;
+
+            this._realcontrol = new TimeSlider.UrlHashReader({
+                timeslidercontrol: therealslider,
+            });
+            theglmap.addControl(this._realcontrol);
+        });
+
+        // we have no visible UI, but we are required to create a container DIV
+        this._container = L.DomUtil.create('div', 'leaflet-control-mbgltimeslider-urlhashreader');
+        return this._container;
+    },
+    onRemove: function () {
+        this._map = undefined;
+
+        const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
+        theglmap.removeControl(this._realcontrol);
+    },
+});
+
+L.Control.MBGLTimeSliderUrlHashWriter = L.Control.extend({
+    options: {
+        position: 'topright',  // not really used, there is no visible UI
+        timeslidercontrol: undefined,
+    },
+    initialize: function (options) {
+        L.setOptions(this, options);
+
+        const isslider = this.options.timeslidercontrol instanceof L.Control.MBGLTimeSlider;
+        if (! isslider) throw `L.Control.MBGLTimeSliderUrlHashWriter timeslidercontrol must point to a  L.Control.MBGLTimeSlider instance`;
+    },
+    onAdd: function (map) {
+        this._map = map;
+
+        // wait until the Leaflet slider control's MBGL layer has load-ed
+        // create the real control (told you, this is but a thin wrapper) and add it to our real MBGL map
+        const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
+        theglmap.on('load', () => {
+            const therealslider = this.options.timeslidercontrol._timeslider;
+
+            this._realcontrol = new TimeSlider.UrlHashWriter({
+                timeslidercontrol: therealslider,
+            });
+            theglmap.addControl(this._realcontrol);
+        });
+
+        // we have no visible UI, but we are required to create a container DIV
+        this._container = L.DomUtil.create('div', 'leaflet-control-mbgltimeslider-urlhashwriter');
+        return this._container;
+    },
+    onRemove: function () {
+        this._map = undefined;
+
+        const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
+        theglmap.removeControl(this._realcontrol);
     },
 });

@@ -1,2 +1,6 @@
 .leaflet-control-mbgltimeslider {
 }
+
+.leaflet-control-mbgltimeslider-urlhashreader, .leaflet-control-mbgltimeslider-urlhashwriter {
+    display: none !important;
+}

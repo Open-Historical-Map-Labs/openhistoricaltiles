@@ -42,5 +42,21 @@ document.addEventListener('DOMContentLoaded', function(event) {
     })
     .addTo(MAP);
 
+    //
+    // now the TimeSlider's URL hash controls
+    // read URL hash params and apply to the starting map view
+    // then track and update the URL hash automagically
+    //
+
+    const urlreader = new L.Control.MBGLTimeSliderUrlHashReader({
+        timeslidercontrol: timeslider,
+    });
+    MAP.addControl(urlreader);
+
+    const urlwriter = new L.Control.MBGLTimeSliderUrlHashWriter({
+        timeslidercontrol: timeslider,
+    });
+    MAP.addControl(urlwriter);
+
     // that's it!
 });

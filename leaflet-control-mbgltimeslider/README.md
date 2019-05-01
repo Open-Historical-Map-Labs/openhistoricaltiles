@@ -72,6 +72,49 @@ dateslider = new L.Control.MBGLTimeSlider({
 All `L.Control.TimeSliderControl` methods are simply those of the Mapbox GL `TimeSlider.TimeSliderControl` and all arguments are passed to the underlying control as-is. See the [documentation for the TimeSliderControl](https://github.com/OpenHistoricalMap/openhistoricaltiles/tree/gh-pages/mbgl-control-timeslider) for details.
 
 
+## Additional Tools: URLHashReader and URLHashWriter
+
+People have become accustomed to having the map state reflected in the URL hash as they change it, and for page loading to implicitly include loading the URL hash into the starting map view.
+
+To facilitate this behavior in your application, we provide `L.Control.MBGLTimeSliderUrlHashReader` and `L.Control.MBGLTimeSliderUrlHashWriter`
+
+### MBGLTimeSliderUrlHashReader
+
+The `L.Control.MBGLTimeSliderUrlHashReader` control, when added to your map, will do one thing: read and apply the URL hash params.
+
+The expected URL hash would be structured like this example: `#16.6/40.8217108/-73.9119449/1980,1970-2000`
+* The zoom level, which may be integer or fractional.
+* The latitude of the starting map view's center.
+* The longitude of the starting map view's center.
+* The MBGLTimeSlider settings: the selected date, then the range.
+
+The MBGLTimeSliderUrlHashReader has only one constructor option: `timeslidercontrol` which points to the MBGLTimeSlider that it should set.
+
+```
+const urlreader = new L.Control.MBGLTimeSliderUrlHashReader({
+    timeslidercontrol: timeslider,
+});
+MAP.addControl(urlreader);
+```
+
+After it has set the map view and MBGLTimeSlider date and range, the `TimeSlider.URLHashReader` control has no other effect, and has no visible user interface.
+
+### MBGLTimeSliderUrlHashWriter
+
+The `L.Control.MBGLTimeSliderUrlHashWriter` control continuously tracks changes to the map view and/or to the MBGLTimeSlider settings, and updates the URL hash in the address bar. When used in conjunction with `MBGLTimeSliderUrlHashReader`, the effect is that one may reload the page and automagically have their previous view applied on page load.
+
+The MBGLTimeSliderUrlHashWriter has only one constructor option: `timeslidercontrol` which points to the MBGLTimeSlider that it should be tracking.
+
+```
+const urlwriter = new TimeSlider.L.Control.MBGLTimeSliderUrlHashWriter({
+    timeslidercontrol: timeslider,
+});
+MAP.addControl(urlwriter);
+```
+
+The MBGLTimeSliderUrlHashWriter has no visible UI control. It will stop updating the URL if it is removed from the map via `MAP.removeControl()`
+
+
 ## For Developers
 
 Again, note that this is just a wrapper for the Mapbox GL `TimeSlider.TimeSliderControl` so if you're trying to alter functionality or styling of the time slider, you should probably be making edits to that code instead.
