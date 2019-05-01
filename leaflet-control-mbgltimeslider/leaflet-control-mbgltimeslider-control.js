@@ -117,6 +117,20 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
     onAdd: function (map) {
         this._map = map;
 
+        // if the URL params contain /zoom/lat/lng then we DO need to apply those here to our parent map
+        // if not, then the params are still parsed by the real UrlHashReader and that one layer is panned and zoomed,
+        // which gets real silly the first time we pan/zoom the real map!
+
+
+        const theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)/;
+        const thematch = location.hash.match(theregex);
+        if (thematch) {
+            const zoom = parseFloat(thematch[1]);
+            const lat = parseFloat(thematch[2]);
+            const lng = parseFloat(thematch[3]);
+            this._map.setView([lat, lng], zoom);
+        }
+
         // wait until the Leaflet slider control's MBGL layer has load-ed
         // create the real control (told you, this is but a thin wrapper) and add it to our real MBGL map
         const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
@@ -125,6 +139,7 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
 
             this._realcontrol = new TimeSlider.UrlHashReader({
                 timeslidercontrol: therealslider,
+                leafletZoomLevelHack: true,
             });
             theglmap.addControl(this._realcontrol);
         });
@@ -163,6 +178,7 @@ L.Control.MBGLTimeSliderUrlHashWriter = L.Control.extend({
 
             this._realcontrol = new TimeSlider.UrlHashWriter({
                 timeslidercontrol: therealslider,
+                leafletZoomLevelHack: true,
             });
             theglmap.addControl(this._realcontrol);
         });

@@ -622,9 +622,9 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
             var dv = this.options.timeslidercontrol.getDate();
 
             // massage into our target values, e.g. rounding decimals and swapping sequences
-            var lat = cc.lat.toFixed(5);
-            var lng = cc.lng.toFixed(5);
-            var zoom = z.toFixed(3);
+            var zoom = z;
+            var lat = cc.lat;
+            var lng = cc.lng;
             var dateval = dv;
             var datemin = dr[0];
             var datemax = dr[1];
@@ -633,7 +633,7 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
                 zoom = zoom + 1;
             }
 
-            var urlhash = '#' + zoom + '/' + lat + '/' + lng + '/' + dateval + ',' + datemin + '-' + datemax;
+            var urlhash = '#' + zoom.toFixed(3) + '/' + lat.toFixed(5) + '/' + lng.toFixed(5) + '/' + dateval + ',' + datemin + '-' + datemax;
             location.hash = urlhash;
         }
 

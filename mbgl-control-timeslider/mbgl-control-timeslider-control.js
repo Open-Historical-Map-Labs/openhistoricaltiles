@@ -505,9 +505,9 @@ export class UrlHashWriter {
         const dv = this.options.timeslidercontrol.getDate();
 
         // massage into our target values, e.g. rounding decimals and swapping sequences
-        const lat = cc.lat.toFixed(5);
-        const lng = cc.lng.toFixed(5);
-        let zoom = z.toFixed(3);
+        let zoom = z;
+        const lat = cc.lat;
+        const lng = cc.lng;
         const dateval = dv;
         const datemin = dr[0];
         const datemax = dr[1];
@@ -516,7 +516,7 @@ export class UrlHashWriter {
             zoom = zoom + 1;
         }
 
-        const urlhash = `#${zoom}/${lat}/${lng}/${dateval},${datemin}-${datemax}`;
+        const urlhash = `#${zoom.toFixed(3)}/${lat.toFixed(5)}/${lng.toFixed(5)}/${dateval},${datemin}-${datemax}`;
         location.hash = urlhash;
     }
 

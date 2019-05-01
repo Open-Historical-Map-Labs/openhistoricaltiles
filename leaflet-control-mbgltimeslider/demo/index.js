@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     //
 
     MAP = L.map('map', {
+        zoomSnap: 0.1,  // enable fractional zooming since our demo is only vector tile layers
     })
     .setView(START_CENTER, START_ZOOM);
 
