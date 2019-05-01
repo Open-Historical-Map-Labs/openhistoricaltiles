@@ -4,8 +4,7 @@ var START_ZOOM = 14.6;
 var START_CENTER = [ 40.80623, -73.91894 ];
 var OHM_SOURCE = "ohm-data";
 var STARTING_DATE = 1920;
-var STARTING_RANGE = [ 1890, 1970 ];
-var MAX_DATES = [ 1870, 2020 ];
+var DATE_RANGE = [ 0, (new Date()).getFullYear() ];
 
 // when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
 var MAP, ohmlayer, timeslider;
@@ -37,8 +36,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         timeSliderOptions: {  // these are passed directly to the Mapbox GL TimeSlider.TimeSliderControl as-given
             sourcename: OHM_SOURCE,
             date: STARTING_DATE,
-            datespan: STARTING_RANGE,
-            datelimit: MAX_DATES
+            range: DATE_RANGE,
         },
     })
     .addTo(MAP);
