@@ -64,17 +64,42 @@ var TimeSlider =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength, padString) {
+        targetLength = targetLength >> 0; //truncate if number, or convert non-number to 0;
+        padString = String(typeof padString !== 'undefined' ? padString : ' ');
+        if (this.length >= targetLength) {
+            return String(this);
+        } else {
+            targetLength = targetLength - this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0, targetLength) + String(this);
+        }
+    };
+}
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -88,9 +113,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(0);
+__webpack_require__(1);
 
-__webpack_require__(6);
+__webpack_require__(0);
 
 var TimeSliderControl = exports.TimeSliderControl = function () {
     function TimeSliderControl() {
@@ -463,15 +488,15 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             var layers = this._getFilteredMapLayers();
 
             var theyear = this._current_date.toString().padStart(4, '0');
-            var mindate = theyear + '-01-01';
-            var maxdate = theyear + '-12-31';
-            // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${date1} - ${date2}`]);
+            var mindate = parseFloat(theyear + '.000001');
+            var maxdate = parseFloat(theyear + '.999999');
+            // console.debug([ `TimeSliderControl _applyDateFilterToLayers date range is: ${mindate} - ${maxdate}`]);
 
             var datesubfilter = ['all',
-            // has OSM ID, and also a start and end date defined
-            ['has', 'osm_id'], ['has', 'start_date'], ['has', 'end_date'],
+            // has OSM ID, and also a start and end date defined (even if blank)
+            ['has', 'osm_id'], ['has', 'start_decdate'], ['has', 'end_decdate'],
             // start/end date either empty (beginning/end of time) or else within range
-            ['any', ['==', 'start_date', ''], ['<=', 'start_date', maxdate]], ['any', ['==', 'end_date', ''], ['>=', 'end_date', mindate]]];
+            ['any', ['==', 'start_decdate', ''], ['<=', 'start_decdate', maxdate]], ['any', ['==', 'end_decdate', ''], ['>=', 'end_decdate', mindate]]];
 
             layers.forEach(function (layer) {
                 var newfilters = _this4._map.getFilter(layer.id).slice();
@@ -654,35 +679,6 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
 
     return UrlHashWriter;
 }();
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
-if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength, padString) {
-        targetLength = targetLength >> 0; //truncate if number, or convert non-number to 0;
-        padString = String(typeof padString !== 'undefined' ? padString : ' ');
-        if (this.length >= targetLength) {
-            return String(this);
-        } else {
-            targetLength = targetLength - this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0, targetLength) + String(this);
-        }
-    };
-}
 
 /***/ })
 /******/ ]);

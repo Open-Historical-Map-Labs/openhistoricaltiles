@@ -4,7 +4,7 @@ var START_ZOOM = 14.6;
 var START_CENTER = [-73.91894, 40.80623];
 var OHM_SOURCE = "ohm-data";
 var STARTING_DATE = 1920;
-var DATE_RANGE = [ 0, (new Date()).getFullYear() ];
+var DATE_RANGE = [ -4000, (new Date()).getFullYear() - 1 ];
 
 // when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
 var MAP, timeslider;
