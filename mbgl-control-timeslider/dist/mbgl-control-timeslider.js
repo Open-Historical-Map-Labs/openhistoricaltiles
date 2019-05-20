@@ -494,9 +494,9 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
             var datesubfilter = ['all',
             // has OSM ID, and also a start and end date defined (even if blank)
-            ['has', 'osm_id'], ['has', 'start_decdate'], ['has', 'end_decdate'],
-            // start/end date either empty (beginning/end of time) or else within range
-            ['any', ['==', 'start_decdate', ''], ['<=', 'start_decdate', maxdate]], ['any', ['==', 'end_decdate', ''], ['>=', 'end_decdate', mindate]]];
+            ['has', 'osm_id'], ['has', 'start_date'], ['has', 'end_date'],
+            // numerical start/end date either absent (beginning/end of time) or else within range
+            ['any', ['!has', 'start_decdate'], ['<=', 'start_decdate', maxdate]], ['any', ['!has', 'end_decdate'], ['>=', 'end_decdate', mindate]]];
 
             layers.forEach(function (layer) {
                 var newfilters = _this4._map.getFilter(layer.id).slice();
