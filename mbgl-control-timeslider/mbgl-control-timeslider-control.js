@@ -427,7 +427,7 @@ export class UrlHashReader {
         // parse the URL hash
         // example: #18/40.8217108/-73.9119449/1980,1970-2000
         // zoom, lat, lng, date and range
-        const theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\d+),(\d+)\-(\d+)/;
+        const theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\-?\d+),(\-?\d+)\-(\-?\d+)/;
         const thematch = location.hash.match(theregex);
         if (! thematch) return console.debug(`UrlHashReader found no URL params to apply`);
 

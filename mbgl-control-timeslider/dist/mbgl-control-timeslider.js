@@ -550,7 +550,7 @@ var UrlHashReader = exports.UrlHashReader = function () {
             // parse the URL hash
             // example: #18/40.8217108/-73.9119449/1980,1970-2000
             // zoom, lat, lng, date and range
-            var theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\d+),(\d+)\-(\d+)/;
+            var theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\-?\d+),(\-?\d+)\-(\-?\d+)/;
             var thematch = location.hash.match(theregex);
             if (!thematch) return console.debug('UrlHashReader found no URL params to apply');
 
