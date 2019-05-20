@@ -13,7 +13,10 @@ Layer:
     max_size: 512
     srid: 900913
     table: (
-      SELECT osm_id, geometry, start_date, end_date, class, name
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      class, name
       FROM layer_water(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water
@@ -33,7 +36,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class, brunnel
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, class,
+      brunnel
       FROM layer_waterway(!bbox!, z(!scale_denominator!))
       ) AS t
   id: waterway
@@ -53,7 +60,10 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, class, subclass
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      class, subclass
       FROM layer_landcover(!bbox!, z(!scale_denominator!))
       ) AS t
   id: landcover
@@ -73,7 +83,10 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, class
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      class
       FROM layer_landuse(!bbox!, z(!scale_denominator!))
       ) AS t
   id: landuse
@@ -93,7 +106,10 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, ele, ele_ft, rank
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, ele, ele_ft, rank
       FROM layer_mountain_peak(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: mountain_peak
@@ -113,7 +129,10 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, class
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      class
       FROM layer_park(!bbox!, z(!scale_denominator!))
       ) AS t
   id: park
@@ -133,7 +152,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, name, start_date, end_date, admin_level, disputed, maritime
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name, admin_level,
+      disputed, maritime
       FROM layer_boundary(!bbox!, z(!scale_denominator!))
       ) AS t
   id: boundary
@@ -153,7 +176,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, ref, class
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      class,
+      ref
       FROM layer_aeroway(!bbox!, z(!scale_denominator!))
       ) AS t
   id: aeroway
@@ -173,7 +200,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name, name_en, name_de, class, subclass, oneway, ramp, brunnel, service, layer, level, indoor
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name, class, subclass,
+      oneway, ramp, brunnel, service, layer, level, indoor
       FROM layer_transportation(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation
@@ -193,7 +224,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, height, min_height, name, building
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name, building,
+      height, min_height
       FROM layer_building(!bbox!, z(!scale_denominator!))
       ) AS t
   id: building
@@ -213,7 +248,10 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, class
       FROM layer_water_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: water_name
@@ -233,7 +271,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, ref, ref_length, network::text, class::text, subclass, layer, level, indoor
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, class::text, subclass,
+      ref, ref_length, network::text, layer, level, indoor
       FROM layer_transportation_name(!bbox!, z(!scale_denominator!))
       ) AS t
   id: transportation_name
@@ -253,7 +295,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name, name_en, name_de, class, rank, capital, iso_a2
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name, class,
+      rank, capital, iso_a2
       FROM layer_place(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: place
@@ -273,7 +319,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class, subclass, agg_stop, rank
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, class, subclass,
+      agg_stop, rank
       FROM layer_poi(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: poi
@@ -293,7 +343,11 @@ Layer:
     key_field_as_attribute: ''
     max_size: 512
     table: (
-      SELECT osm_id, geometry, start_date, end_date, name_en AS name, class, iata, icao, ele, ele_ft
+      SELECT
+      osm_id, geometry,
+      start_date, end_date, isodatetodecimaldate(pad_date(start_date, 'start')) AS start_decdate, isodatetodecimaldate(pad_date(end_date, 'end')) AS end_decdate,
+      name_en AS name, class,
+      iata, icao, ele, ele_ft
       FROM layer_aerodrome_label(!bbox!, z(!scale_denominator!), !pixel_width!)
       ) AS t
   id: aerodrome_label
