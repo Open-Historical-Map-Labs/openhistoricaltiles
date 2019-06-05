@@ -11,6 +11,18 @@ var MAP, timeslider;
 
 document.addEventListener('DOMContentLoaded', function(event) {
     //
+    // read the hash from the URL and see if we should override the zoom and center, dates and range
+    // UrlHashReader does this too, but AFTER the map has loaded... causing a "flash" of the starting view
+    //
+
+    var theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\//;
+    var thematch = location.hash.match(theregex);
+    if (thematch) {
+        START_ZOOM = parseFloat(thematch[1]);
+        START_CENTER = [ parseFloat(thematch[3]), parseFloat(thematch[2]) ];
+    }
+
+    //
     // the basic map and controls
     // the map style is in mapstyle.js
     //
@@ -68,10 +80,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
         const urlreader = new TimeSlider.UrlHashReader({
             timeslidercontrol: timeslider,
         });
+        MAP.addControl(urlreader);
+
         const urlwriter = new TimeSlider.UrlHashWriter({
             timeslidercontrol: timeslider,
         });
-        MAP.addControl(urlreader);
         MAP.addControl(urlwriter);
     });
 
