@@ -11,8 +11,13 @@ var MAP, timeslider;
 
 document.addEventListener('DOMContentLoaded', function(event) {
     //
-    // read the hash from the URL and see if we should override the zoom and center, dates and range
-    // UrlHashReader does this too, but AFTER the map has loaded... causing a "flash" of the starting view
+    // some hacks which improve the visual smoothness of the page loading
+    // 1. read the hash from the URL and see if we should override the zoom and center
+    // UrlHashReader does this too, but AFTER the map has loaded; setting these beforehand starts the map at the right place
+    // preventing that "flash" of the default view
+    // 2. go through the map style and set any TimeSlider-controlled layers to non-visible
+    // then when TimeSlider comes ready and date filtering is in place, make them visible
+    // that greatly reduces the flash of un-date-filtered content before the TimeSlider is effective
     //
 
     var theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\//;
@@ -21,6 +26,18 @@ document.addEventListener('DOMContentLoaded', function(event) {
         START_ZOOM = parseFloat(thematch[1]);
         START_CENTER = [ parseFloat(thematch[3]), parseFloat(thematch[2]) ];
     }
+
+    var hide_these_layers_until_startup = [];
+    GLMAP_STYLE
+    .layers
+    .forEach(function (layer) {
+        if (layer.source != OHM_SOURCE) return;  // not a TimeSlider-controlled layer
+        if (layer.layout && layer.layout.visibility == 'none') return;  // not visible right yet, date filtering should be set up before anyone toggles this
+
+        if (! layer.layout) layer.layout = { visibility: 'visible' };
+        layer.layout.visibility = 'none';
+        hide_these_layers_until_startup.push(layer.id);
+    });
 
     //
     // the basic map and controls
@@ -61,6 +78,16 @@ document.addEventListener('DOMContentLoaded', function(event) {
             //iconClassForward: "glyphicon glyphicon-chevron-right",
             //iconClassBack: "glyphicon glyphicon-chevron-left",
             //iconClassHome: "glyphicon glyphicon-repeat",
+            //
+            // this calling page can do something when the TimeSlider becomes ready and filtering is in place
+            onReady: function () {
+                console.log([ 'TimeSliderControl ready', this.getDate(), this.getRange()[0], this.getRange()[1] ]);
+
+                console.log('re-enable previously hidden layers with filters already in place');
+                hide_these_layers_until_startup.forEach(function (layerid) {
+                    MAP.setLayoutProperty(layerid, 'visibility', 'visible');
+                });
+            },
             // this calling page can also take actions when the date or range are changed
             onDateSelect: function (newdate) {
                 console.log([ 'date changed', newdate ]);

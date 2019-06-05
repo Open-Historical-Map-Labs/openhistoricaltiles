@@ -16,6 +16,7 @@ export class TimeSliderControl {
             // datelimit derived from range
             onDateSelect: function () {},
             onRangeChange: function () {},
+            onReady: function () {},
             loadIconStyleSheet: "https://use.fontawesome.com/releases/v5.8.1/css/all.css",
             iconClassForward: 'fa fa-plus',
             iconClassBack: 'fa fa-minus',
@@ -128,6 +129,7 @@ export class TimeSliderControl {
             this._setupDateFiltersForLayers();
             this.setDate(this.options.date);
             this.setRange(this.options.range);
+            this.options.onReady.call(this);
         }, 0.25 * 1000);
 
         // done; hand back our UI element as expected by the framework

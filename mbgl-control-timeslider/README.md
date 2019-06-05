@@ -52,6 +52,8 @@ MAP.on('load', function () {
 
 `onRangeChange` -- A callback function which will be called when the date range changes. The newly-available range will be passed as a param. Within the callback function, `this` will refer to the TimeSliderControl.
 
+`onReady` -- A callback function which will be called when the TimeSliderControl is done initializing, layers have been set up with their new date filters, and the date ranges and selection have been set. Within the callback function, `this` will refer to the TimeSliderControl.
+
 `loadIconStyleSheet` -- The URL of a stylesheet which provides CSS classes for making icons. If not set, then by default a recent FontAwesome Free release is used. Use this in conjunction with `iconClassForward`, `iconClassBack`, `iconClassHome`, etc. If you set this to an empty value or null, then no stylesheet will be loaded and you will need to provide relevant CSS or icon classes elsewhere.
 
 `iconClassForward` -- For the UI buttons, the CSS class to apply to the Forward button which advances to the next date. By default this is `fa fa-plus` to make a plus sign using FontAwesome.
