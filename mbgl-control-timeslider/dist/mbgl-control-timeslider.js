@@ -573,6 +573,11 @@ var UrlHashReader = exports.UrlHashReader = function () {
             return this._container;
         }
     }, {
+        key: 'onRemove',
+        value: function onRemove() {
+            this._map = null;
+        }
+    }, {
         key: '_readAndApplyUrlHashParams',
         value: function _readAndApplyUrlHashParams() {
             // parse the URL hash

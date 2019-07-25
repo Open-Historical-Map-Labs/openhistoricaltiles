@@ -447,6 +447,10 @@ export class UrlHashReader {
         return this._container;
     }
 
+    onRemove () {
+        this._map = null;
+    }
+
     _readAndApplyUrlHashParams () {
         // parse the URL hash
         // example: #18/40.8217108/-73.9119449/1980,1970-2000
