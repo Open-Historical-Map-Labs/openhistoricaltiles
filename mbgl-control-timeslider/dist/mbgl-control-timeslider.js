@@ -241,6 +241,17 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             return this._container;
         }
     }, {
+        key: 'onRemove',
+        value: function onRemove() {
+            // reset layers we control, to whatever flters they previously had
+            this._removeDateFiltersForLayers();
+            //GDA
+
+            // remove our UI from the map
+            this._container.parentNode.removeChild(this._container);
+            this._map = undefined;
+        }
+    }, {
         key: 'getDefaultPosition',
         value: function getDefaultPosition() {
             return 'top-right';
@@ -451,6 +462,8 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
 
                 var oldfilters = _this3._map.getFilter(layer.id);
 
+                layers.oldfiltersbackup = oldfilters; // keep a backup of the original filters for _removeDateFiltersForLayers()
+
                 var newfilters = void 0;
                 if (oldfilters === undefined) {
                     // no filter at all, so create one
@@ -480,9 +493,24 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             });
         }
     }, {
+        key: '_removeDateFiltersForLayers',
+        value: function _removeDateFiltersForLayers() {
+            var _this4 = this;
+
+            // in _setupDateFiltersForLayers() we rewrote the layers' filters to support date filtering, but we also kept a backup
+            // restore that backup now, so the layers are back where they started
+            // use case is onRemove() when the timeslider is being removed from the map
+            //GDA
+            var layers = this._getFilteredMapLayers();
+
+            layers.forEach(function (layer) {
+                _this4._map.setFilter(layer.id, layers.oldfiltersbackup);
+            });
+        }
+    }, {
         key: '_applyDateFilterToLayers',
         value: function _applyDateFilterToLayers() {
-            var _this4 = this;
+            var _this5 = this;
 
             // back in _setupDateFiltersForLayers() we prepended a filtering clause as filters[1] which filters for "eternal" features lacking a OSM ID
             // here in _applyDateFilterToLayers() we add a second part to that, for features with a start_date and end_date fitting our date
@@ -501,9 +529,9 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             ['any', ['!has', 'start_decdate'], ['<=', 'start_decdate', maxdate]], ['any', ['!has', 'end_decdate'], ['>=', 'end_decdate', mindate]]];
 
             layers.forEach(function (layer) {
-                var newfilters = _this4._map.getFilter(layer.id).slice();
+                var newfilters = _this5._map.getFilter(layer.id).slice();
                 newfilters[1][2] = datesubfilter.slice();
-                _this4._map.setFilter(layer.id, newfilters);
+                _this5._map.setFilter(layer.id, newfilters);
                 // console.debug([ `TimeSliderControl _applyDateFilterToLayers() ${layer.id} filters is now:`, newfilters ]);
             });
         }
@@ -530,7 +558,7 @@ var UrlHashReader = exports.UrlHashReader = function () {
     _createClass(UrlHashReader, [{
         key: 'onAdd',
         value: function onAdd(map) {
-            var _this5 = this;
+            var _this6 = this;
 
             // keep a reference to our map, and create our basic control DIV
             // we have no visible UI (the DIV has a display:none style) but are required to supply a DIV
@@ -540,7 +568,7 @@ var UrlHashReader = exports.UrlHashReader = function () {
 
             // do our one job, but do it in a new context so the caller doesn't block
             setTimeout(function () {
-                _this5._readAndApplyUrlHashParams();
+                _this6._readAndApplyUrlHashParams();
             }, 1 * 1000);
 
             // done
@@ -605,7 +633,7 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
     _createClass(UrlHashWriter, [{
         key: 'onAdd',
         value: function onAdd(map) {
-            var _this6 = this;
+            var _this7 = this;
 
             // keep a reference to our map, and create our basic control DIV
             // we have no visible UI (the DIV has a display:none style) but are required to supply a DIV
@@ -615,7 +643,7 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
 
             // do our one job, but do it in a new context so the caller doesn't block
             setTimeout(function () {
-                _this6._startTrackingHashParams();
+                _this7._startTrackingHashParams();
             }, 2 * 1000);
 
             // done
@@ -630,12 +658,12 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
     }, {
         key: '_startTrackingHashParams',
         value: function _startTrackingHashParams() {
-            var _this7 = this;
+            var _this8 = this;
 
             if (this._timer) return; // we are already tracking; done
 
             this._timer = setInterval(function () {
-                _this7._updateHashParams();
+                _this8._updateHashParams();
             }, this.options.secondsBetweenUpdates * 1000);
         }
     }, {

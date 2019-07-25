@@ -136,6 +136,15 @@ export class TimeSliderControl {
         return this._container;
     }
 
+    onRemove () {
+        // reset layers we control, to whatever flters they previously had
+        this._removeDateFiltersForLayers();
+
+        // remove our UI from the map
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+    }
+
     getDefaultPosition () {
         return 'top-right';
     }
@@ -326,6 +335,8 @@ export class TimeSliderControl {
 
             const oldfilters = this._map.getFilter(layer.id);
 
+layers.oldfiltersbackup = oldfilters;  // keep a backup of the original filters for _removeDateFiltersForLayers()
+
             let newfilters;
             if (oldfilters === undefined) {  // no filter at all, so create one
                 newfilters = [
@@ -363,6 +374,17 @@ export class TimeSliderControl {
 
             // apply the new filter, with the placeholder "eternal features" filter now prepended
             this._map.setFilter(layer.id, newfilters);
+        });
+    }
+
+    _removeDateFiltersForLayers () {
+        // in _setupDateFiltersForLayers() we rewrote the layers' filters to support date filtering, but we also kept a backup
+        // restore that backup now, so the layers are back where they started
+        // use case is onRemove() when the timeslider is being removed from the map
+        const layers = this._getFilteredMapLayers();
+
+        layers.forEach((layer) => {
+            this._map.setFilter(layer.id, layers.oldfiltersbackup);
         });
     }
 
