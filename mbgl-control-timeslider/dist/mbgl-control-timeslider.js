@@ -245,7 +245,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
         value: function onRemove() {
             // reset layers we control, to whatever flters they previously had
             this._removeDateFiltersForLayers();
-            //GDA
 
             // remove our UI from the map
             this._container.parentNode.removeChild(this._container);
@@ -500,7 +499,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
             // in _setupDateFiltersForLayers() we rewrote the layers' filters to support date filtering, but we also kept a backup
             // restore that backup now, so the layers are back where they started
             // use case is onRemove() when the timeslider is being removed from the map
-            //GDA
             var layers = this._getFilteredMapLayers();
 
             layers.forEach(function (layer) {
