@@ -12,8 +12,8 @@ export class TimeSliderControl {
             sourcename: undefined,
             range: [ current_year - 100, current_year],
             autoExpandRange: true,
-            // date derieved from range
-            // datelimit derived from range
+            date: undefined, // derived from range
+            datelimit: undefined, // derived from range
             onDateSelect: function () {},
             onRangeChange: function () {},
             onReady: function () {},
