@@ -43,7 +43,7 @@ dateslider = new L.Control.MBGLTimeSlider({
     timeSliderOptions: {  // these are passed directly to the Mapbox GL TimeSlider.TimeSliderControl as-given
         sourcename: "ohm-data",     // required
         date: 1850,
-        datespan: [1800, 2000],
+        range: [1800, 2000],
         datelimit: [1600, 2100],
         onDateSelect: function (newdate) {
             console.log([ 'date changed', newdate ]);
