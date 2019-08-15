@@ -40,11 +40,11 @@ MAP.on('load', function () {
 
 `sourcename` -- **Required.** The name of the data source, as defined in your map style's `sources`, which should have its layers filtered by this TimeSliderControl. All layers from this source will be presumed to be OpenHistoricalMap (or to be compatible, by virtue of all features having `start_date` and `end_date` properties) and will be filtered.)
 
-`date` -- The initially-selected date when the TimeSliderControl UI first appears. This should be within the range specified by `datespan`. If omitted, this will be set to the first year of the `datespan`.
+`date` -- The initially-selected date when the TimeSliderControl UI first appears. This should be within the range specified by `range`. If omitted, this will be set to the first year of the `range`.
 
 `range` -- The initial range of dates offered by the TimeSliderControl UI when it first appears. This is provided as an array of two numbers, e.g. `[1800, 2000]` If omitted, the range will be set to the last 100 years from the current date (that is, `[ currentyear-100, currentyear]`).
 
-`datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `datespan`. If a `datespan` is also supplied, it should fall wholly within this `datelimit`.
+`datelimit` -- A hard limit on the minimum and maximum dates to which the UI may be adjusted. If omitted, this defaults to the same as `range`. If a `range` is also supplied, it should fall wholly within this `datelimit`.
 
 `autoExpandRange` -- By default `autoExpandRange` is true, so that the + and - buttons will automagically expand the current date range to accommodate the new year. Set this to false, to lock the + and - buttons to the currently-selected range, so the user would need to explicitly change the range in order to +/- past it.
 
