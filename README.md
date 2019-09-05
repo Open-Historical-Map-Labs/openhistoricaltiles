@@ -12,18 +12,18 @@ The root of that service website https://vtiles.openhistoricalmap.org/ will brin
 To start and stop the services:
 
 ```
-/home/ubuntu/OPENMAPTILES/openhistoricaltiles/postgresql_service.sh start
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh stop
 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh start
 ```
 
 ```
-/home/ubuntu/OPENMAPTILES/openhistoricaltiles/tessera_service.sh start
 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/postgresql_service.sh stop
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/postgresql_service.sh start
 ```
 
 ```
-/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh start
 /home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh stop
+/home/ubuntu/OPENMAPTILES/openhistoricaltiles/ohmdiffs_service.sh start
 ```
 
 The Tessera service runs on port `8080` on all interfaces, Internet and localhost. The firewall blocks the general public from accessing port `:8080` and there is an Apache proxy redirecting all website requests to `localhost:8080` so Tessera answers them. This Apache proxy provides HTTPS/SSL service.
