@@ -6,6 +6,9 @@ var OHM_SOURCE = "ohm-data";
 var STARTING_DATE = 1920;
 var DATE_RANGE = [ -4000, (new Date()).getFullYear() - 1 ];
 
+// URL of a map style suited to OpenistoricalMap's data layers
+var MAP_STYLE_URL = 'https://openhistoricalmap.github.io/openhistoricaltiles/ohm_timeslider_style/ohm.style.json';
+
 // when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
 var MAP, ohmlayer, timeslider;
 
@@ -23,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     L.control.scale().addTo(MAP);
 
     ohmlayer = L.mapboxGL({
-        style: GLMAP_STYLE,
+        style: MAP_STYLE_URL,
         accessToken: 'not necessary',
     })
     .addTo(MAP);
