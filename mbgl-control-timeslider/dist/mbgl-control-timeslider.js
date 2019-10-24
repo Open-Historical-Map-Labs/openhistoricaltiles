@@ -460,7 +460,6 @@ var TimeSliderControl = exports.TimeSliderControl = function () {
                 var osmfilteringclause = ['any', ['!has', 'osm_id']];
 
                 var oldfilters = _this3._map.getFilter(layer.id);
-
                 layers.oldfiltersbackup = oldfilters; // keep a backup of the original filters for _removeDateFiltersForLayers()
 
                 var newfilters = void 0;
@@ -547,7 +546,8 @@ var UrlHashReader = exports.UrlHashReader = function () {
         // only one option: the TimeSlider.TimeSliderControl() instance we should set and/or watch
         this.options = Object.assign({
             timeslidercontrol: undefined,
-            leafletZoomLevelHack: false // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
+            leafletZoomLevelHack: false, // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
+            watchHashChange: true // add event listener to watch for hashchange events?
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw 'UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance';
@@ -567,6 +567,12 @@ var UrlHashReader = exports.UrlHashReader = function () {
             // do our one job, but do it in a new context so the caller doesn't block
             setTimeout(function () {
                 _this6._readAndApplyUrlHashParams();
+
+                if (_this6.options.watchHashChange) {
+                    window.addEventListener('hashchange', function () {
+                        _this6.handleHashChange();
+                    });
+                }
             }, 1 * 1000);
 
             // done
@@ -575,6 +581,14 @@ var UrlHashReader = exports.UrlHashReader = function () {
     }, {
         key: 'onRemove',
         value: function onRemove() {
+            var _this7 = this;
+
+            if (this.options.watchHashChange) {
+                window.removeEventListener('hashchange', function () {
+                    _this7.handleHashChange();
+                });
+            }
+
             this._map = null;
         }
     }, {
@@ -612,6 +626,13 @@ var UrlHashReader = exports.UrlHashReader = function () {
         value: function getDefaultPosition() {
             return 'top-right';
         }
+    }, {
+        key: 'handleHashChange',
+        value: function handleHashChange() {
+            var hash = window.location.hash;
+            console.debug(['UrlHashReader handleHashChange()', hash, this]);
+            this._readAndApplyUrlHashParams();
+        }
     }]);
 
     return UrlHashReader;
@@ -636,7 +657,7 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
     _createClass(UrlHashWriter, [{
         key: 'onAdd',
         value: function onAdd(map) {
-            var _this7 = this;
+            var _this8 = this;
 
             // keep a reference to our map, and create our basic control DIV
             // we have no visible UI (the DIV has a display:none style) but are required to supply a DIV
@@ -646,7 +667,7 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
 
             // do our one job, but do it in a new context so the caller doesn't block
             setTimeout(function () {
-                _this7._startTrackingHashParams();
+                _this8._startTrackingHashParams();
             }, 2 * 1000);
 
             // done
@@ -661,12 +682,12 @@ var UrlHashWriter = exports.UrlHashWriter = function () {
     }, {
         key: '_startTrackingHashParams',
         value: function _startTrackingHashParams() {
-            var _this8 = this;
+            var _this9 = this;
 
             if (this._timer) return; // we are already tracking; done
 
             this._timer = setInterval(function () {
-                _this8._updateHashParams();
+                _this9._updateHashParams();
             }, this.options.secondsBetweenUpdates * 1000);
         }
     }, {

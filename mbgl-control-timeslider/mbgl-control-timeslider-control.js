@@ -334,8 +334,7 @@ export class TimeSliderControl {
             const osmfilteringclause = [ 'any', ['!has', 'osm_id'] ];
 
             const oldfilters = this._map.getFilter(layer.id);
-
-layers.oldfiltersbackup = oldfilters;  // keep a backup of the original filters for _removeDateFiltersForLayers()
+            layers.oldfiltersbackup = oldfilters;  // keep a backup of the original filters for _removeDateFiltersForLayers()
 
             let newfilters;
             if (oldfilters === undefined) {  // no filter at all, so create one
@@ -426,6 +425,7 @@ export class UrlHashReader {
         this.options = Object.assign({
             timeslidercontrol: undefined,
             leafletZoomLevelHack: false,  // Leaflet numbers zoom levels differently, always 1 less than MBGL does (L 15.6 = MB 16.6)
+            watchHashChange: true,  // add event listener to watch for hashchange events?
         }, options);
 
         if (this.options.timeslidercontrol.constructor.name != 'TimeSliderControl') throw `UrlHashReader required timeslidercontrol option must point to a TimeSliderControl instance`;
@@ -441,6 +441,10 @@ export class UrlHashReader {
         // do our one job, but do it in a new context so the caller doesn't block
         setTimeout(() => {
             this._readAndApplyUrlHashParams();
+
+            if (this.options.watchHashChange) {
+                window.addEventListener('hashchange', () => { this.handleHashChange(); });
+            }
         }, 1 * 1000);
 
         // done
@@ -448,6 +452,10 @@ export class UrlHashReader {
     }
 
     onRemove () {
+        if (this.options.watchHashChange) {
+            window.removeEventListener('hashchange', () => { this.handleHashChange(); });
+        }
+
         this._map = null;
     }
 
@@ -480,6 +488,12 @@ export class UrlHashReader {
     // we have no visible UI, but are required to implement this method
     getDefaultPosition () {
         return 'top-right';
+    }
+
+    handleHashChange () {
+        const hash = window.location.hash;
+        console.debug(['UrlHashReader handleHashChange()', hash, this]);
+        this._readAndApplyUrlHashParams();
     }
 }
 
