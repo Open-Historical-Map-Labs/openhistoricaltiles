@@ -248,6 +248,10 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
                 leafletZoomLevelHack: true
             });
             theglmap.addControl(_this2._realcontrol);
+
+            window.addEventListener('hashchange', function () {
+                _this2.handleHashChange();
+            });
         });
 
         // we have no visible UI, but we are required to create a container DIV
@@ -255,10 +259,30 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
         return this._container;
     },
     onRemove: function onRemove() {
+        var _this3 = this;
+
         this._map = undefined;
 
         var theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
         theglmap.removeControl(this._realcontrol);
+
+        window.removeEventListener('hashchange', function () {
+            _this3.handleHashChange();
+        });
+    },
+    handleHashChange: function handleHashChange() {
+        // beyond the TimeSlider.UrlHashReader's own behavior,
+        // this Leaflet map should also be affected when hash changes, e.g. center and zoom
+        // example: #18/40.8217108/-73.9119449/1980,1970-2000
+        // zoom, lat, lng, date and range
+        var theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\-?\d+),(\-?\d+)\-(\-?\d+)/;
+        var thematch = location.hash.match(theregex);
+        if (!thematch) return console.debug('UrlHashReader found no URL params to apply');
+
+        var zoom = parseFloat(thematch[1]);
+        var lat = parseFloat(thematch[2]);
+        var lng = parseFloat(thematch[3]);
+        this._map.setView([lat, lng], zoom);
     }
 });
 
@@ -274,7 +298,7 @@ L.Control.MBGLTimeSliderUrlHashWriter = L.Control.extend({
         if (!isslider) throw 'L.Control.MBGLTimeSliderUrlHashWriter timeslidercontrol must point to a  L.Control.MBGLTimeSlider instance';
     },
     onAdd: function onAdd(map) {
-        var _this3 = this;
+        var _this4 = this;
 
         this._map = map;
 
@@ -282,13 +306,13 @@ L.Control.MBGLTimeSliderUrlHashWriter = L.Control.extend({
         // create the real control (told you, this is but a thin wrapper) and add it to our real MBGL map
         var theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
         theglmap.on('load', function () {
-            var therealslider = _this3.options.timeslidercontrol._timeslider;
+            var therealslider = _this4.options.timeslidercontrol._timeslider;
 
-            _this3._realcontrol = new TimeSlider.UrlHashWriter({
+            _this4._realcontrol = new TimeSlider.UrlHashWriter({
                 timeslidercontrol: therealslider,
                 leafletZoomLevelHack: true
             });
-            theglmap.addControl(_this3._realcontrol);
+            theglmap.addControl(_this4._realcontrol);
         });
 
         // we have no visible UI, but we are required to create a container DIV

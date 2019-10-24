@@ -142,6 +142,8 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
                 leafletZoomLevelHack: true,
             });
             theglmap.addControl(this._realcontrol);
+
+            window.addEventListener('hashchange', () => { this.handleHashChange(); });
         });
 
         // we have no visible UI, but we are required to create a container DIV
@@ -153,6 +155,22 @@ L.Control.MBGLTimeSliderUrlHashReader = L.Control.extend({
 
         const theglmap = this.options.timeslidercontrol._glmaplayer._glMap;
         theglmap.removeControl(this._realcontrol);
+
+        window.removeEventListener('hashchange', () => { this.handleHashChange(); });
+    },
+    handleHashChange: function () {
+        // beyond the TimeSlider.UrlHashReader's own behavior,
+        // this Leaflet map should also be affected when hash changes, e.g. center and zoom
+        // example: #18/40.8217108/-73.9119449/1980,1970-2000
+        // zoom, lat, lng, date and range
+        const theregex = /^#(\d+\.?\d+)\/(\-?\d+\.\d+)\/(\-?\d+\.\d+)\/(\-?\d+),(\-?\d+)\-(\-?\d+)/;
+        const thematch = location.hash.match(theregex);
+        if (! thematch) return console.debug(`UrlHashReader found no URL params to apply`);
+
+        let zoom = parseFloat(thematch[1]);
+        const lat = parseFloat(thematch[2]);
+        const lng = parseFloat(thematch[3]);
+        this._map.setView([lat, lng], zoom);
     },
 });
 
