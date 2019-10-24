@@ -1954,7 +1954,7 @@
       "source-layer": "place",
       "filter": ["==", "class", "village"],
       "layout": {
-        "text-font": ["Noto Sans"],
+        "text-font": ["Noto Sans Regular"],
         "text-size": {"base": 1.2, "stops": [[10, 12], [15, 22]]},
         "text-field": "{name}",
         "text-max-width": 8,
