@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>OpenHistoricalMap Data QuickViz</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css" rel="stylesheet" />
+
+    <link href="glyphicons/css/glyphicons.css" rel="stylesheet" />
+
+    <script src="index.js?[hash]"></script>
+    <link href="index.css?[hash]" rel="stylesheet" />
+</head>
+<body>
+
+    <div id="sidebar-map-container">
+        <div id="sidebar">
+            <h3 class="center">OHM Date Issues</h3>
+            <p>As you move the map, features will be listed here which need their dates corrected or filled in.</p>
+
+            <p id="sidebar-count">&nbsp;</p>
+
+            <div id="sidebar-listing"><!-- dynamic content here --></div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+</body>
+</html>

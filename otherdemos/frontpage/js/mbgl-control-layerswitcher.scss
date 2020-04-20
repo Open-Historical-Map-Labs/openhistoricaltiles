@@ -1,0 +1,88 @@
+div.mapboxgl-ctrl.mbgl-control-layerswitcher {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.1);
+
+    .mbgl-control-layerswitcher-button {
+        display: block; /* see hidden class which swaps these */
+        width: 21px;
+        height: 21px;
+
+        i {
+            font-size: 20px;
+            color: black;
+        }
+    }
+
+    .mbgl-control-layerswitcher-panel {
+        display: none; /* see hidden class which swaps these */
+        cursor: default;
+        padding: 0.5em 0.5em 0.5em 0.5em;
+
+        h1 {
+            font-size: 15px;
+            white-space: nowrap;
+            margin-right: 25px;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 13px;
+        }
+
+        .mbgl-control-layerswitcher-layer {  /*  a layer legend/toggle*/
+            margin-bottom: 10px;
+
+            > div { /* a DIV within the layer's section */
+                display: none; /* by default, checkbox toggles this */
+
+                margin-left: 20px;
+
+                &.noUi-target {
+                    margin-right: 15px;
+                }
+            }
+
+            &.mbgl-control-layerswitcher-layer-expanded > div {
+                display: block;
+            }
+        }
+
+        .mbgl-control-layerswitcher-legend {
+            .mbgl-control-layerswitcher-legend-entry {
+                white-space: nowrap;
+            }
+
+            .mbgl-control-layerswitcher-legend-icon {
+                display: inline-block;
+                width: 1em;
+                height: 1em;
+            }
+        }
+    }
+
+    .mbgl-control-layerswitcher-closebutton {
+        cursor: pointer;
+        float: right;
+        font-size: 15px;
+    }
+}
+
+.mbgl-control-layerswitcher-expanded {
+    .mbgl-control-layerswitcher-button {
+        display: none !important;
+    }
+
+    .mbgl-control-layerswitcher-panel {
+        display: block !important;
+    }
+}
+
+/* slider handles */
+.noUi-horizontal .noUi-handle {
+    height: 20px;
+    width: 20px;
+}
+.noUi-horizontal {
+    height: 11px;
+}

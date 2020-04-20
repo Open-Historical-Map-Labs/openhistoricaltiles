@@ -1,0 +1,36 @@
+body {
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+}
+
+#info {
+    position: fixed;
+    float: left;
+    top: 0px;
+    left: 50px;
+    width: 300px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    font: 16px 'Lucida Grande', sans-serif;
+    z-index: 500
+
+    p {
+        margin: 12px;
+    }
+    p.title {
+        color: #0cf;
+    }
+}
+
+.crosshair {
+    cursor: crosshair;
+}
