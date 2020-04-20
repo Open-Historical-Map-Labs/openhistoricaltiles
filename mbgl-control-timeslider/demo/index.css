@@ -9,13 +9,29 @@ body, html {
     height: 100vh;
 }
 
+#splashmessage {
+    padding: 15px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+#splashmessage img {
+    float: left;
+    height: 100px;
+}
+
+#splashmessage h1 {
+    font-size: 24px;
+    font-family: "Helvetica,Arial,sans-serif";
+}
+
 /*
  * a When Am I panel illustrating the use of external controls to adjust the TimeSliderControl
  */
 
 #whenami {
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     left: 10px;
 
     border-radius: 4px;
