@@ -1,7 +1,0 @@
-# mac cruft
-.DS_Store
-
-# development stuff and debug logs
-node_modules/
-yarn-error.log
-npm-debug.log
