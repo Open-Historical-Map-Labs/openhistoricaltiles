@@ -1,13 +1,13 @@
 // demo: South Bronx
 // data ranges 1873-2019, but let's start with a narrower window so the user has an excuse to stretch the range
-var START_ZOOM = 14.6;
-var START_CENTER = [ 40.80623, -73.91894 ];
+var START_ZOOM = 15.0;
+var START_CENTER = [ 48.57240, 7.81240 ];
 var OHM_SOURCE = "ohm-data";
 var STARTING_DATE = 1920;
 var DATE_RANGE = [ -4000, (new Date()).getFullYear() - 1 ];
 
 // URL of a map style suited to OpenistoricalMap's data layers
-var MAP_STYLE_URL = 'https://openhistoricalmap.github.io/openhistoricaltiles/ohm_timeslider_style/ohm.style.json';
+var MAP_STYLE_URL = 'https://open-historical-map-labs.github.io/openhistoricaltiles/ohm_timeslider_style/ohm.style.json';
 
 // when the timeslider comes up, let's keep a reference to it so we can fetch/set it externally
 var MAP, ohmlayer, timeslider;

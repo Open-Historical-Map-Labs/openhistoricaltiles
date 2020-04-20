@@ -33,8 +33,8 @@
       "tileSize": 256
     }
   },
-  "sprite": "https://openhistoricalmap.github.io/openhistoricaltiles/ohm_timeslider_style/sprite",
-  "glyphs": "https://openhistoricalmap.github.io/openhistoricaltiles/frontpage/fonts/{fontstack}/{range}.pbf",
+  "sprite": "https://open-historical-map-labs.github.io/openhistoricaltiles/ohm_timeslider_style/sprite",
+  "glyphs": "https://open-historical-map-labs.github.io/openhistoricaltiles/frontpage/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "reference-osm",

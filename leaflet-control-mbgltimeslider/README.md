@@ -18,8 +18,8 @@ The `demo/` folder contains a working demo of a Leaflet map, filtering an OpenHi
 
 2. Include the SCRIPT and LINK tags for _both_ the MBGL TimeSlider control and this Leaflet wrapper:
 ```
-<script src="https://openhistoricalmap.github.io/openhistoricaltiles/mbgl-control-timeslider/dist/mbgl-control-timeslider.js"></script>
-<link href="https://openhistoricalmap.github.io/openhistoricaltiles/mbgl-control-timeslider/dist/mbgl-control-timeslider.css" rel="stylesheet" />
+<script src="https://open-historical-map-labs.github.io/openhistoricaltiles/mbgl-control-timeslider/dist/mbgl-control-timeslider.js"></script>
+<link href="https://open-historical-map-labs.github.io/openhistoricaltiles/mbgl-control-timeslider/dist/mbgl-control-timeslider.css" rel="stylesheet" />
 
 <script src="dist/leaflet-control-mbgltimeslider.js"></script>
 <link rel="stylesheet" href="dist/leaflet-control-mbgltimeslider.css" />
