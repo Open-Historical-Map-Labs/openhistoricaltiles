@@ -1,6 +1,6 @@
 # OpenHistoricalTiles
 
-This repository (OpenHistoricalTiles) has a `gh-pages` branch, which is used to create a more customized demo.  https://openhistoricalmap.github.io/openhistoricaltiles/
+This repository (OpenHistoricalTiles) has a `gh-pages` branch, which is used to create a more customized demo.  https://open-historical-map-labs.github.io/openhistoricaltiles/
 
 The tilejson URL is https://vtiles.openhistoricalmap.org/index.json and this URL will provide configuration info for vectile consumers. This is served by Tessera and an Apache proxy.
 
