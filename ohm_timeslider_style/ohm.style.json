@@ -5,7 +5,7 @@
   "sources": {
     "ohm-data": {
       "type": "vector",
-      "tiles": ["https://vtiles.openhistoricalmap.org//{z}/{x}/{y}.pbf"]
+      "tiles": ["http://ad777f9e374c94925a9655239552685f-1449910275.us-east-1.elb.amazonaws.com:9090/maps/osm/{z}/{x}/{y}.pbf"]
     },
     "osm-tiles": {
       "type": "raster",
