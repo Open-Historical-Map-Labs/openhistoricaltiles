@@ -9,18 +9,6 @@
  * and it's the LayerPickerControl which will change the visibility of these layers (that's why they're all "none" right now)
  */
 
-var OHM_BASE_URL = "http://ad777f9e374c94925a9655239552685f-1449910275.us-east-1.elb.amazonaws.com:9090/maps/osm";
-var OHM_TILEJSON = `${OHM_BASE_URL}/index.json`;
-var OHM_URL      = `${OHM_BASE_URL}/{z}/{x}/{y}.pbf`;
-
-var THIS_URL = window.location.href.split('#')[0];
-var SPRITE_URL_ROOT = THIS_URL + "styles/osm-bright-gl-style/sprite";
-var FONT_URL_STRING = THIS_URL + "fonts/{fontstack}/{range}.pbf";
-
-
-/*
- * This style is a direct lift of openmaptiles/osm-bright-gl-style    https://github.com/openmaptiles/osm-bright-gl-style    - GA 2018 July
- */
 var GLMAP_STYLE = {
   "version": 8,
   "name": "ohmbasemap",
@@ -28,12 +16,12 @@ var GLMAP_STYLE = {
     "osm": {
       "type": "vector",
       "tiles": [
-        OHM_URL
+        "http://a16ccd46b40d243f6b46ee60df7d70fc-1849580256.us-east-1.elb.amazonaws.com:9090/maps/osm/{z}/{x}/{y}.pbf"
       ]
     },
   },
-  "sprite": SPRITE_URL_ROOT,
-  "glyphs": FONT_URL_STRING,
+  "sprite": "https://go-spatial.github.io/carto-assets/spritesets/osm_tegola_spritesheet",
+  "glyphs": "https://go-spatial.github.io/carto-assets/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -58,7 +46,7 @@ var GLMAP_STYLE = {
         "fill-color": "rgba(247, 246, 241, 1)"
       }
     },
-	{
+    {
       "id": "pier",
       "type": "fill",
       "source": "osm",
@@ -313,7 +301,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "landuse_areas_park_overlay",
       "type": "fill",
       "source": "osm",
@@ -337,7 +325,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "landuse_areas_military_overlay",
       "type": "fill",
       "source": "osm",
@@ -357,7 +345,7 @@ var GLMAP_STYLE = {
       },
       "paint": {
         "fill-color": "rgba(178, 194, 157, 1)",
-		"fill-pattern": "military-fill"
+    "fill-pattern": "military-fill"
       }
     },
     {
@@ -541,7 +529,7 @@ var GLMAP_STYLE = {
         "fill-color": "rgba(230, 224, 212, 1)"
       }
     },
-	{
+  {
       "id": "buildings_flat",
       "type": "fill",
       "source": "osm",
@@ -741,7 +729,7 @@ var GLMAP_STYLE = {
         "fill-color": "rgba(144, 204, 203, 1)"
       }
     },
-	{
+  {
       "id": "pier_line",
       "type": "line",
       "source": "osm",
@@ -774,7 +762,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "aero_taxiway_lines",
       "type": "line",
       "source": "osm",
@@ -800,10 +788,10 @@ var GLMAP_STYLE = {
               12,
               1
             ],
-			[
-			  13,
-			  1.5
-			],
+      [
+        13,
+        1.5
+      ],
             [
               18,
               4
@@ -832,7 +820,7 @@ var GLMAP_STYLE = {
       },
       "paint": {
         "line-color": "rgba(220, 220, 220, 1)",
-		"line-width": {
+    "line-width": {
           "stops": [
             [
               12,
@@ -846,66 +834,66 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "city_county_lines",
       "type": "line",
       "source": "osm",
       "source-layer": "admin_lines",
       "minzoom": 10,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
         [
           ">=",
           "admin_level",
           6
         ],
-		[
+    [
           "<=",
           "admin_level",
           8
         ]
-	  ],	
+    ],  
       "layout": {
         "visibility": "visible"
       },
       "paint": {
         "line-color": "rgba(210, 210, 210, 1)",
-		"line-dasharray": [
+    "line-dasharray": [
           2,
           2
         ],
-		"line-width": 1.5
+    "line-width": 1.5
       }
     },
-	{
+  {
       "id": "state_lines_z10",
       "type": "line",
       "source": "osm",
       "source-layer": "admin_lines",
       "minzoom": 10,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
           "admin_level",
           4
         ]
-	  ],	
+    ],  
       "layout": {
         "visibility": "visible"
       },
       "paint": {
         "line-color": "rgba(178, 171, 171, 1)",
-		"line-dasharray": [
+    "line-dasharray": [
           6,
           3
         ],
-		"line-width": 1.5
+    "line-width": 1.5
       }
     },
-	{
+  {
       "id": "state_lines_z2",
       "type": "line",
       "source": "osm",
@@ -917,11 +905,11 @@ var GLMAP_STYLE = {
       },
       "paint": {
         "line-color": "rgba(178, 171, 171, 1)",
-		"line-dasharray": [
+    "line-dasharray": [
           6,
           3
         ],
-		"line-width": 1.5
+    "line-width": 1.5
       }
     },
     {
@@ -1861,7 +1849,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "roads_subways",
       "type": "line",
       "source": "osm",
@@ -2033,7 +2021,7 @@ var GLMAP_STYLE = {
           "in",
           "type",
           "trunk",
-		  "primary"
+      "primary"
         ]
       ],
       "layout": {
@@ -2059,7 +2047,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "roads_motorway_z7",
       "type": "line",
       "source": "osm",
@@ -2097,7 +2085,7 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "roads_motorway_z4_minzoom",
       "type": "line",
       "source": "osm",
@@ -2106,10 +2094,10 @@ var GLMAP_STYLE = {
       "maxzoom": 8,
       "filter": [
         "all",
-		[
+    [
           ">",
           "min_zoom",
-		  5
+      5
         ]
       ],
       "layout": {
@@ -2148,10 +2136,10 @@ var GLMAP_STYLE = {
       "maxzoom": 8,
       "filter": [
         "all",
-		[
+    [
           "<=",
           "min_zoom",
-		  5
+      5
         ]
       ],
       "layout": {
@@ -2656,37 +2644,37 @@ var GLMAP_STYLE = {
         }
       }
     },
-	{
+  {
       "id": "admin_countrylines_z10",
       "type": "line",
       "source": "osm",
       "source-layer": "admin_lines",
       "minzoom": 10,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
           "admin_level",
           2
         ]
-	  ],	
+    ],  
       "layout": {
         "visibility": "visible"
       },
       "paint": {
         "line-color": "rgba(129, 150, 154, 1)",
-		"line-width": {
-			"stops": [
-			  [ 0,
-				0.5
-			  ],
-			  [
-				7,
-				3
-			  ]
-			]
-		}	
+    "line-width": {
+      "stops": [
+        [ 0,
+        0.5
+        ],
+        [
+        7,
+        3
+        ]
+      ]
+    } 
       }
     },
     {
@@ -2701,17 +2689,17 @@ var GLMAP_STYLE = {
       },
       "paint": {
         "line-color": "rgba(129, 150, 154, 1)",
-		"line-width": {
-			"stops": [
-			  [ 0,
-				0.5
-			  ],
-			  [
-				7,
-				3
-			  ]
-			]
-		}	
+    "line-width": {
+      "stops": [
+        [ 0,
+        0.5
+        ],
+        [
+        7,
+        3
+        ]
+      ]
+    } 
       }
     },
     {
@@ -3054,45 +3042,45 @@ var GLMAP_STYLE = {
         "text-halo-width": 1
       }
     },
-	{
+  {
       "id": "city_labels_z14",
       "type": "symbol",
       "source": "osm",
       "source-layer": "admin_lines",
       "minzoom": 14,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
-		[
+    [
           "==",
           "admin_level",
           8
         ]
-	  ],	
+    ],  
        "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Regular"
         ],
-		"text-size": 10,
-		"text-transform": "uppercase",
-		"text-letter-spacing": 0.5
+    "text-size": 10,
+    "text-transform": "uppercase",
+    "text-letter-spacing": 0.5
       },
       "paint": {
         "text-color": "rgba(34, 34, 34, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "city_labels_z12",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 12,
       "maxzoom": 14,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3102,28 +3090,28 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Regular"
         ],
-		"text-size": 10,
-		"text-transform": "uppercase",
-		"text-letter-spacing": 0.5
+    "text-size": 10,
+    "text-transform": "uppercase",
+    "text-letter-spacing": 0.5
       },
       "paint": {
         "text-color": "rgba(34, 34, 34, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "city_labels_z6",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 6,
       "maxzoom": 12,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3133,26 +3121,26 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Regular"
         ],
-		"text-size": 10
+    "text-size": 10
       },
       "paint": {
         "text-color": "rgba(34, 34, 34, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "state_labels",
       "type": "symbol",
       "source": "osm",
       "source-layer": "state_label_points",
       "minzoom": 5,
       "maxzoom": 10,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3162,11 +3150,11 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold Italic"
         ],
-		"text-size": {
-		  "stops": [
+    "text-size": {
+      "stops": [
             [
               4,
               7
@@ -3176,23 +3164,23 @@ var GLMAP_STYLE = {
               16
             ]
           ]
-		}  
+    }  
       },
       "paint": {
         "text-color": "rgba(166, 166, 170, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "statecapital_labels_z10",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 10,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3202,27 +3190,27 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold"
         ],
-		"text-size": 10,
-		"text-transform": "uppercase"
+    "text-size": 10,
+    "text-transform": "uppercase"
       },
       "paint": {
         "text-color": "rgba(68, 51, 85, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "statecapital_labels_z4",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 4,
       "maxzoom": 10,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3232,11 +3220,11 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold"
         ],
-		"text-size": {
-		  "stops": [
+    "text-size": {
+      "stops": [
             [
               4,
               7
@@ -3246,23 +3234,23 @@ var GLMAP_STYLE = {
               10
             ]
           ]
-		}  
+    }  
       },
       "paint": {
         "text-color": "rgba(68, 51, 85, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "capital_labels_z10",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 10,
       "maxzoom": 20,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3272,27 +3260,27 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold"
         ],
-		"text-size": 11,
-		"text-transform": "uppercase"
+    "text-size": 11,
+    "text-transform": "uppercase"
       },
       "paint": {
         "text-color": "rgba(68, 51, 85, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "capital_labels_z3",
       "type": "symbol",
       "source": "osm",
       "source-layer": "populated_places",
       "minzoom": 3,
       "maxzoom": 10,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3302,11 +3290,11 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{name}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold"
         ],
-		"text-size": {
-		  "stops": [
+    "text-size": {
+      "stops": [
             [
               3,
               9
@@ -3316,23 +3304,23 @@ var GLMAP_STYLE = {
               11
             ]
           ]
-		}  
+    }  
       },
       "paint": {
         "text-color": "rgba(68, 51, 85, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 1
+    "text-halo-blur": 1
       }
     },
-	{
+  {
       "id": "country_labels",
       "type": "symbol",
       "source": "osm",
       "source-layer": "country_label_points",
       "minzoom": 3,
       "maxzoom": 7,
-	  "filter": [
+    "filter": [
         "all",
         [
           "==",
@@ -3342,11 +3330,11 @@ var GLMAP_STYLE = {
       ],
       "layout": {
         "text-field": "{sr_subunit}",
-		"text-font": [
+    "text-font": [
           "Open Sans Bold"
         ],
         "text-size": {
-		  "stops": [
+      "stops": [
             [
               3,
               11
@@ -3356,13 +3344,13 @@ var GLMAP_STYLE = {
               13
             ]
           ]
-		}  
+    }  
       },
       "paint": {
         "text-color": "rgba(68, 51, 85, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1,
-		"text-halo-blur": 5
+    "text-halo-blur": 5
       }
     },
     {
@@ -3751,4 +3739,4 @@ var GLMAP_STYLE = {
       }
     }
   ]
-};
+}
